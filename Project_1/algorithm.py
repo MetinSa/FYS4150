@@ -1,7 +1,5 @@
 import numpy as np 
 
-
-
 def f(x):
 
 	"""	
@@ -23,14 +21,13 @@ def analytical_sol(x):
 
 
 
-def matrix_slow():
+def matrix_slow(n):
 
 	"""
 	Making the specific 4x4 matrix the slow way.
 
 	"""
 
-	n = 4
 	A = np.zeros((n,n))			#making an empty 4x4 matrix
 
 	np.fill_diagonal(A,-2)		#filling the main diagonal with -2
@@ -42,14 +39,31 @@ def matrix_slow():
 	return A
 
 
-def matrix_fast():	
+def matrix_fast(n):	
 
 	"""
-	Making the specific 4x4 matrix the fast way using vectors. 	
+	Making the specific vectors in the 4x4 matrix instead of creating the whole 
+	matrix. 	
 
 	"""
-	#number of mesh points
-	n = 4	
+
+	#initializing the vectors and filling them 
+	a = np.zeros(n);	a.fill(-1)
+	b = np.zeros(n);	b.fill(2)
+	c = np.zeros(n);	c.fill(-1)
+
+	return a, b, c
+
+
+
+def algorithm():
+
+	"""
+	Making the algorithm which solves the differential equation u''(x) = f(x) 
+	using linear algebra.linear
+
+	"""
+
 
 	#boundary conditions
 	x_0 = 0;	x_n = 1	
@@ -64,21 +78,18 @@ def matrix_fast():
 		x[i] = x_0 + i*h	
 	
 
-
-	#initializing the vectors and filling them 
-	a = np.zeros(n);	a.fill(-1)
-	b = np.zeros(n);	b.fill(2)
-	c = np.zeros(n);	c.fill(-1)
-
-	u = np.zeros(n)	
-
+	#initializing the f_tilde and u vectors
 	f_tilde = np.zeros(n)
+	u = np.zeros(n)
+
+	#solving f_tilde = h^2 * f in additino to computing the analytic solution
 	for i in range(n):
 		f_tilde[i] = h**2 * f(x[i])
+		u[i] = analytical_sol(x[i])
 
-	print (f_tilde)
+	print (f_tilde, u)
 
 
-matrix_fast()
+
 
 

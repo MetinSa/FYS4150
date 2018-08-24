@@ -56,11 +56,11 @@ def matrix_fast(n):
 
 
 
-def algorithm():
+def algorithm(n):
 
 	"""
 	Making the algorithm which solves the differential equation u''(x) = f(x) 
-	using linear algebra.linear
+	using linear algebra. 
 
 	"""
 
@@ -78,16 +78,34 @@ def algorithm():
 		x[i] = x_0 + i*h	
 	
 
-	#initializing the f_tilde and u vectors
+	#initializing the f_tilde and v vectors
 	f_tilde = np.zeros(n)
-	u = np.zeros(n)
+	v = np.zeros(n)
 
-	#solving f_tilde = h^2 * f in additino to computing the analytic solution
+	#solving f_tilde = h^2 * f in addition to computing the analytic solution
 	for i in range(n):
 		f_tilde[i] = h**2 * f(x[i])
-		u[i] = analytical_sol(x[i])
+		v[i] = analytical_sol(x[i])
 
-	print (f_tilde, u)
+
+	#forward substitution
+
+	a, b, c = matrix_fast(n)
+
+	#making the gauselliminated new values
+	a_tilde = np.zeros(n)
+	b_tilde = np.zeros(n)
+	c_tilde = np.zeros(n)
+
+
+	# computing equation (1) and (2).  b_tilde == d_tilde and f_tilde = b_tilde in lecture notes but not in the project text 
+	for i in range(n):
+		b_tilde[i] = b[i] - (a[i-1]*c[i-1])/b[i-1]
+		f_tilde[i] = f(x[i]) - (f_tilde[i-1]*c[i-1])/b[i-1]
+
+	print (b_tilde)
+
+algorithm(4)
 
 
 

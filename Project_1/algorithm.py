@@ -1,6 +1,6 @@
 import numpy as np 
 
-def f(x):
+def function(x):
 
 	"""	
 	The function f(x).
@@ -48,11 +48,10 @@ def matrix_fast(n):
 	"""
 
 	#initializing the vectors and filling them 
-	a = np.zeros(n);	a.fill(-1)
-	b = np.zeros(n);	b.fill(2)
-	c = np.zeros(n);	c.fill(-1)
+	e = np.zeros(n);	e.fill(-1)
+	d = np.zeros(n);	d.fill(2)
 
-	return a, b, c
+	return e, d
 
 
 
@@ -78,34 +77,40 @@ def algorithm(n):
 		x[i] = x_0 + i*h	
 	
 
-	#initializing the f_tilde and v vectors
-	f_tilde = np.zeros(n)
-	v = np.zeros(n)
-
-	#solving f_tilde = h^2 * f in addition to computing the analytic solution
-	for i in range(n):
-		f_tilde[i] = h**2 * f(x[i])
-		v[i] = analytical_sol(x[i])
-
-
-	#forward substitution
-
-	a, b, c = matrix_fast(n)
-
-	#making the gauselliminated new values
-	a_tilde = np.zeros(n)
+	#initializing the b, b_tilde and u vectors
+	b_ = np.zeros(n)
 	b_tilde = np.zeros(n)
-	c_tilde = np.zeros(n)
+	u = np.zeros(n)
+
+	#solving b_tilde = h^2 * f in addition to computing the analytic solution
+	for i in range(1, n):
+		b = h**2 * function(x[i])
+		u[i] = analytical_sol(x[i])
 
 
-	# computing equation (1) and (2).  b_tilde == d_tilde and f_tilde = b_tilde in lecture notes but not in the project text 
-	for i in range(n):
-		b_tilde[i] = b[i] - (a[i-1]*c[i-1])/b[i-1]
-		f_tilde[i] = f(x[i]) - (f_tilde[i-1]*c[i-1])/b[i-1]
+	#extracting the e and d diagonal matrix vectors
+	e, d = matrix_fast(n)
 
-	print (b_tilde)
+	#making the gauselliminated new arrays for e and d
+	e_tilde = np.zeros(n)
+	d_tilde = np.zeros(n)
 
-algorithm(4)
+	#Forward Substition
+
+	#starting by setting the initial conditions to avoid inf errors
+	d_tilde[0] = d[0]
+	b_tilde[0] = function(x[0])
+
+	#computing equation (1) and (2) fromt the lecture notes
+	for i in range(1,n):
+		d_tilde[i] = d[i] - (e[i-1]**2)/d_tilde[i-1]
+		b_tilde[i] = function(x[i]) - (b_tilde[i-1]*e[i-1])/d_tilde[i-1]
+
+
+
+
+
+algorithm(10)
 
 
 

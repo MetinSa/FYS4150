@@ -149,8 +149,8 @@ def plot(n):
 	plt.xlabel("x")
 	plt.ylabel("u(x)")
 	plt.title("Numerically computed vs exact analytic solution")
-	plt.show()
 	plt.savefig("pythonab.jpg")
+	plt.show()
 
 
 plot(10000)

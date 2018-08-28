@@ -78,13 +78,13 @@ def algorithm(n):
 	
 
 	#initializing the b, b_tilde and u vectors
-	b_ = np.zeros(n)
+	b = np.zeros(n)
 	b_tilde = np.zeros(n)
 	u = np.zeros(n)
 
 	#solving b_tilde = h^2 * f in addition to computing the analytic solution
 	for i in range(1, n):
-		b = h**2 * function(x[i])
+		b[i] = h**2 * function(x[i])
 		u[i] = analytical_sol(x[i])
 
 

@@ -25,7 +25,7 @@ def analytical_sol(x):
 def matrix_slow(n):
 
 	"""
-	Making the specific 4x4 matrix the slow way.
+	Making the specific 4x4 matrix the slow way (Ignore this function).
 
 	"""
 
@@ -44,7 +44,8 @@ def matrix_fast(n):
 
 	"""
 	Making the specific vectors in the 4x4 matrix instead of creating the whole 
-	matrix. 	
+	matrix. (Note: arrays are made to be n+2 long so that that the first and last
+	elemets are always 0 in order to fulfill dirchlet boundary conditions)
 
 	"""
 
@@ -122,7 +123,7 @@ def algorithm(n):
 	u = np.zeros(n+2)
 	u[n] = b_tilde[n]/d_tilde[n]
 
-	#computing equation (3) using a reversed for loop going from i = 8 to i = 0
+	#computing equation (3) using a reversed for loop 
 	for i in range(n-1,0,-1):
 		u[i] = (b_tilde[i] - e[i]*u[i+1])/d_tilde[i]
 

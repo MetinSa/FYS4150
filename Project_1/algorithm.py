@@ -92,8 +92,7 @@ def algorithm(n):
 	#extracting the e and d diagonal matrix vectors
 	e, d = matrix_fast(n)
 
-	#making the gauselliminated new arrays for e and d
-	e_tilde = np.zeros(n+2)
+	#making the gauselliminated new array for d
 	d_tilde = np.zeros(n+2)
 
 
@@ -155,4 +154,3 @@ def plot(n):
 
 
 plot(10000)
-

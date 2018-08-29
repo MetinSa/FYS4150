@@ -30,7 +30,7 @@ double analytical_sol(double x){
 
 int main(int argc, char *argv[]){
 
-	//starting by defining n
+	//starting by defining number of grid points n from the command line
 	int n = atoi(argv[1]);
 
 	//starting the clock
@@ -93,9 +93,15 @@ int main(int argc, char *argv[]){
 
 	}
 
+	// stopping the clock
+	finish = clock();
+	double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
+
+	// printing the time used
+	cout << "Time used: " << timeused << " seconds" << endl;
 
 
-
+	// freeing up memory
 	delete [] x;
 	delete [] e;
 	delete [] d;

@@ -1,14 +1,17 @@
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include <time.h>
-
+#include <fstream>
 #include "functions.h"
 
 using namespace std;
 
+// defining the outputfile as a global variable
+ofstream ofile;
+
 
 // Main algorithm
-
 int main(int argc, char *argv[]){
 
 	//starting by defining number of grid points n from the command line
@@ -42,13 +45,13 @@ int main(int argc, char *argv[]){
 
 	}
 
-
 	//solving b = h^2 * f along with the analytic solution u
 	for (int i = 0; i < n+1; i++){
 		b[i] = h*h * func(x[i]);
 		v[i] = analytical_sol(x[i]);
 
 	}
+
 
 	// Forward Substitution
 
@@ -62,6 +65,7 @@ int main(int argc, char *argv[]){
 		b_tilde[i] = b[i] - ((b_tilde[i-1]*e[i-1])/d_tilde[i-1]);
 
 	}
+
 
 	// Backwards Substitution
 
@@ -81,8 +85,21 @@ int main(int argc, char *argv[]){
 	// printing the time used
 	cout << "Time used: " << timeused << " seconds" << endl;
 
-	cout << u[40] << endl;
-	cout << v[40] << endl;
+	// Writing the data to file
+	string name = "data_" + to_string(n) + ".dat";
+	ofile.open(name);
+	ofile << "Grid points: " << n << endl;
+	ofile << "x:" << setw(15) << "u(x):" << setw(15) << "v(x):" << endl;
+
+	// printing to file using iomanip to setw and precision
+	for (int i = 0; i < n+2; i++){
+		ofile << setprecision(7) << x[i] << setw(15) << setprecision(7) << u[i] << setw(15) << setprecision(7) << v[i] << endl;
+
+	}
+
+	ofile.close();
+
+
 
 	// freeing up memory
 	delete [] x;

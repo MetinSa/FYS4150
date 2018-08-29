@@ -140,17 +140,17 @@ def plot(n):
 
 	#extracting the x, u and the analytic solution 
 	x, u, solution = algorithm(n)
-
+	print(solution)
 	#plotting
-	plt.plot(x, solution, color = "black", label = "Exact Solution")
-	plt.plot(x, u, color = "royalblue", label = "Computed")
-	plt.grid(linestyle = "--")
-	plt.legend()
-	plt.xlabel("x")
-	plt.ylabel("u(x)")
-	plt.title("Numerically computed vs exact analytic solution")
-	plt.savefig("pythonab.jpg")
-	plt.show()
+	# plt.plot(x, solution, color = "black", label = "Exact Solution")
+	# plt.plot(x, u, color = "royalblue", label = "Computed")
+	# plt.grid(linestyle = "--")
+	# plt.legend()
+	# plt.xlabel("x")
+	# plt.ylabel("u(x)")
+	# plt.title("Numerically computed vs exact analytic solution")
+	# plt.savefig("pythonab.jpg")
+	# plt.show()
 
 
-plot(10000)
+plot(10)

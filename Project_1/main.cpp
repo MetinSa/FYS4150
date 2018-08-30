@@ -85,15 +85,38 @@ int main(int argc, char *argv[]){
 	// printing the time used
 	cout << "Time used: " << timeused << " seconds" << endl;
 
+	// relative error
+
+
+	// double *eps = new double[n+2];		// relative error array
+
+	// double max_err = 0.0;
+	// for (int i = 1; i < n+1; i++){
+	// 	eps[i] = log10(abs((v[i]-u[i])/u[i]));
+
+		// if(abs(eps[i]) > abs(max_err)){
+			// max_err = eps[i];
+		// }
+	// }
+	// cout << eps[2];
+
+	// double max_err = error_estimation(n, u, v);
+
+	// cout << "max relative error: " << max_err << endl;
+
+
+
+
 	// Writing the data to file
 	string name = "data_" + to_string(n) + ".dat";
 	ofile.open(name);
-	ofile << "Grid points: " << n << endl;
-	ofile << "x:" << setw(15) << "u(x):" << setw(15) << "v(x):" << endl;
+	ofile << n << endl << endl;
+	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;
+
 
 	// printing to file using iomanip to setw and precision
 	for (int i = 0; i < n+2; i++){
-		ofile << setprecision(7) << x[i] << setw(15) << setprecision(7) << u[i] << setw(15) << setprecision(7) << v[i] << endl;
+		ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << u[i] << setw(16) << setprecision(7) << v[i] << endl;
 
 	}
 

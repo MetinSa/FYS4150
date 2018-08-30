@@ -85,26 +85,10 @@ int main(int argc, char *argv[]){
 	// printing the time used
 	cout << "Time used: " << timeused << " seconds" << endl;
 
-	// relative error
 
-
-	// double *eps = new double[n+2];		// relative error array
-
-	// double max_err = 0.0;
-	// for (int i = 1; i < n+1; i++){
-	// 	eps[i] = log10(abs((v[i]-u[i])/u[i]));
-
-		// if(abs(eps[i]) > abs(max_err)){
-			// max_err = eps[i];
-		// }
-	// }
-	// cout << eps[2];
-
-	// double max_err = error_estimation(n, u, v);
-
-	// cout << "max relative error: " << max_err << endl;
-
-
+	// printing the relative error
+	double max = error_estimation(n, u, v);
+	cout << "max relative error: " << max << endl;
 
 
 	// Writing the data to file

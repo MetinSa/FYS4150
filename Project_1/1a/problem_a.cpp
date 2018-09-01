@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
 	// declaring the exponent of 10 and the content of the diagonal vectors
 	int expo;	double a_fill;	double b_fill;	double c_fill;
 
-	if ( argc <= 1) {
+	if ( argc <= 4) {
 		cout << "Bad Usage: Please include the power of 10^n, and the content of a, b and c diagonal vectors. Four total inputs." << endl;
 		exit(1);
 	}

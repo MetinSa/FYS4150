@@ -9,7 +9,6 @@ using namespace std;
 // defining the outputfile as a global variable
 ofstream ofile;
 
-
 // computing the input function f.
 inline double func(double x){ return 100.0*exp(-10*x); 
 }
@@ -30,12 +29,10 @@ int main(int argc, char *argv[]){
 		exit(1);
 	}
 		else{
-
 		expo = atoi(argv[1]);
 		a_fill = atoi(argv[2]);
 		b_fill = atoi(argv[3]);
 		c_fill = atoi(argv[4]);
-
 	}
 	// computing n based on the input exponent
 	int n = pow(10.0,expo);
@@ -72,7 +69,6 @@ int main(int argc, char *argv[]){
 	for (int i = 2; i < n; i++){
 		b[i] = b[i] - (a[i]*c[i-1])/b[i-1];
 		f_tilde[i] = f[i] - (a[i]*f_tilde[i-1])/b[i-1];
-
 	}
 
 	// backward substitution
@@ -80,7 +76,6 @@ int main(int argc, char *argv[]){
 
 	for (int i = n-2; i > 0; i--){
 		u[i] = f_tilde[i] - (c[i]*u[i+1])/b[i];
-
 	}	
 
 	// stopping the clock
@@ -95,15 +90,12 @@ int main(int argc, char *argv[]){
 	ofile << n << endl << endl;
 	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;
 
-
 	// printing to file using iomanip to setw and precision
 	for (int i = 0; i < n+1; i++){
 		ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << u[i] << setw(16) << setprecision(7) << v[i] << endl;
-
 	}
 
 	ofile.close();
-
 
 	// freeing up memory
 	delete [] x;
@@ -115,9 +107,5 @@ int main(int argc, char *argv[]){
 	delete [] u;
 	delete [] v;
 
-
-
-
 	return 0;
-
 }

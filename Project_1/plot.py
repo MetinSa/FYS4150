@@ -10,9 +10,9 @@ file = open(name, "r")
 n = int(file.readline())
 
 # defining x, y, v arrays
-x = np.zeros(n+2)
-u = np.zeros(n+2)
-v = np.zeros(n+2)
+x = np.zeros(n+1)
+u = np.zeros(n+1)
+v = np.zeros(n+1)
 
 #dummy index
 j = 0
@@ -36,7 +36,6 @@ plt.legend()
 plt.xlabel("x")
 plt.ylabel("u(x)")
 plt.title("n = %g" %n)
-# figname = "plot_"+str(n)+".jpg"
 plt.savefig("plot_"+str(n)+".png")
 plt.show()
 

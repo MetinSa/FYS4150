@@ -32,7 +32,8 @@
 *.bib
 *.png
 *.out
-
+*.txt
+*.dat
 
 # OS generated files #
 ######################

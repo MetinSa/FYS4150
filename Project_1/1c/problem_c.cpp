@@ -21,17 +21,15 @@ inline double analytic_sol(double x){ return 1.0 - (1 - exp(-10))*x - (exp(-10 *
 int main(int argc, char *argv[]){
 
 	// declaring the exponent of 10 and the content of the diagonal vectors
-	int expo;	double a_fill;	double b_fill;	double c_fill;
+	int expo;
 
-	if ( argc <= 4) {
-		cout << "Bad Usage: Please include the power of 10^n, and the content of a, b and c diagonal vectors. Four total inputs." << endl;
+	if ( argc <= 1) {
+		cout << "Bad Usage: Please include the power of 10^n." << endl;
 		exit(1);
 	}
 		else{
 		expo = atoi(argv[1]);
-		a_fill = atoi(argv[2]);
-		b_fill = atoi(argv[3]);
-		c_fill = atoi(argv[4]);
+
 	}
 	// computing n based on the input exponent
 	int n = pow(10.0,expo);
@@ -42,9 +40,7 @@ int main(int argc, char *argv[]){
 
 	// Allocating memory to the vectors used in the algorithm
 	double *x = new double[n+1];			// x-array goes from [0,1] with steplength h
-	double *a = new double[n+1];			// secondary diagonal a
-	double *b = new double[n+1];			// main diagonal b
-	double *c = new double[n+1];			// secondary diagonal c
+	double *d = new double[n+1];			// main diagonal renamed to d from b
 	double *f = new double[n+1];			// RHS solution f
 	double *f_tilde = new double[n+1];		// RHS solution f_tilde
 	double *u = new double[n+1];			// numerical solution	
@@ -53,9 +49,6 @@ int main(int argc, char *argv[]){
 	// filling the x, a, b and c arrays in addition to computing f and u
 	for (int i = 0; i < n+1; i++){
 		x[i] = i*h;
-		a[i] = a_fill;
-		b[i] = b_fill;
-		c[i] = c_fill;
 		f[i] = hh*func(x[i]);
 		v[i] = analytic_sol(x[i]);
 	}
@@ -65,16 +58,17 @@ int main(int argc, char *argv[]){
 	start = clock();
 
 	// forward substitution
+	d[0] = d[n] = 2.0;
 	for (int i = 2; i < n; i++){
-		b[i] = b[i] - (a[i]*c[i-1])/b[i-1];
-		f_tilde[i] = f[i] - (a[i]*f_tilde[i-1])/b[i-1];
+		d[i] = (i+1.0)/((double)i);
+		f_tilde[i] = f[i] + ((i-1.0)*f_tilde[i-1])/i;
 	}
 
 	// backward substitution
-	u[n-1] = f_tilde[n-1]/b[n-1];			// setting initial condition
+	u[n-1] = f_tilde[n-1]/d[n-1];			// setting initial condition
 
 	for (int i = n-2; i > 0; i--){
-		u[i] = (f_tilde[i] - c[i]*u[i+1])/b[i];
+		u[i] = (i/(i+1.0))*(f_tilde[i] + u[i+1]);
 	}	
 
 	// stopping the clock
@@ -98,9 +92,7 @@ int main(int argc, char *argv[]){
 
 	// freeing up memory
 	delete [] x;
-	delete [] a;
-	delete [] b;
-	delete [] c;
+	delete [] d;
 	delete [] f;
 	delete [] f_tilde;
 	delete [] u;

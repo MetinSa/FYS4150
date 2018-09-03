@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
 	u[n-1] = f_tilde[n-1]/b[n-1];			// setting initial condition
 
 	for (int i = n-2; i > 0; i--){
-		u[i] = f_tilde[i] - (c[i]*u[i+1])/b[i];
+		u[i] = (f_tilde[i] - c[i]*u[i+1])/b[i];
 	}	
 
 	// stopping the clock

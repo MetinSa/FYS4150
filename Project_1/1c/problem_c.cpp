@@ -78,7 +78,7 @@ int main(int argc, char *argv[]){
 	cout << "Time used: " << timeused << " seconds" << endl;
 
 	// Writing the data to file
-	string name = "data_" + to_string(n) + ".dat";
+	string name = "data_" + to_string(n) + "_b.dat";
 	ofile.open(name);
 	ofile << n << endl << endl;
 	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;

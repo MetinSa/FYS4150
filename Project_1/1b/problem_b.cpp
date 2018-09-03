@@ -22,7 +22,7 @@ inline double analytic_sol(double x){ return 1.0 - (1 - exp(-10))*x - (exp(-10 *
 int main(int argc, char *argv[]){
 
 	// declaring the exponent of 10 and the content of the diagonal vectors
-	int expo;	double a_fill;	double b_fill;	double c_fill;
+	int expo;
 
 	if ( argc <= 1) {
 		cout << "Bad Usage: Please include the power of 10^n." << endl;

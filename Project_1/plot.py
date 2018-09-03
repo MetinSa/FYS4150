@@ -1,5 +1,5 @@
-import matplotlib.pyplot as plt 
-import numpy as np 
+import matplotlib.pyplot as plt
+import numpy as np
 import sys
 
 #reading in the name of the file and opening it
@@ -22,7 +22,7 @@ for i, line in enumerate(file):
 
 	#skipping the first line
 	if i > 1:
-		
+
 		x[j] = line.split()[0]
 		u[j] = line.split()[1]
 		v[j] = line.split()[2]
@@ -36,9 +36,8 @@ plt.legend()
 plt.xlabel("x")
 plt.ylabel("u(x)")
 plt.title("n = %g" %n)
-plt.savefig("plot_"+str(n)+".png")
+if name[5] == 'a':
+	plt.savefig("plot_armadillo_"+str(n)+".png")
+else:
+	plt.savefig("plot_"+str(n)+".png")
 plt.show()
-
-
-
-

@@ -8,12 +8,13 @@
 using namespace arma;
 using namespace std;
 
+// MUST BE COMPILED WITH LARMADILLO (ex: >c++ -o exec code.cpp -O1 -larmadillo)
+
 // Source term
 inline double func(double x) {return 100.*exp(-10*x);}
 
 // Exact slution to the problem
 inline double exact_solution(double x) {return 1.-(1-exp(-10))*x-exp(-10*x);}
-
 
 
 

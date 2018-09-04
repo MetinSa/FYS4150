@@ -64,6 +64,7 @@ int main(int argc, char *argv[]){
 	clock_t start, finish;
 	start = clock();
 
+	f_tilde[1] = f[1];
 	// forward substitution
 	for (int i = 2; i < n; i++){
 		b[i] = b[i] - (a[i]*c[i-1])/b[i-1];
@@ -84,7 +85,7 @@ int main(int argc, char *argv[]){
 	cout << "Time used: " << timeused << " seconds" << endl;
 
 	// Writing the data to file
-	string name = "data_" + to_string(n) + ".dat";
+	string name = "data_" + to_string(n) + "_b.dat";
 	ofile.open(name);
 	ofile << n << endl << endl;
 	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;

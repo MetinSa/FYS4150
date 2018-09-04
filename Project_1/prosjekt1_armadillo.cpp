@@ -44,6 +44,10 @@ int main(int argc, char** argv)
     vec f(n+1);                          // Source term f
     vec exact(n+1);                      // Exact solution
 
+    vec b_tilde(n+1);                    // Diagonal elements after gaussian ellimination
+    vec f_tilde(n+1);                    // Source term after gaussian ellimination
+    vec u(n+1);                          // Solution
+
 
     // Filling x, a, b, c and calculating f and exact.
     for (int i = 0; i < n+1; i++){
@@ -57,12 +61,8 @@ int main(int argc, char** argv)
 
 
     // Setting initial conditions for in the gauss eliminated results
-    vec b_tilde(n+1); b_tilde(1) = b_tilde(n) = b(1);
-    vec f_tilde(n+1); f_tilde(1) = f(1);
-
-
-    // Setting endpoint of the backwards substitution
-    vec u(n+1); u(n) = f_tilde(n)/b_tilde(n);
+     b_tilde(1) = b(1);
+     f_tilde(1) = f(1);
 
 
     //starting the clock
@@ -76,7 +76,9 @@ int main(int argc, char** argv)
       f_tilde(i) = f(i) - (a(i)*f_tilde(i-1))/b_tilde(i-1);
       }
 
-    cout << b_tilde << endl << f_tilde << endl;
+
+    // Setting endpoint of the backwards substitution
+    u(n) = f_tilde(n)/b_tilde(n);
 
 
     // Backward substitution

@@ -59,10 +59,12 @@ int main(int argc, char *argv[]){
 
 	// forward substitution
 	d[0] = d[n] = 2.0;
+	f_tilde[1] = f[1];
 	for (int i = 2; i < n; i++){
 		d[i] = (i+1.0)/((double)i);
 		f_tilde[i] = f[i] + ((i-1.0)*f_tilde[i-1])/i;
 	}
+
 
 	// backward substitution
 	u[n-1] = f_tilde[n-1]/d[n-1];			// setting initial condition
@@ -78,7 +80,7 @@ int main(int argc, char *argv[]){
 	cout << "Time used: " << timeused << " seconds" << endl;
 
 	// Writing the data to file
-	string name = "data_" + to_string(n) + "_b.dat";
+	string name = "data_" + to_string(n) + "_c.dat";
 	ofile.open(name);
 	ofile << n << endl << endl;
 	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;

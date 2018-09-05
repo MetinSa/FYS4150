@@ -34,6 +34,7 @@
 *.out
 *.txt
 *.dat
+*.toc
 
 # OS generated files #
 ######################

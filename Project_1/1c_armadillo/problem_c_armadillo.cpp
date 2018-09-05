@@ -32,6 +32,7 @@ int main(int argc, char** argv)
 
     int n = pow(10.0, expo);
     double h = 1.0/n;                    // Step size
+    double hh = h*h
 
     vec x(n+1);                          // X-array from x_0 = 0 to x_n = 1 with steplength h
     vec f(n+1);                          // Source term f
@@ -45,7 +46,7 @@ int main(int argc, char** argv)
     // Filling x, a, b, c and calculating f and exact.
     for (int i = 0; i < n+1; i++){
       x(i) = i*h;
-      f(i) = func(x(i))*h*h;
+      f(i) = func(x(i))*hh;
       exact(i) = exact_solution(x(i));
       }
 
@@ -75,7 +76,7 @@ int main(int argc, char** argv)
 
     // Backward substitution
     for (int i = n-2; i > 0; i--){
-      u(i) = (f_tilde(i) - u(i+1))/b_tilde(i);
+      u(i) = (f_tilde(i) + u(i+1))/b_tilde(i);
     }
 
 

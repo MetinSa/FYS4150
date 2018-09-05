@@ -25,7 +25,7 @@ for i, line in enumerate(file):
 		eps[j] = line.split()[1]
 		j += 1
 
-# # plotting
+# plotting
 plt.plot()
 plt.loglog(n, 10**eps, color = "royalblue", label = "Best Fit")
 plt.loglog(n, 10**eps, "x",markersize = 7, color = "black", label = "Data Points")
@@ -34,7 +34,7 @@ plt.legend()
 plt.xlabel("$n$")
 plt.ylabel(r"$\epsilon(n)$")
 plt.title("Maximum relative error for varying grid points")
-plt.savefig("error.png")
+plt.savefig("rel_error_plot.png")
 plt.show()
 
 

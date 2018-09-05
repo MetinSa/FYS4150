@@ -77,11 +77,30 @@ $$ \frac{1}{r^2}  \der{}{r} \left( r^2 \der{\Phi}{r} \right)= -4 \pi \rho(r).$$
 By substituting $\Phi = \phi(r)/r$, we can simplify the equation even more, giving 
 $$ \dder{\phi}{r} = -4\pi \rho(r). $$ 
 The final equation can be written in a general form by letting $\phi \rightarrow u$ and $r \rightarrow x$, and defining the right hand side of the equation as $f$,
-$$- u''(x) = f(x). $$
+$$- u''(x) = f(x). $$ 
 
-In this study we will assume that the source term is $f(x) = 100 e^{-10x}$ with $x \in (0,1)$. We will also assume that we have Dirichlet boundary conditions, such that $ u(0) = u(1) = 0. $ With these assumptions the equation have an exact solution on the form $u(x) = 1 - (1 - e^{-10})x - e^{-10x}$. \\
+In this study we will assume that the source term is $f(x) = 100 e^{-10x}$ with $x \in [0,1]$. We will also assume that we have Dirichlet boundary conditions, such that $ u(0) = u(1) = 0. $ With these assumptions the equation have an exact solution on the form $u(x) = 1 - (1 - e^{-10})x - e^{-10x}$. \\
+
+
 
 2.2. \textbf{Discretization of the problem.} 
+To solve the Poisson equation nummerically, we need to discretize the problem. The discritation can be done using $n+1$ x-values, such that $x \in [x_0, x_1, x_2, ..., x_n]$ with $x_0 = 0$ and $x_n = 1$, and $u(x_i) = u_i$. Then we have that 
+$$ x_i = x_0 + ih, $$
+where $h = (x_n - x_0)/n$ is the step size. \\
+
+A discretized version of $\dder{u(x)}{x}$ can be found by using Taylor expansion. We know that
+\begin{align*}
+u(x + h) &= u(x) + h u' + \frac{h^2}{2!} u'' + O(h^2) \\
+u(x - h) &= u(x) - h u' + \frac{h^2}{2!} u'' + O(h^2) 
+\end{align*} 
+By adding $u(x + h)$ and $u(x-h)$, we can derive the desired expression:
+\begin{align*}
+u(x + h) + u(x - h) &= 2 u(x) + \frac{2}{2!} h^2 u'' + O(h^2) \\
+u''(x) &= \frac{u(x+1) + u(x-h) - 2u(x)}{h^2} + O(h^2) \\
+u'' &=  \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2}+ O(h^2)
+\end{align*}
+
+
 
 \end{document}
 

@@ -1,4 +1,7 @@
+%setting document class
 \documentclass[a4paper,10pt,]{article}
+
+%importing packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc,url}
 \usepackage[english,]{babel}
@@ -17,24 +20,28 @@
 \usepackage{hyperref}
 \usepackage{svg}
 \usepackage{wrapfig}
-\urlstyle{sf}
+\usepackage{fancyhdr}
 
+%fixing the header 
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[CE]{\textsc{solving poisson's equation}}
+\fancyhead[CO]{\textsc{asprusten $\&$ rasmussen \& san }}
+\fancyfoot[C]{\thepage}
 
+%front page title/author setup
  \title{FYS 4150 - Computational Physics\\
- \title{ \textbf{FYS 4150 - Computational Physics\\
-
  Project 1: Solving Poisson's equation in one dimension 
-}}
+}
  \date{\normalsize{4. September 2018} }
  \author{
  \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Markus Leira Asprusten}}\and \textsc{\small{Metin San}}
  }
  
 
- 
+ %starting the document
 \begin{document}
-
-
 \maketitle
 
 \begin{center}
@@ -56,26 +63,47 @@ This project involves solving the one-dimensional Possion equation with dirichle
 \end{center}
 
 \blindtext
-
 \newpage
 
 
 \begin{center}
-\textsc{2. Theory}
+\textsc{3. Algorithm}
 \end{center}
-2.1. \textbf{The Poisson Equation.} \blindtext
-\end{document}
-
-
+In order to solve Poisson's equation we need to be able to solve the discretized set of equations involving the tridiagonal matrix $\hat{\text{A}}$. We will tackle this problem through the implementation of two algorithms. The first is the Tridiagonal matrix algorithm, also known as the Thomas algorithm. The second is the LU-decomposition algorithm. 
 \bigskip
 
-\begin{center}
-\textsc{1. Method}
-\end{center}
+3.1. \textbf{Tridiagonal Matrix Algorithm.} This algorithm is a simplified form of Gaussian elimination which can be used to solve tridiagonal systems of equations. A tridiagonal system of $n$ unknowns can be represented as 
 
-\textbf{1.1 The Poisson equation} 
+\begin{equation}
+a_i v_{i-1} + b_i v_i +c_i v_{i+1} = b_i,
+\end{equation}
+where $a_1 = c_1 = 0$. Or in matrix representation as $\hat{\text{A}} \mathbf{v} = \mathbf{b}$. Written out in the $4 \cross 4$ case, this becomes
+\begin{equation}
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+a_1& b_2 & c_2 & 0 \\
+0 & a_3 & b_3 & c_3 \\
+0 & 0 & a_4 & b_4 
+\end{bmatrix}
+\begin{bmatrix}
+v_1 \\
+v_2 \\
+v_3 \\
+v_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_1\\
+b_2\\
+b_3\\
+b_4
+\end{bmatrix}.
+\end{equation}
+The algorithm starts off by reducing the tridiagonal matrix $\hat{\text{A}}$ to an upper tridiagonal matrix. This is achieved through Gaussian elimination.
 
-\blindtext
+
+
+
+
 
 \end{document}
-

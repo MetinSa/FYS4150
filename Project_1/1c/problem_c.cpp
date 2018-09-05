@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
 	double *u = new double[n+1];			// numerical solution	
 	double *v = new double[n+1];			// analytical solution
 
-	// filling the x, a, b and c arrays in addition to computing f and u
+	// filling the x and computing f and u
 	for (int i = 0; i < n+1; i++){
 		x[i] = i*h;
 		f[i] = hh*func(x[i]);
@@ -83,18 +83,18 @@ int main(int argc, char *argv[]){
 	// printing the time used
 	cout << "Time used: " << timeused << " seconds" << endl;
 
-	// Writing the data to file
-	string name = "data_" + to_string(n) + "_c.dat";
-	ofile.open(name);
-	ofile << n << endl << endl;
-	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;
+	// // Writing the data to file
+	// string name = "data_" + to_string(n) + "_c.dat";
+	// ofile.open(name);
+	// ofile << n << endl << endl;
+	// ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;
 
-	// printing to file using iomanip to setw and precision
-	for (int i = 0; i < n+1; i++){
-		ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << u[i] << setw(16) << setprecision(7) << v[i] << endl;
-	}
+	// // printing to file using iomanip to setw and precision
+	// for (int i = 0; i < n+1; i++){
+	// 	ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << u[i] << setw(16) << setprecision(7) << v[i] << endl;
+	// }
 
-	ofile.close();
+	// ofile.close();
 
 	// freeing up memory
 	delete [] x;

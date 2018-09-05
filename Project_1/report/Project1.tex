@@ -1,5 +1,5 @@
 %setting document class
-\documentclass[a4paper,10pt,]{article}
+\documentclass[a4paper,10pt]{article}
 
 %importing packages
 \usepackage[utf8]{inputenc}
@@ -24,10 +24,9 @@
 
 %fixing the header 
 \pagestyle{fancy}
-\fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
-\fancyhead[CE]{\textsc{solving poisson's equation}}
-\fancyhead[CO]{\textsc{asprusten $\&$ rasmussen \& san }}
+\fancyhf{}
+\fancyhead[CO]{\textsc{asprusten \& rasmussen \& san }}
 \fancyfoot[C]{\thepage}
 
 %front page title/author setup
@@ -69,7 +68,7 @@ This project involves solving the one-dimensional Possion equation with dirichle
 \begin{center}
 \textsc{3. Algorithm}
 \end{center}
-In order to solve Poisson's equation we need to be able to solve the discretized set of equations involving the tridiagonal matrix $\hat{\text{A}}$. We will tackle this problem through the implementation of two algorithms. The first is the Tridiagonal matrix algorithm, also known as the Thomas algorithm. The second is the LU-decomposition algorithm. 
+In order to solve Poisson's equation we need to be able to solve the discretized set of equations involving the tridiagonal matrix $\textbf{A}$. We will tackle this problem through the implementation of two algorithms. The first is the Tridiagonal matrix algorithm, also known as the Thomas algorithm. The second is the LU-decomposition algorithm. 
 \bigskip
 
 3.1. \textbf{Tridiagonal Matrix Algorithm.} This algorithm is a simplified form of Gaussian elimination which can be used to solve tridiagonal systems of equations. A tridiagonal system of $n$ unknowns can be represented as 
@@ -77,11 +76,11 @@ In order to solve Poisson's equation we need to be able to solve the discretized
 \begin{equation}
 a_i v_{i-1} + b_i v_i +c_i v_{i+1} = b_i,
 \end{equation}
-where $a_1 = c_1 = 0$. Or in matrix representation as $\hat{\text{A}} \mathbf{v} = \mathbf{b}$. Written out in the $4 \cross 4$ case, this becomes
+where $a_1 = c_1 = 0$. Or in matrix representation as $\textbf{A} \mathbf{v} = \mathbf{b}$. Written out in the $4 \cross 4$ case, this becomes
 \begin{equation}
 \begin{bmatrix}
 b_1 & c_1 & 0 & 0 \\
-a_1& b_2 & c_2 & 0 \\
+a_2& b_2 & c_2 & 0 \\
 0 & a_3 & b_3 & c_3 \\
 0 & 0 & a_4 & b_4 
 \end{bmatrix}
@@ -93,15 +92,107 @@ v_4
 \end{bmatrix}
 =
 \begin{bmatrix}
-b_1\\
-b_2\\
-b_3\\
-b_4
+f_1\\
+f_2\\
+f_3\\
+f_4
 \end{bmatrix}.
 \end{equation}
-The algorithm starts off by reducing the tridiagonal matrix $\hat{\text{A}}$ to an upper tridiagonal matrix. This is achieved through Gaussian elimination.
+The algorithm starts off by reducing the tridiagonal matrix $\textbf{A}$ to an upper tridiagonal matrix. This is achieved through Gaussian elimination. We want to get rid of the $a_i$ terms located on the lower secondary diagonal. We perform the following row reduction on both sides of the equation
+\[
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+a_2& b_2 & c_2 & 0 \\
+0 & a_3 & b_3 & c_3 \\
+0 & 0 & a_4 & b_4 
+\end{bmatrix}
+\xrightarrow{\text{II} - \frac{a_2}{b_1}\text{I}}
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+0& \tilde{b_2}  & c_2 & 0 \\
+0 & a_3 & b_3 & c_3 \\
+0 & 0 & a_4 & b_4 
+\end{bmatrix}, \qquad
+\begin{bmatrix}
+f_1\\
+f_2\\
+f_3\\
+f_4
+\end{bmatrix}
+\xrightarrow{\text{II} - \frac{a_2}{b_1}\text{I}}
+\begin{bmatrix}
+f_1\\
+\tilde{f_2}\\
+f_3\\
+f_4
+\end{bmatrix}
+\]
+where $\tilde{b_2} = b_2 - a_2c_1/b_1$, and $\tilde{f_2} = f_2 - f_1a_2/b_1$, and II and I denotes the row 1 and 2 in the \textbf{A}. Similarly for the second row
 
+\[
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+0& \tilde{b_2}  & c_2 & 0 \\
+0 & a_3 & b_3 & c_3 \\
+0 & 0 & a_4 & b_4 
+\end{bmatrix}
+\xrightarrow{\text{III} - \frac{a_3}{b_2}\text{II}}
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+0& \tilde{b_2}  & c_2 & 0 \\
+0 & 0 & \tilde{b_3} & c_3 \\
+0 & 0 & a_4 & b_4 
+\end{bmatrix}, \qquad
+\begin{bmatrix}
+f_1\\
+\tilde{f_2}\\
+f_3\\
+f_4
+\end{bmatrix}
+\xrightarrow{\text{III} - \frac{a_3}{b_2}\text{II}}
+\begin{bmatrix}
+f_1\\
+\tilde{f_2}\\
+\tilde{f_3}\\
+f_4
+\end{bmatrix}
+\]
+where $\tilde{b_3} = b_3 - a_3c_2/b_2$, and $\tilde{f_3} = f_3 - f_2a_3/b_2$. Finally we compute the last row reduction
 
+\[
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+0& \tilde{b_2}  & c_2 & 0 \\
+0 & 0 & \tilde{b_3} & c_3 \\
+0 & 0 & a_4 & b_4 
+\end{bmatrix}
+\xrightarrow{\text{IIII} - \frac{a_4}{b_3}\text{III}}
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+0& \tilde{b_2}  & c_2 & 0 \\
+0 & 0 & \tilde{b_3} & c_3 \\
+0 & 0 & 0 & \tilde{b_4} 
+\end{bmatrix}, \qquad
+\begin{bmatrix}
+f_1\\
+\tilde{f_2}\\
+\tilde{f_3}\\
+f_4
+\end{bmatrix}
+\xrightarrow{\text{III} - \frac{a_3}{b_2}\text{II}}
+\begin{bmatrix}
+f_1\\
+\tilde{f_2}\\
+\tilde{f_3}\\
+\tilde{f_4}
+\end{bmatrix}
+\]
+
+where $\tilde{b_4} = b_4 - a_4c_3/b_3$, and $\tilde{f_4} = f_4 - f_3a_4/b_3$. 
+
+\newpage
+
+We are then left with the row reduced form of the set of equations $\tilde{\mathbf{A}}\mathbf{v} = \tilde{\mathbf{f}}$
 
 
 

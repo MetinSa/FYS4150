@@ -53,16 +53,20 @@ int main(int argc, char *argv[]){
 		v[i] = analytic_sol(x[i]);
 	}
 
+	//precomputing the diagonal
+	d[0] = d[n] = 2.0;
+	for (int i = 1; i < n; i++){
+		d[i] = (i+1.0)/((double)i);
+	}
+
 	//starting the clock
 	clock_t start, finish;
 	start = clock();
 
 	// forward substitution
-	d[0] = d[n] = 2.0;
 	f_tilde[1] = f[1];
 	for (int i = 2; i < n; i++){
-		d[i] = (i+1.0)/((double)i);
-		f_tilde[i] = f[i] + ((i-1.0)*f_tilde[i-1])/i;
+		f_tilde[i] = f[i] + (f_tilde[i-1]/d[i-1]);
 	}
 
 
@@ -70,7 +74,7 @@ int main(int argc, char *argv[]){
 	u[n-1] = f_tilde[n-1]/d[n-1];			// setting initial condition
 
 	for (int i = n-2; i > 0; i--){
-		u[i] = (i/(i+1.0))*(f_tilde[i] + u[i+1]);
+		u[i] = (f_tilde[i] + u[i+1])/d[i];
 	}	
 
 	// stopping the clock

@@ -1,0 +1,110 @@
+\documentclass[a4paper,10pt,]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc,url}
+\usepackage[english,]{babel}
+\usepackage{blindtext}
+\usepackage{natbib}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{changepage}
+\usepackage{amssymb}
+\usepackage{commath}
+\usepackage{physics}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{svg}
+\usepackage{wrapfig}
+\urlstyle{sf}
+
+
+\newcommand{\der}[2]{\frac{d #1}{d #2}}
+\newcommand{\dder}[2]{\frac{d^2 #1}{d #2 ^2}}
+\newcommand{\peder}[2]{\frac{\partial #1}{\partial #2}}
+
+
+
+
+
+ \title{ \textbf{FYS 4150 - Computational Physics\\
+ Project 1: Solving Poisson's equation in one dimension 
+}}
+ \date{\normalsize{4. September 2018} }
+ \author{
+ \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Markus Leira Asprusten}}\and \textsc{\small{Metin San}}
+ }
+ 
+
+ 
+\begin{document}
+
+
+\maketitle
+
+\begin{center}
+\textsc{Abstract}
+\end{center}
+
+\begin{adjustwidth}{7mm}{7mm}
+
+This project involves solving the one-dimensional Possion equation with dirichlet boundary conditions using two different algorithms. The first method is the tridiagonal matrix algorithm while the second is the LU decomposition. The conclusion of the project is that a specialized version of the tridiagonal algorithm is much faster.
+
+\end{adjustwidth}
+
+
+
+\bigskip
+
+\begin{center}
+\textsc{1. Introduction}
+\end{center}
+
+\blindtext
+
+\newpage
+
+
+\begin{center}
+\textsc{2. Theory}
+\end{center}
+2.1. \textbf{The Poisson Equation.} 
+Poisson's equation is a classical and well known differential equation from electromagnetism. The equation describes the potential field $\Phi$ generated from a charge distribution $\rho(\textbf{r})$. For three dimensions, the equation is given by
+ $$ \nabla^2 \Phi = -4 \pi \rho(\textbf{r}), $$
+where $\nabla = $ is the Laplace operator. If both $\Phi$ and $\rho(\textbf{r})$ is spherically symmetric, the equation can be simplified to an one dimensional equation in r,
+$$ \frac{1}{r^2}  \der{}{r} \left( r^2 \der{\Phi}{r} \right)= -4 \pi \rho(r).$$
+By substituting $\Phi = \phi(r)/r$, we can simplify the equation even more, giving 
+$$ \dder{\phi}{r} = -4\pi \rho(r). $$ 
+The final equation can be written in a general form by letting $\phi \rightarrow u$ and $r \rightarrow x$, and defining the right hand side of the equation as $f$,
+$$- u''(x) = f(x). $$ 
+
+In this study we will assume that the source term is $f(x) = 100 e^{-10x}$ with $x \in [0,1]$. We will also assume that we have Dirichlet boundary conditions, such that $ u(0) = u(1) = 0. $ With these assumptions the equation have an exact solution on the form $u(x) = 1 - (1 - e^{-10})x - e^{-10x}$. \\
+
+
+
+2.2. \textbf{Discretization of the problem.} 
+To solve the Poisson equation nummerically, we need to discretize the problem. The discritation can be done using $n+1$ x-values, such that $x \in [x_0, x_1, x_2, ..., x_n]$ with $x_0 = 0$ and $x_n = 1$, and $u(x_i) = u_i$. Then we have that 
+$$ x_i = x_0 + ih, $$
+where $h = (x_n - x_0)/n$ is the step size. \\
+
+A discretized version of $\dder{u(x)}{x}$ can be found by using Taylor expansion. We know that
+\begin{align*}
+u(x + h) &= u(x) + h u' + \frac{h^2}{2!} u'' + O(h^2) \\
+u(x - h) &= u(x) - h u' + \frac{h^2}{2!} u'' + O(h^2) 
+\end{align*} 
+The $O(h^2)$-term is the remaining terms from the Taylor expansion, or the error we get by excluding these terms. By adding $u(x + h)$ and $u(x-h)$, we can derive the desired expression:
+\begin{align*}
+u(x + h) + u(x - h) &= 2 u(x) + \frac{2}{2!} h^2 u'' + O(h^2) \\
+u''(x) &= \frac{u(x+1) + u(x-h) - 2u(x)}{h^2} + O(h^4) \\
+u'' &=  \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2}+ O(h^2)
+\end{align*}
+So by excluding the rest of the terms in the Taylor expansion, our equation is given by:
+$$- \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2} = f(x_i) = f_i. $$
+Further we can define $f_i^* = f_i h^2$ such that 
+$$- u_{i+1} - u_{i-1} + 2u_i = f_i^* .$$
+
+
+\end{document}
+
+

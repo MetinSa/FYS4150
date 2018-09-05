@@ -93,13 +93,16 @@ A discretized version of $\dder{u(x)}{x}$ can be found by using Taylor expansion
 u(x + h) &= u(x) + h u' + \frac{h^2}{2!} u'' + O(h^2) \\
 u(x - h) &= u(x) - h u' + \frac{h^2}{2!} u'' + O(h^2) 
 \end{align*} 
-By adding $u(x + h)$ and $u(x-h)$, we can derive the desired expression:
+The $O(h^2)$-term is the remaining terms from the Taylor expansion, or the error we get by excluding these terms. By adding $u(x + h)$ and $u(x-h)$, we can derive the desired expression:
 \begin{align*}
 u(x + h) + u(x - h) &= 2 u(x) + \frac{2}{2!} h^2 u'' + O(h^2) \\
-u''(x) &= \frac{u(x+1) + u(x-h) - 2u(x)}{h^2} + O(h^2) \\
+u''(x) &= \frac{u(x+1) + u(x-h) - 2u(x)}{h^2} + O(h^4) \\
 u'' &=  \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2}+ O(h^2)
 \end{align*}
-
+So by excluding the rest of the terms in the Taylor expansion, our equation is given by:
+$$- \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2} = f(x_i) = f_i. $$
+Further we can define $f_i^* = f_i h^2$ such that 
+$$- u_{i+1} - u_{i-1} + 2u_i = f_i^* .$$
 
 
 \end{document}

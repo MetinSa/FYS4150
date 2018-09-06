@@ -250,7 +250,7 @@ If one takes a closer look at the steps which we carried out, one notices the fo
 \end{equation}
 where $b_1 = \tilde{b_1}$ and $f_1 = \tilde{f}$. In general for a $(n \cross n)$ matrix we would have $i \in [2,n]$. The forward substitution has been implemented in the following way in c++:
 
-\lstinputlisting[language=c++, firstline=67, lastline=72]{../1b/problem_b.cpp}
+\lstinputlisting[language=c++, firstline=67, lastline=74]{../1b/problem_b.cpp}
 Note that instead of allocating memory for a seperate $\tilde{b}$ array, we have rather reused the b array.
 
 The last part of the tridiagonal algorithm is the backwards substitution. By setting up the set of equations in (?), we are able to solve each of these for their respective solution $u_i$. The first equation along with its solution is then
@@ -274,7 +274,7 @@ u_i = \frac{\tilde{f}_i - c_i u_{i+1}}{\tilde{b}_i}.
 \end{equation}
 \newpage
 This is implemented in the code as
-\lstinputlisting[language=c++, firstline=74, lastline=79]{../1b/problem_b.cpp}
+\lstinputlisting[language=c++, firstline=76, lastline=81]{../1b/problem_b.cpp}
 where we see that the last term has been computed separately as it differs from the general algorithm. 
 
 In general one of the most important aspects of any algorithm is its efficiency. The tridiagonal matrix algorithm is known to be a relatively fast algorithm as it only uses three diagonal vectors to represent the entire $(n \cross n)$ matrix which severely reduces the number of floating points operations (FLOPS) required to solve the set of equations. We will assume that addition, subtraction, multiplication and division all counts as FLOPS. In reality, division operations are said to be "heavier" than the other three operations. The forward substitution method requires 6 FLOPS for each iteration, and it is computed $(n-2)$ times which results in a total of $6(n-2)$ FLOPS. The backward substitution requires $3(n-2) +1 $ FLOPS where the $+1$ term comes from the definition of the last term, which has to be computed just once.
@@ -306,7 +306,7 @@ which has now also been reduced to 2 FLOPS down from 3.
 The new specialized algorithm is implemented in the
  following way
 \lstinputlisting[language=c++, firstline=66, lastline=77]{../1c/problem_c.cpp}
-The total number of FLOPS is then reduced to 4(n-2) + 1 operation.
+The total number of FLOPS is then reduced to $4(n-2) + 1$ operation.
 
 
 \end{document}

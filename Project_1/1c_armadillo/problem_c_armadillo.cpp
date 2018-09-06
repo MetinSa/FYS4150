@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 
 
     // Backward substitution
-    for (int i = n-1; i > 0; i--){
+    for (int i = n-2; i > 0; i--){
       u(i) = (f_tilde(i) + u(i+1))/b_tilde(i);
     }
 

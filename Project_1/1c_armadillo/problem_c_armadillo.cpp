@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 
     int n = pow(10.0, expo);
     double h = 1.0/n;                    // Step size
-    double hh = h*h
+    double hh = h*h;
 
     vec x(n+1);                          // X-array from x_0 = 0 to x_n = 1 with steplength h
     vec f(n+1);                          // Source term f

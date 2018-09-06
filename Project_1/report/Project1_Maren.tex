@@ -99,10 +99,43 @@ u(x + h) + u(x - h) &= 2 u(x) + \frac{2}{2!} h^2 u'' + O(h^2) \\
 u''(x) &= \frac{u(x+1) + u(x-h) - 2u(x)}{h^2} + O(h^4) \\
 u'' &=  \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2}+ O(h^2)
 \end{align*}
-So by excluding the rest of the terms in the Taylor expansion, our equation is given by:
-$$- \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2} = f(x_i) = f_i. $$
-Further we can define $f_i^* = f_i h^2$ such that 
-$$- u_{i+1} - u_{i-1} + 2u_i = f_i^* .$$
+So by excluding the rest of the terms in the Taylor expansion, and defining $f_i^* = f_i h^2= f(x_i) h^2 $, our equation is given by:
+$$- u_{i+1} - u_{i-1} + 2u_i = f_i^* .$$ 
+For each x-value we then get a set of linear equations, 
+\begin{align*}
+-v_2 - v_0 + 2v_1 &= f_1^*  \\
+-v_3 - v_1 + 2v_2 &= f_2^*\\
+\vdots \\
+-v_n - v_{n-2} + 2v_{n-1} &= f_{n-1}^*. \\
+\end{align*}
+It is easy to see that the right hand side of the equation set, can represent as a vector on the fllowing form
+$$ \mathbf{\hat{f}} =  
+\begin{bmatrix}
+	 f_1^*\\
+          f_2^* \\
+   	\vdots \\
+ 	f_{n-1}^* 
+\end{bmatrix} $$
+The left hand side of the equation set we can represent as a matrix product on the following form
+$$
+\mathbf{\hat{A}} \mathbf{\hat{u}} = 
+\begin{bmatrix}
+                           2& -1& 0 &\dots   & \dots &0 \\
+                           -1 & 2 & -1 &0 &\dots &\dots \\
+
+                           & \dots   & \dots &\dots   &\dots & \dots \\
+                           0&\dots   &  &-1 &2& -1 \\
+                           0&\dots    &  & 0  &-1 & 2 \\
+\end{bmatrix}
+\begin{bmatrix}
+	 u_1\\
+          u_2 \\
+   	\vdots \\
+ 	u_{n-1}
+\end{bmatrix}.
+$$
+This means that the set of equations can be written as a linear algebra problem on the form
+$$ \mathbf{\hat{A}} \mathbf{\hat{u}} = \mathbf{\hat{f}}.$$
 
 
 \end{document}

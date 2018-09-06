@@ -21,6 +21,36 @@
 \usepackage{svg}
 \usepackage{wrapfig}
 \usepackage{fancyhdr}
+\usepackage{color}
+
+\definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{cadetgrey}{rgb}{0.57, 0.64, 0.69}
+
+%listing customization
+\lstset{ %
+  backgroundcolor=\color{white},
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{cadetgrey},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{awesome},       % keyword style
+  language=c++,                 % the language of the code
+  otherkeywords={...},           % if you want to add more keywords to the set
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=3,	                   % sets default tabsize to 2 spaces
+}
 
 %fixing the header 
 \pagestyle{fancy}
@@ -76,7 +106,7 @@ In order to solve Poisson's equation we need to be able to solve the discretized
 \begin{equation}
 a_i v_{i-1} + b_i v_i +c_i v_{i+1} = b_i,
 \end{equation}
-where $a_1 = c_1 = 0$. Or in matrix representation as $\textbf{A} \mathbf{v} = \mathbf{b}$. Written out in the $4 \cross 4$ case, this becomes
+where $a_1 = c_1 = 0$. Or in matrix representation as $\textbf{A} \mathbf{u} = \mathbf{b}$. Written out in the $4 \cross 4$ case, this becomes
 \begin{equation}
 \begin{bmatrix}
 b_1 & c_1 & 0 & 0 \\
@@ -85,10 +115,10 @@ a_2& b_2 & c_2 & 0 \\
 0 & 0 & a_4 & b_4 
 \end{bmatrix}
 \begin{bmatrix}
-v_1 \\
-v_2 \\
-v_3 \\
-v_4
+u_1 \\
+u_2 \\
+u_3 \\
+u_4
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -98,7 +128,7 @@ f_3\\
 f_4
 \end{bmatrix}.
 \end{equation}
-The algorithm starts off by reducing the tridiagonal matrix $\textbf{A}$ to an upper tridiagonal matrix. This is achieved through Gaussian elimination. We want to get rid of the $a_i$ terms located on the lower secondary diagonal. We perform the following row reduction on both sides of the equation
+The algorithm is quite simple and consists of mainly two steps, a forward substitution and a backwards substitution. The forward substitution reduces the tridiagonal matrix $\textbf{A}$ to an upper tridiagonal matrix. This is achieved through Gaussian elimination. We want to get rid of the $a_i$ terms located on the lower secondary diagonal. We perform the following row reduction on both sides of the equation
 \[
 \begin{bmatrix}
 b_1 & c_1 & 0 & 0 \\
@@ -192,7 +222,60 @@ where $\tilde{b_4} = b_4 - a_4c_3/b_3$, and $\tilde{f_4} = f_4 - f_3a_4/b_3$.
 
 \newpage
 
-We are then left with the row reduced form of the set of equations $\tilde{\mathbf{A}}\mathbf{v} = \tilde{\mathbf{f}}$
+We are then left with the row reduced form of the set of equations $\tilde{\mathbf{A}}\mathbf{u} = \tilde{\mathbf{f}}$, or in matrix notation
+
+\begin{equation}
+\begin{bmatrix}
+b_1 & c_1 & 0 & 0 \\
+0& \tilde{b_2}  & c_2 & 0 \\
+0 & 0 & \tilde{b_3} & c_3 \\
+0 & 0 & 0 & \tilde{b_4} 
+\end{bmatrix} \begin{bmatrix}
+u_1\\
+u_2\\
+u_3\\
+u_4
+\end{bmatrix} = \begin{bmatrix}
+f_1\\
+\tilde{f_2}\\
+\tilde{f_3}\\
+\tilde{f_4}
+\end{bmatrix}.
+\end{equation}
+If one takes a closer look at the steps which we carried out, one notices the following pattern for $\tilde{b}$ and $\tilde{d}$. These can be generally expressed as
+
+\begin{equation}
+\tilde{b_i} = b_i - \frac{a_i c_{i-1}}{\tilde{b}_{i-1}}, \qquad 
+\tilde{f_i} = f_i - \frac{a_i \tilde{f}_{i-1}}{\tilde{b}_{i-1}}, \qquad i \in [2,4],
+\end{equation}
+where $b_1 = \tilde{b_1}$ and $f_1 = \tilde{f}$. In general for a $(n \cross n)$ matrix we would have $i \in [2,n]$. The forward substitution has been implemented in the following way in c++:
+
+\lstinputlisting[language=c++, firstline=67, lastline=72]{../1b/problem_b.cpp}
+Note that instead of allocating memory for a seperate $\tilde{b}$ array, we have rather reused the b array.
+
+The last part of the tridiagonal algorithm is the backwards substitution. By setting up the set of equations in (?), we are able to solve each of these for their respective solution $u_i$. The first equation along with its solution is then
+\[
+\tilde{b}_1 u_1 + c_1 u_2 = \tilde{f_1} \qquad \rightarrow \qquad u_1 = \frac{\tilde{f}_1 - c_1 u_2}{\tilde{b_1}},
+\]
+where we have used that $b_1 = \tilde{b}_1$. Similarly for the second and the third rows
+\[
+\tilde{b}_2 u_2 + c_2 u_3 = \tilde{f_2} \qquad \rightarrow \qquad u_2 = \frac{\tilde{f}_2 - c_2 u_3}{\tilde{b_2}},
+\]
+\[
+\tilde{b}_3 u_3 + c_3 u_4 = \tilde{f_3} \qquad \rightarrow \qquad u_3 = \frac{\tilde{f}_3 - c_3 u_4}{\tilde{b_3}}.
+\]
+For the final row, we simply get
+\[
+\tilde{b}_4 u_4 = \tilde{f}_4 \qquad \rightarrow \qquad u_4 = \frac{\tilde{f_4}}{\tilde{b}_4}.
+\]
+This is a result of the chosen dirichlet boundary conditions. Again we notice the solution $u_i$ follows the following pattern
+\begin{equation}
+u_i = \frac{\tilde{f}_i - c_i u_{i+1}}{\tilde{b}_i}.
+\end{equation}
+\newpage
+This is implemented in the code as
+\lstinputlisting[language=c++, firstline=74, lastline=79]{../1b/problem_b.cpp}
+where we see that the last term has been computed separately as it differs from the general algorithm
 
 
 

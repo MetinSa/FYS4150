@@ -25,9 +25,8 @@ int main(int argc, char** argv)
     // Reading in values from the command line
     if ( argc < 2)
     {
-  		cout << "Bad Usage: Please include the power of 10^n, and the content of at least the first diagonal vector. At least 2 inputs." << endl;
-  		cout << "Diagonal values is first middel, then first upper, then first lower, then second upper, then second lower etc." << endl;
-      exit(1);
+  		cout << "Bad Usage: Please include the power of 10^n.";
+  		exit(1);
   	}
     
     if (string(argv[1]) == "test")
@@ -39,13 +38,6 @@ int main(int argc, char** argv)
       n = pow(10.0, atoi(argv[1]));
     }
 
-    if (argc - 2 > n*2 -1)
-    {
-      cout << "Bad Usage: Too many arguments. Current n gives max " << 2*n << " inputs" << endl;
-      cout << "First argument should be the power of 10^n, then diagonal values." << endl;
-      cout << "Diagonal values is first middel, then first upper, then first lower, then second upper, then second lower etc." << endl;
-      exit(1);
-    }
   	
     // Load diagonals from command line
 
@@ -69,23 +61,18 @@ int main(int argc, char** argv)
 
     for (int i = 0; i<n; i++)
     {
-      for (int j = 0; j<n; j++)
-      {
-        for (int k = 0; k < argc - 2; k++)
-        {
-          if (k%2 == 0 && i == j + k/2)
-          {
-            A(i, j) = atof(argv[k+2]);
-          }
-          else if (k%2 != 0 && i == j - k + int(k/2))
-          {
-            A(i, j) = atof(argv[k+2]);
-          }
-        }
-      }
+    	A(i,i) = 2;
+    	if (i != 0)
+    	{
+    		A(i,i-1) = -1;
+    	}
+    	if(i != n-1)
+    	{
+    		A(i, i+1) = -1;
+    	}
     }
 
-    cout << "A:\n" << A << endl << endl;
+    //cout << "A:\n" << A << endl << endl;
 
     double x_0 = 0;    double x_n = 1;   // Boundary conditions
     double h = (x_n - x_0)/n;            // Step size
@@ -106,32 +93,48 @@ int main(int argc, char** argv)
 
     lu(L, U, A);   // LU-decomposition
 
-    cout << "Upper triangular:\n" << U << endl << endl;
-    cout << "Lower triangular:\n" << L << endl;
+    //cout << "Upper triangular:\n" << U << endl << endl;
+    //cout << "Lower triangular:\n" << L << endl;
 
     // Solving Ac = b => LUc = b => Lz = b => Uc = z
     // Forward substitution, finding Z
-
     z(0) = b(0);
-    for (int i = 1; i < n; i++)
+    for (int i = 1; i<n; i++)
     {
-      z(i) = b(i)-b(i-1)*L(i,i-1);
+    	z(i) = b(i) - L(i,i-1)*b(i-1);
     }
 
-    c(n-1) = z(n-1)/U(n-1, n-1);
-    // Backward substitution, finding c
+
+    c(n-1) = z(n-1)/L(n-1,n-1);
     for (int i = n-2; i == 0; i--)
     {
-      c(i) = z(i)/U(i,i) - z(i+1)*U(i,i+1);
+    	c(i) = z(i)/L(i,i) - z(i+1)*L(i,i+1);
     }
 
-    // FAILED HORRIBLY
-    cout << exac << endl << c;
+
     // Stopping the clock
   	finish = clock();
   	double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
   	// printing the time used
   	cout << "Time used: " << timeused << " seconds" << endl;
+
+  	// Writing the data to file
+  	ofstream ofile;
+	string name = "data_" + to_string(n) + "_c.dat";
+	ofile.open(name);
+	ofile << n << endl << endl;
+	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;
+
+	
+
+	// printing to file using iomanip to setw and precision
+	for (int i = 0; i < n; i++){
+		ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << exac[i] << setw(16) << setprecision(7) << c[i] << endl;
+	}
+
+	
+
+	ofile.close();
 
 
     return 0;

@@ -39,5 +39,5 @@ plt.title("n = %g" %n)
 if name[5] == 'a':
 	plt.savefig("plot_armadillo_"+str(n)+".png")
 else:
-	plt.savefig("plot_"+str(n)+".png")
+	plt.savefig("plot_"+str(n)+"_e.png")
 plt.show()

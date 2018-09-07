@@ -10,9 +10,9 @@ file = open(name, "r")
 n = int(file.readline())
 
 # defining x, y, v arrays
-x = np.zeros(n)
-u = np.zeros(n)
-v = np.zeros(n)
+x = np.zeros(n+1)
+u = np.zeros(n+1)
+v = np.zeros(n+1)
 
 #dummy index
 j = 0
@@ -23,11 +23,9 @@ for i, line in enumerate(file):
 	#skipping the first line
 	if i > 1:
 
-		a = line.split()
-
-		x[j] = a[0]
-		u[j] = a[1]
-		v[j] = a[2]
+		x[j] = line.split()[0]
+		u[j] = line.split()[1]
+		v[j] = line.split()[2]
 		j += 1
 
 # plotting

@@ -39,22 +39,9 @@ int main(int argc, char** argv)
     }
 
   	
-    // Load diagonals from command line
-
-    double *vecfill = new double[n*2-1];
-
-    for(int i = 0; i<n*2-1; i++)
-    {
-      vecfill[i] = 0;
-    }
-
-    for(int i = 0; i<argc-2; i++)
-    {
-      vecfill[i] = atof(argv[i+2]);
-    }
     
     
-    mat L, U;    // Assign armadillo matrices, lower and upper triangular for LU decomposition
+    mat L, U, inv_L, inv_U;    // Assign armadillo matrices, lower and upper triangular for LU decomposition
 
     mat A(n, n); // Assign matrix to be decomposed
     A.fill(0);
@@ -78,7 +65,6 @@ int main(int argc, char** argv)
     double h = (x_n - x_0)/n;            // Step size
 
     vec b(n); vec z(n); vec x(n); vec c(n); vec exac(n);
-    double sum;
 
     for (int i = 0; i < n; i++)
     {
@@ -93,23 +79,12 @@ int main(int argc, char** argv)
 
     lu(L, U, A);   // LU-decomposition
 
-    //cout << "Upper triangular:\n" << U << endl << endl;
-    //cout << "Lower triangular:\n" << L << endl;
+    // Inverting the matrices to solve the set of equations
+    L = inv(L);
+    U = inv(U);
 
-    // Solving Ac = b => LUc = b => Lz = b => Uc = z
-    // Forward substitution, finding Z
-    z(0) = b(0);
-    for (int i = 1; i<n; i++)
-    {
-    	z(i) = b(i) - L(i,i-1)*b(i-1);
-    }
-
-
-    c(n-1) = z(n-1)/L(n-1,n-1);
-    for (int i = n-2; i == 0; i--)
-    {
-    	c(i) = z(i)/L(i,i) - z(i+1)*L(i,i+1);
-    }
+    z = L*b;
+    c = U*z;
 
 
     // Stopping the clock
@@ -120,7 +95,7 @@ int main(int argc, char** argv)
 
   	// Writing the data to file
   	ofstream ofile;
-	string name = "data_" + to_string(n) + "_c.dat";
+	string name = "data_" + to_string(n) + "_e.dat";
 	ofile.open(name);
 	ofile << n << endl << endl;
 	ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;
@@ -129,7 +104,7 @@ int main(int argc, char** argv)
 
 	// printing to file using iomanip to setw and precision
 	for (int i = 0; i < n; i++){
-		ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << exac[i] << setw(16) << setprecision(7) << c[i] << endl;
+		ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << c[i] << setw(16) << setprecision(7) << exac[i] << endl;
 	}
 
 	

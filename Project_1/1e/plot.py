@@ -22,10 +22,10 @@ for i, line in enumerate(file):
 
 	#skipping the first line
 	if i > 1:
-
-		x[j] = line.split()[0]
-		u[j] = line.split()[1]
-		v[j] = line.split()[2]
+		spl = line.split()
+		x[j] = spl[0]
+		u[j] = spl[1]
+		v[j] = spl[2]
 		j += 1
 
 # plotting

@@ -33,28 +33,24 @@ int main(int argc, char** argv)
     double h = 1.0/n;                    // Step size
     double hh = h*h;
 
-    mat A = zeros<mat>(n,n);           // A matrix
-    vec x(n);                          // X-array from x_0 = 0 to x_n = 1 with steplength h
-    vec f(n);                          // Source term f
-    vec exact(n);                      // Exact solution
+    mat A = zeros<mat>(n+1,n+1);         // A matrix
+    vec x(n+1);                          // X-array from x_0 = 0 to x_n = 1 with steplength h
+    vec f(n+1);                          // Source term f
+    vec exact(n+1);                      // Exact solution
 
-    x(0) = h;                f(0) =  hh*func(x(0));
-    x(n-1) = x(0)+(n-1)*h;   f(n-1) = hh*func(x(n-1));
-    exact(0) = exact_solution(x(0));
-    exact(n-1) = exact_solution(x(n-1));
 
     //Filling x and calculating f and exact.
-    for (int i = 1; i < n-1; i++){
-       x(i) = x(i-1)+h;
+    for (int i = 1; i < n+1; i++){
+       x(i) =  i*h;//x(i-1)+h;
        f(i) = func(x(i))*hh;
        exact(i) = exact_solution(x(i));
        }
 
 
     // Filling the matrix A
-    A(0,0) = 2.0; A(0,1) = -1;
+    A(1,1) = 2.0; A(1,2) = -1;
 
-    for (int i = 1; i < n-1; i++){
+    for (int i = 2; i < n-1; i++){
       A(i,i-1) = -1.0;
       A(i,i) = 2.0;
       A(i,i+1) = -1.0;
@@ -62,14 +58,9 @@ int main(int argc, char** argv)
 
       A(n-1,n-1) = 2.0; A(n-1,n-2) = -1; A(n-2,n-1) = -1;
 
-      cout << x << endl;
-      cout << A << endl;
-      cout << f << endl;
+
       // Solving Au = f
       vec u = solve(A,f);
-
-      cout << u << endl;
-      cout << exact << endl;
 
 
       // Convert the integer n to string

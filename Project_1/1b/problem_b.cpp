@@ -65,10 +65,12 @@ int main(int argc, char *argv[]){
 	start = clock();
 
 	f_tilde[1] = f[1];
+	double ab;
 	// forward substitution
 	for (int i = 2; i < n; i++){
-		b[i] = b[i] - (a[i]*c[i-1])/b[i-1];
-		f_tilde[i] = f[i] - (a[i]*f_tilde[i-1])/b[i-1];
+		ab = a[i]/b[i-1];
+		b[i] = b[i] - ab*c[i-1];
+		f_tilde[i] = f[i] - ab*f_tilde[i-1];
 	}
 
 	// backward substitution

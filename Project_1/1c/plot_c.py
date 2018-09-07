@@ -29,14 +29,14 @@ for i, line in enumerate(file):
 		j += 1
 
 # plotting
-plt.plot(x, v, color = "black", label = "Exact Solution")
-plt.plot(x, u, color = "royalblue", label = "Computed")
+plt.plot(x, v, color = "black", label = "Analytic Solution")
+plt.plot(x, u, color = "royalblue", label = "Numerical Solution")
 plt.grid(linestyle = "--")
 plt.legend()
-plt.xlabel("x")
-plt.ylabel("u(x)")
-plt.title("n = %g" %n)
-plt.savefig("plot_"+str(n)+"_c.png")
+plt.xlabel("$x$")
+plt.ylabel("$u(x)$")
+plt.title("Gridpoints: n = %g" %n)
+plt.savefig("fig_"+str(n)+"_b.pdf")
 plt.show()
 
 

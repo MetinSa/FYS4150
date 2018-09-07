@@ -387,5 +387,74 @@ The new specialized algorithm is implemented in the
 \lstinputlisting[language=c++, firstline=66, lastline=77]{../1c/problem_c.cpp}
 The total number of FLOPS is then reduced to $4(n-2) + 1$ operation, which is half that of the general algorithm. 
 
+\bigskip
+
+\begin{center}
+\textsc{4. Results}
+\end{center}
+4.1. \textbf{The General Tridiagonal Algorithm.} As previously mentioned, the general tridiagonal matrix algorithm can solve problems for matrices of $(n \cross n)$. We have tested the algorithm for $n = 10$, $n = 100$, and  $n = 1000$. Together with the numerical solution, we also compute the exact solution mentioned in 2.1 with corresponding grid points. 
+
+The results are produced by compiling and executing the c++ program \textit{problem\_b.cpp} with the commandline arguments $1$ $-1$ $2$ $-1$. The first argument reads in number of grid points and is calculated by $n = 10^i$ where $i$ is the commandline input. The next three arguments fills the diagonals of the tridiagonal matrix, which in this case becomes $a_i = c_i  = -1$ and $b_i = 2$ which correspond to the discretized second derivative matrix. The result for the $n= 10$ can be seen in figure \ref{fig:1}, $n = 100$ in figure \ref{fig:2}, and $n=1000$ in figure \ref{fig:3}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/fig_10_b.pdf}
+  \caption{Numerical and analytic solution to Poisson's equation for $n = 10$ grid points. }
+  \label{fig:1}
+\end{figure}
+
+In figure \ref{fig:1} we see that the both solutions have the same shape but the numerical one converges to $x=1$ from below the analytic solution. The low number of grid points results in a non smooth curve for both the analytic and numerical solution. The Numerical solution ends up with a lower amplitude compared to the exact solution.
+
+For the $n = 100$ case seen in figure \ref{fig:2}, we see that the numerical solution lies nearly perfectly on top of the analytic one. For a simple 100 integration points, the algorithm seems to accurately reproduce the exact solution of the Poisson equation.
+
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/fig_100_b.pdf}
+  \caption{Numerical and analytic solution to Poisson's equation for $n = 100$ grid points.}
+  \label{fig:2}
+\end{figure}
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/fig_1000_b.pdf}
+  \caption{Numerical and analytic solution to Poisson's equation for $n = 1000$ grid points.}
+  \label{fig:3}
+\end{figure}
+
+For the third and final precision test at $n = 1000$ seen in figure \ref{fig:3} the numerical solution is indistinguishable from the analytic one. These results suggest that our algorithm works as intended.
+
+\bigskip
+
+4.2. \textbf{Special Tridiagonal Algorithm.}
+The results produced by the special tridiagonal algorithm are the same as the once for the general algorithm, as was to be expected. The specialized algorithms only objective was to reduce the number of floating point operations and therefore cut the computation time of the calculation. 
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/rel_error_plot.pdf}
+  \caption{Maximum relative error as a function of grid points.}
+  \label{fig:4}
+\end{figure}
+
+\begin{table}[]
+\begin{tabular}{lll}
+General Algorithm  & Special Algorithm & LU-Decomposition \\
+0.030738           & 0.023905          &                  \\
+0.028017           & 0.024106          &                  \\
+0.028026           & 0.024124          &                  \\
+0.028299           & 0.023557          &                  \\
+0.028742           & 0.024067          &                  \\
+0.028511           & 0.023537          &                  \\
+0.028791           & 0.02406           &                  \\
+0.028829           & 0.024148          &                  \\
+0.028296           & 0.023556          &                  \\
+0.028575           & 0.023642          &                  \\
+                   &                   &                  \\
+Average Time Spent &                   &                  \\
+0.0286824          & 0.0238702         &                 
+\end{tabular}
+\end{table}
 
 \end{document}

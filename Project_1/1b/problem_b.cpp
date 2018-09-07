@@ -99,6 +99,12 @@ int main(int argc, char *argv[]){
 
 	ofile.close();
 
+
+	// // Saving time spent on algorithm
+	// ofile.open("time_b.dat",ios_base::app | ios_base::out);
+	// ofile << timeused << endl;
+	// ofile.close();
+
 	// freeing up memory
 	delete [] x;
 	delete [] a;

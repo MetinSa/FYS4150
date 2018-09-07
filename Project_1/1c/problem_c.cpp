@@ -88,14 +88,18 @@ int main(int argc, char *argv[]){
 	// ofile << n << endl << endl;
 	// ofile << "x:" << setw(15) << "u:" << setw(15) << "v:" << endl;
 
-	//
+	
 
 	// // printing to file using iomanip to setw and precision
 	// for (int i = 0; i < n+1; i++){
 	// 	ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << u[i] << setw(16) << setprecision(7) << v[i] << endl;
 	// }
 
-	//
+	// Saving time spent on algorithm
+	ofile.open("time_.dat",ios_base::app | ios_base::out);
+	ofile << timeused << endl;
+	ofile.close();
+	
 
 	// ofile.close();
 

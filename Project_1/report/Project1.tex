@@ -64,8 +64,8 @@
  Project 1: Solving Poisson's equation in one dimension 
 }
  \date{\normalsize{4. September 2018} }
- \author{
- \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Markus Leira Asprusten}}\and \textsc{\small{Metin San}}
+ \author{\textsc{\small{Markus Leira Asprusten}}
+\and \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Metin San}}
  }
  
 \newcommand{\der}[2]{\frac{d #1}{d #2}}
@@ -152,7 +152,7 @@ Inserting for specific $i$-value leaves us with a set of linear equations
 -u_2 - u_0 + 2u_1 &= f_1^* , \\
 -u_3 - u_1 + 2u_2 &= f_2^*,\\
 \vdots \\
--v_n - v_{n-2} + 2v_{n-1} &= f_{n-1}^*. \\
+-u_n - u_{n-2} + 2u_{n-1} &= f_{n-1}^*. \\
 \end{align*}
 This set of equations can also be represented in terms of matrices. The LHS of the equation can be splitted up into the product of a matrix $\mathbf{\hat{A}}$ and a vector $\mathbf{\hat{u}}$
 
@@ -194,7 +194,7 @@ With the problem now formulated in terms of linear algebra, the next step is to 
 \noindent 3.1. \textbf{Tridiagonal Matrix Algorithm.} This algorithm is a simplified form of Gaussian elimination which can be used to solve tridiagonal systems of equations. In the general case, a tridiagonal system of $n$ unknowns can be represented as 
 
 \begin{equation}\label{eq:5}
-a_i u_{i-1} + b_i u_i +c_i u_{i+1} = b_i,
+a_i u_{i-1} + b_i u_i +c_i u_{i+1} = f_i,
 \end{equation}
 where $a_1 = c_1 = 0$. Or in matrix representation as $\mathbf{\hat{A}} \mathbf{\hat{u}} = \mathbf{\hat{f}}$. We spot that this corresponds to our linear algebra problem with Possion's Equation. Written out in the $4 \cross 4$ case, this becomes
 \begin{equation}\label{eq:6}
@@ -332,7 +332,7 @@ f_1\\
 \tilde{f_4}
 \end{bmatrix}.
 \end{equation}
-If one takes a closer look at the steps which we carried out, one notices the following pattern for $\tilde{b}$ and $\tilde{d}$. These can be generally expressed as
+If one takes a closer look at the steps which we carried out, one notices the following pattern for $\tilde{b}$ and $\tilde{f}$. These can be expressed on the general form
 
 \begin{equation}\label{eq:8}
 \tilde{b_i} = b_i - \frac{a_i c_{i-1}}{\tilde{b}_{i-1}}, \qquad 
@@ -366,14 +366,13 @@ u_i = \frac{\tilde{f}_i - c_i u_{i+1}}{\tilde{b}_i}.
 \newpage
 This is implemented in the code as
 \lstinputlisting[language=c++, firstline=76, lastline=81]{../1b/problem_b.cpp}
-where we see that the last term has been computed separately as it differs from the general algorithm. Prior to these two code snippets are the allocation of memory to the different vectors that are to be used in the algorithm. The code displayed here has used classic c++ memory allocation. We have however also created corresponding armadillo code to every program which can be found on the Github together with the classical code.
+where we see that the last term has been computed separately as it differs from the general algorithm. The code prior to these two snippets addresses the allocation of memory to the different vectors that are to be used in the algorithm. The code displayed here has used classic c++ memory allocation. We have however also created corresponding codes to every program which use the package Armadillo. These can be found on the Github alongside the the standard code.
 
-In general one of the most important aspects of any algorithm is its efficiency. The tridiagonal matrix algorithm is known to be a relatively fast algorithm as it only uses three diagonal vectors to represent the entire $(n \cross n)$ matrix which severely reduces the number of floating points operations (FLOPS) required to solve the set of equations. We will assume that addition, subtraction, multiplication and division all counts as FLOPS. In reality, division operations are said to be "heavier" than the other three operations. The forward substitution method requires 6 FLOPS for each iteration, and it is computed $(n-2)$ times which results in a total of $6(n-2)$ FLOPS. The backward substitution requires $3(n-2) +1 $ FLOPS where the $+1$ term comes from the definition of the last term, which has to be computed just once.
-
+In general one of the most important aspects of any algorithm is its efficiency. The tridiagonal matrix algorithm is known to be a relatively fast algorithm as it only uses three diagonal vectors to represent the entire $(n \cross n)$ matrix which severely reduces the number of floating point operations (FLOPS) required to solve the set of equations. We will assume that addition, subtraction, multiplication and division all counts as FLOPS. In reality, division operations are "heavier" and requires the most computation time. The forward substitution method requires 6 FLOPS for each iteration, and it is computed $(n-2)$ times which results in a total of $6(n-2)$ FLOPS. The backward substitution requires $2(n-2) +1 $ FLOPS where the $+1$ term comes from the definition of the last term, which has to be computed just once. All together the algorithm requires $8(n-2) +1$ FLOPS. For large numbers of $n$, the algorithm can be said to require $O(8n)$ FLOPS, as the constants can be neglected.
 \bigskip
 
 \noindent 3.1.1 \textbf{Optimizing the Tridiagonal Matrix Algorithm.}
-The number of floating point operations in the algorithm can be severely reduced if we specialize it for our special case with the Poisson equation. Since we are only interested in the tridiagonal matrix which resulted from the discretization of the second derivative, we can use the precomputed matrix $\mathbf{\hat{A}}$. This allows us to rewrite the expressions for the forward and backwards substitution. If one inserts for the constant $a_i =  c_i = -1$ and $b_i = 2$ into equations \eqref{eq:8} and \eqref{eq:9}, we find that we can in fact rewrite these into the form
+The number of floating point operations in the algorithm can be severely reduced if we tailor it to the Poisson equation. Since we are only interested in the tridiagonal matrix which resulted from the discretization of the second derivative, we can use the precomputed matrix $\mathbf{\hat{A}}$ with known diagonal elements. This allows us to rewrite the expressions for the forward and backwards substitution. If one inserts for the constant $a_i =  c_i = -1$ and $b_i = 2$ into equations \eqref{eq:8} and \eqref{eq:9}, we find that we can in fact rewrite these into the form
 
 \begin{equation}\label{eq:10}
 \tilde{b}_i = 2 - \frac{1}{\tilde{b}_{i-1}} = \frac{i+1}{i},
@@ -384,11 +383,11 @@ The number of floating point operations in the algorithm can be severely reduced
 \begin{equation}\label{eq:12}
 u_{i} = \frac{i}{i+1}(\tilde{f}_{i} +u_{i+1}).
 \end{equation}
-Now, since the diagonal elements $\tilde{b}_i$ can be precomputed as they only depend on $i$, we can move this calculation outside of the main algorithm. Further, we spot that we can rewrite (?) in terms of $\tilde{b}_{i-1} = i/(i-1) $, to the form
+Since the diagonal elements $\tilde{b}_i$ can be precomputed as they only depend on $i$, this calculation can be moved outside of the main algorithm. Further, we spot that we can rewrite equation \eqref{eq:11} in terms of $\tilde{b}_{i-1} = i/(i-1) $, to the form
 \begin{equation}\label{eq:13}
 \tilde{f}_i = f_i + \frac{\tilde{f}_{i-1}}{\tilde{b}_{i-1}}
 \end{equation}
-Which has now been reduced to 2 FLOPS down from 3. Similarly we rewrite the (?) in terms of $\tilde{b}_i$ to the from
+Which has now been reduced to 2 FLOPS down from 3. Similarly we rewrite the equation \eqref{eq:12} in terms of $\tilde{b}_i$ to the from
 \begin{equation}\label{eq:14}
 u_i = \frac{\tilde{f}_i + u_{i+1}}{\tilde{b}_i},
 \end{equation}
@@ -396,21 +395,24 @@ which has now also been reduced to 2 FLOPS down from 3.
 The new specialized algorithm is implemented in the
  following way
 \lstinputlisting[language=c++, firstline=66, lastline=77]{../1c/problem_c.cpp}
-The total number of FLOPS is then reduced to $4(n-2) + 1$ operation, which is half that of the general algorithm. 
+where the total number of FLOPS have been reduced to $4(n-2) + 1$ operation, which is half that of the general algorithm. For large numbers of $n$ the running time can be said to go as $O(4n)$.
 
-Finally we are interested in finding out how much the numerical solution deviates from the analytic. The following equation gives us the relative error $\epsilon_i$ in the data set, where $i = 1, ...,n$
+These algorithms are then ready to be used. We are however  interested in finding out how much the computed numerical solution deviates from the analytic. The following equation gives us the relative error $\epsilon_i$ in the data set, where $i = 1, ...,n$
 
 \begin{equation}\label{eq:15}
-\epsilon_i = \log_{10} \left( \abs{\frac{u_i - v_i}{v_i}}, \right)
+\epsilon_i = \log_{10} \left( \abs{\frac{u_i - v_i}{v_i}} \right),
 \end{equation}
-where $u_i$ is the numerically computed solution and $v_i$ is the exact analytic solution. The relative error $\epsilon_i$ can then be computed for different number of grid points. 
+where $u_i$ is the numerically computed solution and $v_i$ is the exact analytic solution. The relative error $\epsilon_i$ can then be computed for different number of grid points.
 
 \bigskip
 
 \begin{center}
 \textsc{4. Results}
 \end{center}
-4.1. \textbf{The General Tridiagonal Algorithm.} As previously mentioned, the general tridiagonal matrix algorithm can solve problems for matrices of $(n \cross n)$. We have tested the algorithm for $n = 10$, $n = 100$, and  $n = 1000$. Together with the numerical solution, we also compute the exact solution mentioned in 2.1 with corresponding grid points. 
+
+\noindent All three algorithms are tested with varying precision. The produced results, figures and errors are presented here.\\
+
+\noindent 4.1. \textbf{The General Tridiagonal Algorithm.} As previously mentioned, the general tridiagonal matrix algorithm can solve problems for matrices of $(n \cross n)$. We have tested the algorithm for $n = 10$, $n = 100$, and  $n = 1000$. The numerical solution is computed alongside the exact analytic solution so they can be compared.
 
 The results are produced by compiling and executing the c++ program \textit{problem\_b.cpp} with the commandline arguments $1$ $-1$ $2$ $-1$. The first argument reads in number of grid points and is calculated by $n = 10^i$ where $i$ is the commandline input. The next three arguments fills the diagonals of the tridiagonal matrix, which in this case becomes $a_i = c_i  = -1$ and $b_i = 2$ which correspond to the discretized second derivative matrix. The result for the $n= 10$ can be seen in figure \ref{fig:1}, $n = 100$ in figure \ref{fig:2}, and $n=1000$ in figure \ref{fig:3}.
 
@@ -423,16 +425,14 @@ The results are produced by compiling and executing the c++ program \textit{prob
 
 In figure \ref{fig:1} we see that the both solutions have the same shape but the numerical one converges to $x=1$ from below the analytic solution. The low number of grid points results in a non smooth curve for both the analytic and numerical solution. The Numerical solution ends up with a lower amplitude compared to the exact solution.
 
-For the $n = 100$ case seen in figure \ref{fig:2}, we see that the numerical solution lies nearly perfectly on top of the analytic one. For a simple 100 integration points, the algorithm seems to accurately reproduce the exact solution of the Poisson equation.
-
-
-
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.9\linewidth]{figures/fig_100_b.pdf}
   \caption{Numerical and analytic solution to Poisson's equation for $n = 100$ grid points.}
   \label{fig:2}
 \end{figure}
+
+For $n = 100$, seen in figure \ref{fig:2}, we see that the numerical solution lies nearly perfectly on top of the exact solution. For a simple 100 integration points, the algorithm seems to accurately reproduce the exact solution of the Poisson equation.
 
 
 \begin{figure}[h]
@@ -447,15 +447,15 @@ For the third and final precision test at $n = 1000$ seen in figure \ref{fig:3} 
 \bigskip
 
 \noindent 4.2. \textbf{Special Tridiagonal Algorithm.}
-The results produced by the special tridiagonal algorithm are the same as the once for the general algorithm, as was to be expected. The specialized algorithms only objective was to reduce the number of floating point operations and therefore cut the computation time of the calculation. 
+The results produced by the special tridiagonal algorithm are the same as the once for the general algorithm, as was to be expected. The specialized algorithms only objective was to reduce the number of floating point operations and therefore cut the computation time of the calculation. \\
 
 \noindent 4.3 \textbf{Execution time.}
 The efficiency of the algorithms is compared by extracting the execution time for each of the algorithms separately. The execution time should be proportional to the number of FLOPS required in the algorithm. The following results has been found using a MacBook Pro (Early 2015) to run the program. The program has been executed 10 times in rapid succession collecting each run time. These are then used to find an average executing time. The run time results can be seen in figure \ref{fig:5}. 
 
-For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. 
+For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. \\
 
 \noindent 4.4 \textbf{Relative Error.}
-Having computed the relative error for $n = 10, 100, 1000, ..., 10^7$ grid points, we can extract the maximum value of the error for each set of grid points. Max$[\epsilon_i]$ is then plotted as a function if the grid points. The result is seen in figure \ref{fig:4}.
+Having computed the relative error for $n = 10, ..., 10^7$ grid points, we can extract the maximum value of the error for each set of grid points. Max$[\epsilon_i]$ is then plotted as a function if the grid points. The result is seen in figure \ref{fig:4}.
 
 \begin{figure}[h]
   \centering
@@ -468,7 +468,7 @@ We see that the relative error decreases linearly with increasing number of grid
 
 
 
-\begin{table}[]  \label{fig:5}
+\begin{table}[h]  \label{fig:5}
 \begin{tabular}{lll}
 \hline
 General Algorithm  & Special Algorithm & LU-Decomposition \\
@@ -489,6 +489,56 @@ Average Time Spent &                   &                  \\
 0.0286824          & 0.0238702         &                 
 \end{tabular}
 \end{table}
+
+\begin{table}[]  \label{fig:5}
+\begin{tabular}{lll}
+\hline
+General Algorithm  & Special Algorithm \\
+\hline
+0.106575           & 0.066029                       \\
+0.106026           & 0.066126                       \\
+0.115654           & 0.066128                       \\
+0.106315           & 0.068742                       \\
+0.106237           & 0.067858                       \\
+0.105891           & 0.067724                       \\
+0.106279           & 0.068543                       \\
+0.107324           & 0.068350                        \\
+0.105830           & 0.067883                        \\
+0.106344           & 0.068466                        \\
+                   &                   &                  \\\hline
+Average Time Spent &                                \\
+\hline
+0.1072475          & 0.068466                      
+\end{tabular}
+\end{table}
+
+
+\begin{center}
+\textsc{Conclusion / Discussion ellerno}
+\end{center}
+The results presented in section ? shows that by only including the first terms of the Taylor expansion to approximate the second derivative, does not give a big error. At least not when using a big $n$.  [...] \\
+
+Section ? shows that even though we know from the mathematical theory that a bigger $n$ and a smaller stepsize $h$ shoud give better results, this is not the case nummerically. The reason for this, is that there is a limit on how accurate a number can be represented on a computer. Beacuse of this limit, the computer has to make round offs, which increases the total error. This means that there has to be a ideal stepsize $h$, giving the best results. From figure ?, we found that this ideal stepsize was ??. [...] \\
+
+From table ? we can see that it was not big difference in the run time between the general and the special algorithm. The special was only a bit faster, even thogh it had half as many flops as the general. But when we ran the program on a older computer with a worse processor we could see a much bigger difference between the two run times. On this computer the special algorithm was almost twice as fast as the general. This is also what we expected, since this algorithm had half as many FLOPS as the general. \\
+
+Bare noen tanker, trenger ikke være med.
+
+\bigskip
+
+\textbf{Punkter som bør diskuteres: (hvis vi skjønner hvorfor)}\\
+- Hvorfor numerisk kommer neden ifra (figure 1)\\
+- Hvorfor run time er som den er\\
+- Relative Error, hvorfor den begynner å øke\\
+- Noe om LU
+\bigskip
+
+\textbf{Andre ting som må fikses:}\\
+- Sette inn LU info i method, litt i resultater og diskusjon\\
+- Skrive en bedre Abstract siden den bør skrives til slutt.\\
+- Prøve å fikse posisjonen til figurene og bestemme hvilke/hvilken tabell med run times vi skal bruke.\\
+- Finne en bedre tittel??
+
 
 
 \end{document}

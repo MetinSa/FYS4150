@@ -103,7 +103,7 @@ We will derive and experiment with two specific numerical algorithms which can b
 
 
 \begin{center}
-\textsc{2. Theory}
+\textsc{2. Theoretical Background}
 \end{center}
 2.1. \textbf{The Poisson Equation.} 
 Poisson's equation is a classical and well known differential equation from electromagnetism. The equation describes the potential field $\Phi$ generated from a charge distribution $\rho(\textbf{r})$. For three dimensions, the equation is given by
@@ -175,7 +175,7 @@ $$ \mathbf{\hat{A}} \mathbf{\hat{u}} = \mathbf{\hat{f}}.$$
 \bigskip
 
 \begin{center}
-\textsc{3. Algorithm}
+\textsc{3. Algorithm \& Implementation }
 \end{center}
 With the problem now formulated in terms of linear algebra, the next step is to solve it. We will tackle this problem through the implementation of two algorithms. The first is the Tridiagonal matrix algorithm, also known as the Thomas algorithm. The second is the LU-decomposition algorithm. 
 \bigskip
@@ -387,6 +387,12 @@ The new specialized algorithm is implemented in the
 \lstinputlisting[language=c++, firstline=66, lastline=77]{../1c/problem_c.cpp}
 The total number of FLOPS is then reduced to $4(n-2) + 1$ operation, which is half that of the general algorithm. 
 
+Finally we are interested in finding out how much the numerical solution deviates from the analytic. The following equation gives us the relative error $\epsilon_i$ in the data set, where $i = 1, ...,n$
+
+\begin{equation}
+\epsilon_i = \log_{10} \left( \abs{10} \right)
+\end{equation}
+
 \bigskip
 
 \begin{center}
@@ -436,7 +442,7 @@ The efficiency of the algorithms is compared by extracting the execution time fo
 
 For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. 
 
-Another interesting quantity is the relative error in the data set. We are interested in finding out how much the numerical solution deviates from the analytic.
+
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.9\linewidth]{figures/rel_error_plot.pdf}

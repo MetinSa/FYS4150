@@ -124,7 +124,7 @@ In this study we will assume that the source term is $f(x) = 100 e^{-10x}$ with 
 
 
 
-2.2. \textbf{Discretization of the problem.} 
+\noindent 2.2. \textbf{Discretization of the problem.} 
 To solve the Poisson equation nummerically, we need to discretize the problem. The discretization can be done using $(n+1)$ $x$-values, so that $x \in [x_0, x_1, x_2, ..., x_n]$ with $x_0 = 0$ and $x_n = 1$, and $u(x_i) = u_i$. The $x$-values are then given as 
 $$ x_i = x_0 + ih, $$
 where $h = (x_n - x_0)/n$ is the step size. \\
@@ -191,7 +191,7 @@ $$ \mathbf{\hat{A}} \mathbf{\hat{u}} = \mathbf{\hat{f}}.$$
 With the problem now formulated in terms of linear algebra, the next step is to solve it. We will tackle this problem through the implementation of two algorithms. The first is the Tridiagonal matrix algorithm, also known as the Thomas algorithm. The second is the LU-decomposition algorithm. 
 \bigskip
 
-3.1. \textbf{Tridiagonal Matrix Algorithm.} This algorithm is a simplified form of Gaussian elimination which can be used to solve tridiagonal systems of equations. In the general case, a tridiagonal system of $n$ unknowns can be represented as 
+\noindent 3.1. \textbf{Tridiagonal Matrix Algorithm.} This algorithm is a simplified form of Gaussian elimination which can be used to solve tridiagonal systems of equations. In the general case, a tridiagonal system of $n$ unknowns can be represented as 
 
 \begin{equation}\label{eq:5}
 a_i u_{i-1} + b_i u_i +c_i u_{i+1} = b_i,
@@ -372,7 +372,7 @@ In general one of the most important aspects of any algorithm is its efficiency.
 
 \bigskip
 
-3.1.1 \textbf{Optimizing the Tridiagonal Matrix Algorithm.}
+\noindent 3.1.1 \textbf{Optimizing the Tridiagonal Matrix Algorithm.}
 The number of floating point operations in the algorithm can be severely reduced if we specialize it for our special case with the Poisson equation. Since we are only interested in the tridiagonal matrix which resulted from the discretization of the second derivative, we can use the precomputed matrix $\mathbf{\hat{A}}$. This allows us to rewrite the expressions for the forward and backwards substitution. If one inserts for the constant $a_i =  c_i = -1$ and $b_i = 2$ into equations \eqref{eq:8} and \eqref{eq:9}, we find that we can in fact rewrite these into the form
 
 \begin{equation}\label{eq:10}
@@ -446,15 +446,15 @@ For the third and final precision test at $n = 1000$ seen in figure \ref{fig:3} 
 
 \bigskip
 
-4.2. \textbf{Special Tridiagonal Algorithm.}
+\noindent 4.2. \textbf{Special Tridiagonal Algorithm.}
 The results produced by the special tridiagonal algorithm are the same as the once for the general algorithm, as was to be expected. The specialized algorithms only objective was to reduce the number of floating point operations and therefore cut the computation time of the calculation. 
 
-4.3 \textbf{Execution time.}
+\noindent 4.3 \textbf{Execution time.}
 The efficiency of the algorithms is compared by extracting the execution time for each of the algorithms separately. The execution time should be proportional to the number of FLOPS required in the algorithm. The following results has been found using a MacBook Pro (Early 2015) to run the program. The program has been executed 10 times in rapid succession collecting each run time. These are then used to find an average executing time. The run time results can be seen in figure \ref{fig:5}. 
 
 For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. 
 
-4.4 \textbf{Relative Error.}
+\noindent 4.4 \textbf{Relative Error.}
 Having computed the relative error for $n = 10, 100, 1000, ..., 10^7$ grid points, we can extract the maximum value of the error for each set of grid points. Max$[\epsilon_i]$ is then plotted as a function if the grid points. The result is seen in figure \ref{fig:4}.
 
 \begin{figure}[h]

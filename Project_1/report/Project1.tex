@@ -390,8 +390,9 @@ The total number of FLOPS is then reduced to $4(n-2) + 1$ operation, which is ha
 Finally we are interested in finding out how much the numerical solution deviates from the analytic. The following equation gives us the relative error $\epsilon_i$ in the data set, where $i = 1, ...,n$
 
 \begin{equation}
-\epsilon_i = \log_{10} \left( \abs{10} \right)
+\epsilon_i = \log_{10} \left( \abs{\frac{u_i - v_i}{v_i}}, \right)
 \end{equation}
+where $u_i$ is the numerically computed solution and $v_i$ is the exact analytic solution. The relative error $\epsilon_i$ can then be computed for different number of grid points. 
 
 \bigskip
 
@@ -442,6 +443,8 @@ The efficiency of the algorithms is compared by extracting the execution time fo
 
 For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. 
 
+4.4 \textbf{Relative Error.}
+Having computed the relative error for $n = 10, 100, 1000, ..., 10^7$ grid points, we can extract the maximum value of the error for each set of grid points. Max$[\epsilon_i]$ is then plotted as a function if the grid points. The result is seen in figure \ref{fig:4}.
 
 \begin{figure}[h]
   \centering
@@ -449,6 +452,10 @@ For the tridiagonal algorithm, we find that that the specialized version has a f
   \caption{Maximum relative error as a function of grid points.}
   \label{fig:4}
 \end{figure}
+
+We see that the relative error decreases linearly with increasing number of grid points, which is expected. However, once we reach $n > 10^6$ grid points, the error starts to increase again. 
+
+
 
 \begin{table}[]  \label{fig:5}
 \begin{tabular}{lll}

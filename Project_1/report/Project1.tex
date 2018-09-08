@@ -431,6 +431,12 @@ For the third and final precision test at $n = 1000$ seen in figure \ref{fig:3} 
 4.2. \textbf{Special Tridiagonal Algorithm.}
 The results produced by the special tridiagonal algorithm are the same as the once for the general algorithm, as was to be expected. The specialized algorithms only objective was to reduce the number of floating point operations and therefore cut the computation time of the calculation. 
 
+4.3 \textbf{Execution time.}
+The efficiency of the algorithms is compared by extracting the execution time for each of the algorithms separately. The execution time should be proportional to the number of FLOPS required in the algorithm. The following results has been found using a MacBook Pro (Early 2015) to run the program. The program has been executed 10 times in rapid succession collecting each run time. These are then used to find an average executing time. The run time results can be seen in figure \ref{fig:5}. 
+
+For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. 
+
+Another interesting quantity is the relative error in the data set. We are interested in finding out how much the numerical solution deviates from the analytic.
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.9\linewidth]{figures/rel_error_plot.pdf}
@@ -438,9 +444,11 @@ The results produced by the special tridiagonal algorithm are the same as the on
   \label{fig:4}
 \end{figure}
 
-\begin{table}[]
+\begin{table}[]  \label{fig:5}
 \begin{tabular}{lll}
+\hline
 General Algorithm  & Special Algorithm & LU-Decomposition \\
+\hline
 0.030738           & 0.023905          &                  \\
 0.028017           & 0.024106          &                  \\
 0.028026           & 0.024124          &                  \\
@@ -451,10 +459,12 @@ General Algorithm  & Special Algorithm & LU-Decomposition \\
 0.028829           & 0.024148          &                  \\
 0.028296           & 0.023556          &                  \\
 0.028575           & 0.023642          &                  \\
-                   &                   &                  \\
+                   &                   &                  \\\hline
 Average Time Spent &                   &                  \\
+\hline
 0.0286824          & 0.0238702         &                 
 \end{tabular}
 \end{table}
+
 
 \end{document}

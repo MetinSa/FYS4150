@@ -108,52 +108,54 @@ The report starts of with a theory section where the Possion equation is introdu
 \end{center}
 2.1. \textbf{The Poisson Equation.} 
 Poisson's equation is a classical and well known differential equation from electromagnetism. The equation describes the potential field $\Phi$ generated from a charge distribution $\rho(\textbf{r})$. For three dimensions, the equation is given by
- $$ \nabla^2 \Phi = -4 \pi \rho(\textbf{r}), $$
-where $\nabla = $ is the Laplace operator. If both $\Phi$ and $\rho(\textbf{r})$ is spherically symmetric, the equation can be simplified to an one dimensional equation in r,
+\begin{equation}\label{eq:1}
+ \nabla^2 \Phi = -4 \pi \rho(\textbf{r}),
+\end{equation}
+where $\nabla = $ is the Laplace operator. If both $\Phi$ and $\rho(\textbf{r})$ is spherically symmetric, the equation can be simplified to a one dimensional equation in r,
 $$ \frac{1}{r^2}  \der{}{r} \left( r^2 \der{\Phi}{r} \right)= -4 \pi \rho(r).$$
 By substituting $\Phi = \phi(r)/r$, we can simplify the equation even more, giving 
 $$ \dder{\phi}{r} = -4\pi \rho(r). $$ 
 The final equation can be written in a general form by letting $\phi \rightarrow u$ and $r \rightarrow x$, and defining the right hand side of the equation as $f$,
-$$- u''(x) = f(x). $$ 
+\begin{equation}\label{eq:2}
+ - u''(x) = f(x).
+\end{equation}
 
-In this study we will assume that the source term is $f(x) = 100 e^{-10x}$ with $x \in [0,1]$. We will also assume that we have Dirichlet boundary conditions, such that $ u(0) = u(1) = 0. $ With these assumptions the equation have an exact solution on the form $u(x) = 1 - (1 - e^{-10})x - e^{-10x}$. \\
+In this study we will assume that the source term is $f(x) = 100 e^{-10x}$ with $x \in [0,1]$. We will also assume that we have Dirichlet boundary conditions, such that $ u(0) = u(1) = 0. $ With these assumptions the equation have an exact solution on the form $u(x) = 1 - (1 - e^{-10})x - e^{-10x}$. The exact solution is of importance as it can be compared to the numerical calculation in order to verify the accuracy of our results.  \\
 
 
 
 2.2. \textbf{Discretization of the problem.} 
-To solve the Poisson equation nummerically, we need to discretize the problem. The discritation can be done using $n+1$ x-values, such that $x \in [x_0, x_1, x_2, ..., x_n]$ with $x_0 = 0$ and $x_n = 1$, and $u(x_i) = u_i$. Then we have that 
+To solve the Poisson equation nummerically, we need to discretize the problem. The discretization can be done using $(n+1)$ $x$-values, so that $x \in [x_0, x_1, x_2, ..., x_n]$ with $x_0 = 0$ and $x_n = 1$, and $u(x_i) = u_i$. The $x$-values are then given as 
 $$ x_i = x_0 + ih, $$
 where $h = (x_n - x_0)/n$ is the step size. \\
 
-A discretized version of $\dder{u(x)}{x}$ can be found by using Taylor expansion. We know that
+A discretized version of $u''(x)$ can be found using Taylor expansion. We know that
 \begin{align*}
-u(x + h) &= u(x) + h u' + \frac{h^2}{2!} u'' + O(h^2) \\
-u(x - h) &= u(x) - h u' + \frac{h^2}{2!} u'' + O(h^2) 
+u(x + h) &= u(x) + h u' + \frac{h^2}{2!} u'' + O(h^2), \\
+u(x - h) &= u(x) - h u' + \frac{h^2}{2!} u'' + O(h^2). 
 \end{align*} 
 The $O(h^2)$-term is the remaining terms from the Taylor expansion, or the error we get by excluding these terms. By adding $u(x + h)$ and $u(x-h)$, we can derive the desired expression:
 \begin{align*}
-u(x + h) + u(x - h) &= 2 u(x) + \frac{2}{2!} h^2 u'' + O(h^2) \\
-u''(x) &= \frac{u(x+1) + u(x-h) - 2u(x)}{h^2} + O(h^4) \\
-u'' &=  \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2}+ O(h^2)
+u(x + h) + u(x - h) &= 2 u(x) + \frac{2}{2!} h^2 u'' + O(h^2), \\
+u''(x) &= \frac{u(x+1) + u(x-h) - 2u(x)}{h^2} + O(h^4),
 \end{align*}
-So by excluding the rest of the terms in the Taylor expansion, and defining $f_i^* = f_i h^2= f(x_i) h^2 $, our equation is given by:
-$$- u_{i+1} - u_{i-1} + 2u_i = f_i^* .$$ 
-For each x-value we then get a set of linear equations, 
+\begin{equation}\label{eq:3}
+u'' =  \frac{u_{i+1} + u_{i-1} - 2u_i}{h^2}+ O(h^2)
+\end{equation}
+By excluding the rest of the terms in the Taylor expansion, and using the definition in equation \eqref{eq:2} discretized, we can define $f_i^* = f_i h^2 $. This reduces equation \eqref{eq:3} to
+
+\begin{equation}\label{eq:4}
+u_{i+1} - u_{i-1} + 2u_i = f_i^* .
+\end{equation}
+Inserting for specific $i$-value leaves us with a set of linear equations
 \begin{align*}
--v_2 - v_0 + 2v_1 &= f_1^*  \\
--v_3 - v_1 + 2v_2 &= f_2^*\\
+-u_2 - u_0 + 2u_1 &= f_1^* , \\
+-u_3 - u_1 + 2u_2 &= f_2^*,\\
 \vdots \\
 -v_n - v_{n-2} + 2v_{n-1} &= f_{n-1}^*. \\
 \end{align*}
-It is easy to see that the right hand side of the equation set, can represent as a vector on the fllowing form
-$$ \mathbf{\hat{f}} =  
-\begin{bmatrix}
-	 f_1^*\\
-          f_2^* \\
-   	\vdots \\
- 	f_{n-1}^* 
-\end{bmatrix} $$
-The left hand side of the equation set we can represent as a matrix product on the following form
+This set of equations can also be represented in terms of matrices. The LHS of the equation can be splitted up into the product of a matrix $\mathbf{\hat{A}}$ and a vector $\mathbf{\hat{u}}$
+
 $$
 \mathbf{\hat{A}} \mathbf{\hat{u}} = 
 \begin{bmatrix}
@@ -168,8 +170,16 @@ $$
           u_2 \\
    	\vdots \\
  	u_{n-1}
-\end{bmatrix}.
+\end{bmatrix},
 $$
+and the RHS as a vector $\mathbf{\hat{f}}$
+$$ \mathbf{\hat{f}} =  
+\begin{bmatrix}
+	 f_1^*\\
+          f_2^* \\
+   	\vdots \\
+ 	f_{n-1}^* 
+\end{bmatrix}. $$
 This means that the set of equations can be written as a linear algebra problem on the form
 $$ \mathbf{\hat{A}} \mathbf{\hat{u}} = \mathbf{\hat{f}}.$$
 
@@ -183,11 +193,11 @@ With the problem now formulated in terms of linear algebra, the next step is to 
 
 3.1. \textbf{Tridiagonal Matrix Algorithm.} This algorithm is a simplified form of Gaussian elimination which can be used to solve tridiagonal systems of equations. In the general case, a tridiagonal system of $n$ unknowns can be represented as 
 
-\begin{equation}
-a_i v_{i-1} + b_i v_i +c_i v_{i+1} = b_i,
+\begin{equation}\label{eq:5}
+a_i u_{i-1} + b_i u_i +c_i u_{i+1} = b_i,
 \end{equation}
-where $a_1 = c_1 = 0$. Or in matrix representation as $\textbf{A} \mathbf{u} = \mathbf{f}$. Written out in the $4 \cross 4$ case, this becomes
-\begin{equation}
+where $a_1 = c_1 = 0$. Or in matrix representation as $\mathbf{\hat{A}} \mathbf{\hat{u}} = \mathbf{\hat{f}}$. We spot that this corresponds to our linear algebra problem with Possion's Equation. Written out in the $4 \cross 4$ case, this becomes
+\begin{equation}\label{eq:6}
 \begin{bmatrix}
 b_1 & c_1 & 0 & 0 \\
 a_2& b_2 & c_2 & 0 \\
@@ -208,7 +218,7 @@ f_3\\
 f_4
 \end{bmatrix}.
 \end{equation}
-The algorithm is quite simple and consists of mainly two steps, a forward substitution and a backwards substitution. The forward substitution reduces the tridiagonal matrix $\textbf{A}$ to an upper tridiagonal matrix. This is achieved through Gaussian elimination. We want to get rid of the $a_i$ terms located on the lower secondary diagonal. We perform the following row reduction on both sides of the equation
+The algorithm is quite simple and consists of mainly two steps, a forward substitution and a backwards substitution. The forward substitution reduces the tridiagonal matrix $\mathbf{\hat{A}}$ to an upper tridiagonal matrix. This is achieved through Gaussian elimination. We want to get rid of the $a_i$ terms located on the lower secondary diagonal. We perform the following row reduction on both sides of the equation
 \[
 \begin{bmatrix}
 b_1 & c_1 & 0 & 0 \\
@@ -237,7 +247,7 @@ f_3\\
 f_4
 \end{bmatrix}
 \]
-where $\tilde{b_2} = b_2 - a_2c_1/b_1$, and $\tilde{f_2} = f_2 - f_1a_2/b_1$, and II and I denotes the row 1 and 2 in the \textbf{A}. Similarly for the second row
+where $\tilde{b_2} = b_2 - a_2c_1/b_1$, and $\tilde{f_2} = f_2 - f_1a_2/b_1$, and II and I denotes the row 1 and 2 in the $\mathbf{\hat{A}}$. Similarly for the second row
 
 \[
 \begin{bmatrix}
@@ -302,9 +312,9 @@ where $\tilde{b_4} = b_4 - a_4c_3/b_3$, and $\tilde{f_4} = f_4 - f_3a_4/b_3$.
 
 \newpage
 
-We are then left with the row reduced form of the set of equations $\tilde{\mathbf{A}}\mathbf{u} = \tilde{\mathbf{f}}$, or in matrix notation
+We are then left with the row reduced form of the set of equations $\tilde{\mathbf{A}}\mathbf{\hat{u}} = \tilde{\mathbf{f}}$, or in matrix notation
 
-\begin{equation}
+\begin{equation}\label{eq:7}
 \begin{bmatrix}
 b_1 & c_1 & 0 & 0 \\
 0& \tilde{b_2}  & c_2 & 0 \\
@@ -324,16 +334,17 @@ f_1\\
 \end{equation}
 If one takes a closer look at the steps which we carried out, one notices the following pattern for $\tilde{b}$ and $\tilde{d}$. These can be generally expressed as
 
-\begin{equation}
+\begin{equation}\label{eq:8}
 \tilde{b_i} = b_i - \frac{a_i c_{i-1}}{\tilde{b}_{i-1}}, \qquad 
 \tilde{f_i} = f_i - \frac{a_i \tilde{f}_{i-1}}{\tilde{b}_{i-1}}, \qquad i \in [2,4],
 \end{equation}
-where $b_1 = \tilde{b_1}$ and $f_1 = \tilde{f}$. In general for a $(n \cross n)$ matrix we would have $i \in [2,n]$. The forward substitution has been implemented in the following way in c++:
+where $b_1 = \tilde{b_1}$ and $f_1 = \tilde{f}$. In general for a $(n \cross n)$ matrix we would have $i \in [2,n]$. 
+The forward substitution has been implemented in the following way in c++:
 
 \lstinputlisting[language=c++, firstline=67, lastline=74]{../1b/problem_b.cpp}
 Note that instead of allocating memory for a seperate $\tilde{b}$ array, we have rather reused the b array. We also compute $a_i / \tilde{b}_{i-1}$ at the start of the loop which saves us a FLOP as it appears in both the expression for $\tilde{b}$ and $\tilde{f}$.
 
-The last part of the tridiagonal algorithm is the backwards substitution. By setting up the set of equations in (?), we are able to solve each of these for their respective solution $u_i$. The first equation along with its solution is then
+The last part of the tridiagonal algorithm is the backwards substitution. By setting up the set of equations in \eqref{eq:7}, we are able to solve each of these for their respective solution $u_i$. The first equation along with its solution is then
 \[
 \tilde{b}_1 u_1 + c_1 u_2 = \tilde{f_1} \qquad \rightarrow \qquad u_1 = \frac{\tilde{f}_1 - c_1 u_2}{\tilde{b_1}},
 \]
@@ -349,40 +360,39 @@ For the final row, we simply get
 \tilde{b}_4 u_4 = \tilde{f}_4 \qquad \rightarrow \qquad u_4 = \frac{\tilde{f_4}}{\tilde{b}_4}.
 \]
 This is a result of the chosen dirichlet boundary conditions. Again we notice the solution $u_i$ follows the following pattern
-\begin{equation}
+\begin{equation}\label{eq:9}
 u_i = \frac{\tilde{f}_i - c_i u_{i+1}}{\tilde{b}_i}.
 \end{equation}
 \newpage
 This is implemented in the code as
 \lstinputlisting[language=c++, firstline=76, lastline=81]{../1b/problem_b.cpp}
-where we see that the last term has been computed separately as it differs from the general algorithm. 
+where we see that the last term has been computed separately as it differs from the general algorithm. Prior to these two code snippets are the allocation of memory to the different vectors that are to be used in the algorithm. The code displayed here has used classic c++ memory allocation. We have however also created corresponding armadillo code to every program which can be found on the Github together with the classical code.
 
 In general one of the most important aspects of any algorithm is its efficiency. The tridiagonal matrix algorithm is known to be a relatively fast algorithm as it only uses three diagonal vectors to represent the entire $(n \cross n)$ matrix which severely reduces the number of floating points operations (FLOPS) required to solve the set of equations. We will assume that addition, subtraction, multiplication and division all counts as FLOPS. In reality, division operations are said to be "heavier" than the other three operations. The forward substitution method requires 6 FLOPS for each iteration, and it is computed $(n-2)$ times which results in a total of $6(n-2)$ FLOPS. The backward substitution requires $3(n-2) +1 $ FLOPS where the $+1$ term comes from the definition of the last term, which has to be computed just once.
 
 \bigskip
 
 3.1.1 \textbf{Optimizing the Tridiagonal Matrix Algorithm.}
-The number of floating point operations in the algorithm can be severely reduced if we specialize it for our special case with the Poisson equation. Since we are only interested in the tridiagonal matrix which resulted from the discretization of the second derivative, we can use the precomputed matrix (?). This allows us to rewrite the expressions for the forward and backwards substitution. If one inserts for the constant $a_i =  c_i = -1$ and $b_i = 2$ into equations (?) and (?), we find that we can in fact rewrite these into the form
+The number of floating point operations in the algorithm can be severely reduced if we specialize it for our special case with the Poisson equation. Since we are only interested in the tridiagonal matrix which resulted from the discretization of the second derivative, we can use the precomputed matrix $\mathbf{\hat{A}}$. This allows us to rewrite the expressions for the forward and backwards substitution. If one inserts for the constant $a_i =  c_i = -1$ and $b_i = 2$ into equations \eqref{eq:8} and \eqref{eq:9}, we find that we can in fact rewrite these into the form
 
-\begin{equation}
+\begin{equation}\label{eq:10}
 \tilde{b}_i = 2 - \frac{1}{\tilde{b}_{i-1}} = \frac{i+1}{i},
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:11}
 \tilde{f}_i = f_i + \frac{(i-1)\tilde{f}_{i-1}}{i},
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:12}
 u_{i} = \frac{i}{i+1}(\tilde{f}_{i} +u_{i+1}).
 \end{equation}
 Now, since the diagonal elements $\tilde{b}_i$ can be precomputed as they only depend on $i$, we can move this calculation outside of the main algorithm. Further, we spot that we can rewrite (?) in terms of $\tilde{b}_{i-1} = i/(i-1) $, to the form
-\begin{equation}
+\begin{equation}\label{eq:13}
 \tilde{f}_i = f_i + \frac{\tilde{f}_{i-1}}{\tilde{b}_{i-1}}
 \end{equation}
 Which has now been reduced to 2 FLOPS down from 3. Similarly we rewrite the (?) in terms of $\tilde{b}_i$ to the from
-\begin{equation}
+\begin{equation}\label{eq:14}
 u_i = \frac{\tilde{f}_i + u_{i+1}}{\tilde{b}_i},
 \end{equation}
 which has now also been reduced to 2 FLOPS down from 3. 
-\newpage
 The new specialized algorithm is implemented in the
  following way
 \lstinputlisting[language=c++, firstline=66, lastline=77]{../1c/problem_c.cpp}
@@ -390,7 +400,7 @@ The total number of FLOPS is then reduced to $4(n-2) + 1$ operation, which is ha
 
 Finally we are interested in finding out how much the numerical solution deviates from the analytic. The following equation gives us the relative error $\epsilon_i$ in the data set, where $i = 1, ...,n$
 
-\begin{equation}
+\begin{equation}\label{eq:15}
 \epsilon_i = \log_{10} \left( \abs{\frac{u_i - v_i}{v_i}}, \right)
 \end{equation}
 where $u_i$ is the numerically computed solution and $v_i$ is the exact analytic solution. The relative error $\epsilon_i$ can then be computed for different number of grid points. 

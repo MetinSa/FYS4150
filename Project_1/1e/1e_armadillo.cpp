@@ -10,91 +10,80 @@ using namespace std;
 
 // MUST BE COMPILED WITH LARMADILLO (ex: >c++ -o exec code.cpp -O1 -larmadillo)
 
-// Source term
-inline double func(double x) {return 100.*exp(-10*x);}
+// defining the outputfile as a global variable
+ofstream ofile;
 
-// Exact slution to the problem
-inline double exact_solution(double x) {return 1.-(1-exp(-10))*x-exp(-10*x);}
+// computing the input function f.
+inline double func(double x){ return 100.0*exp(-10*x);
+}
+
+// computing the exact solution to the problem
+inline double analytic_sol(double x){ return 1.0 - (1 - exp(-10))*x - (exp(-10 * x));
+}
 
 
 
 int main(int argc, char** argv)
   { 	
-    int n;
+	// declaring the exponent of 10 and the content of the diagonal vectors
+	int expo;
 
-    // Reading in values from the command line
-    if ( argc < 2)
-    {
-  		cout << "Bad Usage: Please include the power of 10^n.";
-  		exit(1);
-  	}
-    
-    if (string(argv[1]) == "test")
-    {
-      n = 4;
-    }
-    else
-    {
-      n = pow(10.0, atoi(argv[1]));
-    }
+	if ( argc <= 1) {
+		cout << "Bad Usage: Please include the power of 10^n." << endl;
+		exit(1);
+	}
+		else{
+		expo = atoi(argv[1]);
 
-  	
-    
-    
-    mat L, U, inv_L, inv_U;    // Assign armadillo matrices, lower and upper triangular for LU decomposition
+	}
+	// computing n based on the input exponent
+	int n = pow(10.0,expo);
 
-    mat A(n, n); // Assign matrix to be decomposed
-    A.fill(0);
+	// defining step length and its square
+	double h = 1.0/(n);
+	double hh = h*h;
 
-    for (int i = 0; i<n; i++)
-    {
-    	A(i,i) = 2;
-    	if (i != 0)
-    	{
-    		A(i,i-1) = -1;
-    	}
-    	if(i != n-1)
-    	{
-    		A(i, i+1) = -1;
-    	}
-    }
+	// Allocating memory to the vectors used in the algorithm
+	vec x(n+1);			// x-array goes from [0,1] with steplength h
+	mat A(n+1,n+1);		// banded matrix
+	vec f(n+1);			// RHS solution f
+	vec u(n+1);			// numerical solution
+	vec v(n+1);			// analytical solution
 
-    //cout << "A:\n" << A << endl << endl;
+	// filling the x and computing f and u
+	for (int i = 0; i < n+1; i++){
+		x[i] = i*h;
+		f[i] = hh*func(x[i]);
+		v[i] = analytic_sol(x[i]);
+	}
 
-    double x_0 = 0;    double x_n = 1;   // Boundary conditions
-    double h = (x_n - x_0)/n;            // Step size
+	//creating the diagonal matrix
+	
+	for (int i = 0; i < n+1; i++){
+		A(i,i) = 2;
+		if (i != 0)
+		{
+			A(i,i-1) = -1;
+		}
+		if (i != n)
+		{
+			A(i,i+1) = -1;
+		}
+	}
 
-    vec b(n); vec z(n); vec x(n); vec c(n); vec exac(n);
+	//starting the clock
+	clock_t start, finish;
+	start = clock();
 
-    for (int i = 0; i < n; i++)
-    {
-      x(i) = x_0 + i*h;
-      b(i) = func(x(i))*h*h;
-      exac(i) = exact_solution(x(i));
-    }
+	u = solve(A,f);
 
-    //starting the clock
-  	clock_t start, finish;
-  	start = clock();
+	// stopping the clock
+	finish = clock();
+	double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
+	// printing the time used
+	cout << "Time used: " << timeused << " seconds" << endl;
 
-    lu(L, U, A);   // LU-decomposition
-
-    // Inverting the matrices to solve the set of equations
-    L = inv(L);
-    U = inv(U);
-
-    z = L*b;
-    c = U*z;
-
-
-    // Stopping the clock
-  	finish = clock();
-  	double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
-  	// printing the time used
-  	cout << "Time used: " << timeused << " seconds" << endl;
-
-  	// Writing the data to file
-  	ofstream ofile;
+	// Writing the data to file
 	string name = "data_" + to_string(n) + "_e.dat";
 	ofile.open(name);
 	ofile << n << endl << endl;
@@ -103,14 +92,18 @@ int main(int argc, char** argv)
 	
 
 	// printing to file using iomanip to setw and precision
-	for (int i = 0; i < n; i++){
-		ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << c[i] << setw(16) << setprecision(7) << exac[i] << endl;
+	for (int i = 0; i < n+1; i++){
+	 	ofile << setprecision(7) << x[i] << setw(16) << setprecision(7) << u[i] << setw(16) << setprecision(7) << v[i] << endl;
 	}
-
-	
 
 	ofile.close();
 
+	// Saving time spent on algorithm
+	ofile.open("time_e.dat",ios_base::app | ios_base::out);
+	ofile << timeused << endl;
+	ofile.close();
+	
 
-    return 0;
-  }
+	return 0;
+}
+   

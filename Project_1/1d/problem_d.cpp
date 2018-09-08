@@ -90,7 +90,7 @@ int main(int argc, char *argv[]){
 		double max = -20;	
 
 		for (int i = 1; i < n; i++){
-			eps[i] = log10(abs((v[i]-u[i])/u[i]));	
+			eps[i] = log10(abs((u[i]-v[i])/v[i]));	
 
 			if ( ( eps[i] > max) && (isinf(eps[i])== 0) ){
 				max = eps[i];

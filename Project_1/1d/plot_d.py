@@ -12,18 +12,11 @@ length = 7
 n = np.zeros(length)
 eps = np.zeros(length)
 
-#dummy index
-j = 0
-
 #iterating over the different lines in the file
 for i, line in enumerate(file):
-
-	#skipping the first line
-	if i > 1:
 		
-		n[j] = line.split()[0]
-		eps[j] = line.split()[1]
-		j += 1
+		n[i] = line.split()[0]
+		eps[i] = line.split()[1]
 
 # plotting
 plt.loglog(n, 10**eps, color = "royalblue", label = "Best Fit")

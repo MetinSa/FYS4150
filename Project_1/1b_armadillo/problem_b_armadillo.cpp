@@ -22,8 +22,8 @@ int main(int argc, char** argv)
 
       // Reading in values from the command line
     	if ( argc <= 4) {
-  		cout << "Bad Usage: Please include the power of 10^n, and the content of a, b and c diagonal vectors. Four total inputs." << endl;
-  		exit(1);
+        cout << "Bad Usage: Please include the power of 10^n, and the content of a, b and c diagonal vectors. Four total inputs." << endl;
+    		exit(1);
   	}
   		else{
   		expo = atoi(argv[1]);
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     int n = pow(10.0, expo);
     double x_0 = 0;    double x_n = 1;   // Boundary conditions
     double h = (x_n - x_0)/n;            // Step size
-    double hh = h*h
+    double hh = h*h;
 
     vec x(n+1);                          // X-array from x_0 = 0 to x_n = 1 with steplength h
     vec a(n+1);                          // Lower secondary diagonal a
@@ -72,18 +72,19 @@ int main(int argc, char** argv)
 
 
     // Gaussian ellimination / forward substitution
-    for (int i = 2; i < n+1; i++){
-      b_tilde(i) = b(i) - (c(i-1)*a(i))/b_tilde(i-1);
-      f_tilde(i) = f(i) - (a(i)*f_tilde(i-1))/b_tilde(i-1);
+    for (int i = 2; i < n; i++){
+      double ab = a(i)/b_tilde(i-1);
+      b_tilde(i) = b(i) - c(i-1)*ab;
+      f_tilde(i) = f(i) - f_tilde(i-1)*ab;
       }
 
 
     // Setting endpoint of the backwards substitution
-    u(n) = f_tilde(n)/b_tilde(n);
+    u(n-1) = f_tilde(n-1)/b_tilde(n-1);
 
 
     // Backward substitution
-    for (int i = n-1; i > 0; i--){
+    for (int i = n-2; i > 0; i--){
       u(i) = (f_tilde(i) - c(i)*u(i+1))/b_tilde(i);
     }
 

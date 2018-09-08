@@ -1,0 +1,142 @@
+%setting document class
+\documentclass[a4paper,10pt]{article}
+
+%importing packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc,url}
+\usepackage[english,]{babel}
+\usepackage{blindtext}
+\usepackage{natbib}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{changepage}
+\usepackage{amssymb}
+\usepackage{commath}
+\usepackage{physics}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{svg}
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{color}
+
+\definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{cadetgrey}{rgb}{0.57, 0.64, 0.69}
+
+%listing customization
+\lstset{ %
+  backgroundcolor=\color{white},
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{cadetgrey},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{awesome},       % keyword style
+  language=c++,                 % the language of the code
+  otherkeywords={...},           % if you want to add more keywords to the set
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=3,	                   % sets default tabsize to 2 spaces
+}
+
+%fixing the header 
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[CO]{\textsc{asprusten \& rasmussen \& san }}
+\fancyfoot[C]{\thepage}
+
+%front page title/author setup
+ \title{FYS 4150 - Computational Physics\\
+ Project 1: Solving Poisson's equation in one dimension 
+}
+ \date{\normalsize{4. September 2018} }
+ \author{
+ \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Markus Leira Asprusten}}\and \textsc{\small{Metin San}}
+ }
+ 
+\newcommand{\der}[2]{\frac{d #1}{d #2}}
+\newcommand{\dder}[2]{\frac{d^2 #1}{d #2 ^2}}
+\newcommand{\peder}[2]{\frac{\partial #1}{\partial #2}}
+
+
+ %starting the document
+\begin{document}
+\maketitle
+\begin{center}
+\textsc{Abstract}
+\end{center}
+
+\begin{adjustwidth}{7mm}{7mm}
+
+
+\end{adjustwidth}
+
+
+
+\bigskip
+
+\begin{center}
+\textsc{1. Introduction}
+\end{center}
+
+\newpage
+
+
+\begin{center}
+\textsc{2. Theoretical Background}
+
+\end{center}
+\begin{center}
+\textsc{3. Algorithm \& Implementation }
+\end{center}
+\bigskip
+3.2 \textbf{LU-decomposition} \\
+Solving the linear algebra problem with an LU decomposition is relatively simple. By decomposing the matrix $\mathbf{\hat{A}}$ into the lower triangular matrix $\mathbf{\hat{L}}$ and the upper triangular matrix $\mathbf{\hat{U}}$, where all the diagonal elements in $\mathbf{\hat{L}}$ is 1, in such a way that $\mathbf{\hat{A}} = \mathbf{\hat{L}\hat{U}}$. We can then rewrite the linear algebra problem into
+
+\begin{align}
+	\mathbf{\hat{A}}\mathbf{\hat{u}} &= \mathbf{\hat{f}} \nonumber\\
+	\mathbf{\hat{L}}\mathbf{\hat{U}}\mathbf{\hat{u}} &= \mathbf{\hat{f}} \nonumber\\
+	\mathbf{\hat{U}}\mathbf{\hat{u}} &= \mathbf{\hat{L}}^{-1}\mathbf{\hat{f}} = \mathbf{\hat{y}} \nonumber\\
+	\implies \mathbf{\hat{L}\hat{y}} = \mathbf{\hat{f}} \, &,\, \mathbf{\hat{U}\hat{u}} = \mathbf{\hat{y}}.
+\end{align}
+The problem is then to solve two equations, firstly for $\mathbf{\hat{y}}$ and lastly for $\mathbf{\hat{u}}$. Suppose the matrices have dimension ($n\times n$). The solution can then be found by iterating $n$-times for each equation, to a total of $2n$ iterations. The Armadillo library solves this problem simply with the \texttt{solve}-function.
+
+\bigskip
+
+\begin{center}
+\textsc{4. Results}
+\end{center}
+\bigskip
+4.5 \textbf{LU-decomposition} \\
+
+
+
+\begin{table}[]  \label{fig:5}
+\begin{tabular}{llll}
+\hline
+n &General Algorithm  & Special Algorithm & LU-Decomposition \\
+\hline
+10 & 0.030738           & 0.023905          &                  \\
+100 & 0.028017           & 0.024106          &                  \\
+1000 & 0.028026           & 0.024124          &                  \\
+10 000 & 0.028299           & 0.023557          &                  \\
+100 000 & 0.028742           & 0.024067          &                  \\
+\end{tabular}
+\end{table}
+
+
+\end{document}

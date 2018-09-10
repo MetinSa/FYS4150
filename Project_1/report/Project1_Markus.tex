@@ -93,7 +93,6 @@
 \textsc{1. Introduction}
 \end{center}
 
-\newpage
 
 
 \begin{center}
@@ -122,21 +121,34 @@ The problem is then to solve two equations, firstly for $\mathbf{\hat{y}}$ and l
 \end{center}
 \bigskip
 4.5 \textbf{LU-decomposition} \\
+As described is section \textit{3.2}, the \texttt{solve}-function is implemented in \texttt{problem\_e.cpp}, with the number of columns and rows in the square matrix, $n$, given as a command line input. The run times for this code can be found in table \ref{tab:LUres}. Generally speaking, we see clearly that the LU-decomposition has a longer computational time than the other algorithms to get the same results. Note also that the LU-solver would not run for $n = 10^5$, due to memory allocation error.
 
 
-
-\begin{table}[]  \label{fig:5}
+\begin{table}[]
 \begin{tabular}{llll}
 \hline
-n &General Algorithm  & Special Algorithm & LU-Decomposition \\
 \hline
-10 & 0.030738           & 0.023905          &                  \\
-100 & 0.028017           & 0.024106          &                  \\
-1000 & 0.028026           & 0.024124          &                  \\
-10 000 & 0.028299           & 0.023557          &                  \\
-100 000 & 0.028742           & 0.024067          &                  \\
+$n$ &General Algorithm  & Special Algorithm & LU-Decomposition \\
+\hline
+$10^1$ & $1.2\cdot 10^{-6}$ s & $1.2\cdot 10^{-6}$ s & $4.4\cdot 10^{-5}$ s\\
+$10^2$ & $3.1\cdot 10^{-6}$ s & $2.9\cdot 10^{-6}$ s & $8.8\cdot 10^{-5}$ s\\
+$10^3$ & $2.2\cdot 10^{-5}$ s & $2.2\cdot 10^{-5}$ s & $5.2\cdot 10^{-3}$ s\\
+$10^4$ & $2.2\cdot 10^{-4}$ s & $2.3\cdot 10^{-4}$ s & $5.1\cdot 10^{-1}$ s\\
+$10^5$ & $2.2\cdot 10^{-3}$ s & $2.2\cdot 10^{-3}$ s & N/A               \\
+$10^6$ & $2.1\cdot 10^{-2}$ s & $2.1\cdot 10^{-2}$ s & N/A
 \end{tabular}
+\caption{Average time usage for 500 executions of the different algorithms, tested on Lenovo laptop running linux.}
+\label{tab:LUres}
 \end{table}
+\bigskip
+\begin{center}
+\textsc{Discussion}
+\end{center}
 
+The relative error in figure \ref{fig:4} is decreasing steadily to about $n = 10^6$, after which it starts increasing. In other words, the error in the calculations is at its lowest at $n=10^6$. The reason for the increase in error with $n$ larger than this, might seem difficult to explain with an analytical mindset, but there is a lower limit to the precision of a number that a computer can represent. This means that that a larger $n$ will actually make the computations more imprecise as the differences calculated becomes smaller than the machine precision. \\
+
+The difference in run time between the specialized algorithm discussed in section 4.2 and the general algorithm discussed in section 4.1 seems to depend heavily on the computer doing the operations. As seen in table \ref{tab:LUres}, the results from the Lenovo laptop has a minimal difference in rum time between the general and specialized algorithm, and the small differences there is, might be explained by random chance. The reason for this result is difficult to tell. As seen in table [METINS/MARENS RESULTATER], the results differ when running on another machine. These values are more as expected as the run times for the general algorithm is slower than for the specialized algorithm. The reason this is (and should be) the case, is that the specialized algorithm uses less FLOPS per iteration than the general algorithm.\\
+
+The results seen in section 4.5 and table \ref{tab:LUres} shows that the LU-decomposition is noticeably slower than the two other algorithms discussed here. This can be explained by the number of elements that are needed to compute the LU-decomposition. The more specialized only need to to operations with 3 vector of length $n$, while the solution with LU-decompositions needs to do operations on matrices with dimensions $n\times n$. The problem with this can be seen in table \ref{tab:LUres}, where already at $n = 10^5$, the computer in use does not have enough memory to store all the numbers needed. On the other hand of this problem, the other algorithms exclusively solve a banded matrix, while the LU-decomposition can solve a more general linear algebra problem. So each method has its advantages and drawbacks.
 
 \end{document}

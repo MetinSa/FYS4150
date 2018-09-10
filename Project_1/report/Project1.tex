@@ -405,6 +405,18 @@ These algorithms are then ready to be used. We are however  interested in findin
 where $u_i$ is the numerically computed solution and $v_i$ is the exact analytic solution. The relative error $\epsilon_i$ can then be computed for different number of grid points.
 
 \bigskip
+3.2 \textbf{LU-decomposition} \\
+Solving the linear algebra problem with an LU decomposition is relatively simple. By decomposing the matrix $\mathbf{\hat{A}}$ into the lower triangular matrix $\mathbf{\hat{L}}$ and the upper triangular matrix $\mathbf{\hat{U}}$, where all the diagonal elements in $\mathbf{\hat{L}}$ is 1, in such a way that $\mathbf{\hat{A}} = \mathbf{\hat{L}\hat{U}}$. We can then rewrite the linear algebra problem into
+
+\begin{align}
+	\mathbf{\hat{A}}\mathbf{\hat{u}} &= \mathbf{\hat{f}} \nonumber\\
+	\mathbf{\hat{L}}\mathbf{\hat{U}}\mathbf{\hat{u}} &= \mathbf{\hat{f}} \nonumber\\
+	\mathbf{\hat{U}}\mathbf{\hat{u}} &= \mathbf{\hat{L}}^{-1}\mathbf{\hat{f}} = \mathbf{\hat{y}} \nonumber\\
+	\implies \mathbf{\hat{L}\hat{y}} = \mathbf{\hat{f}} \, &,\, \mathbf{\hat{U}\hat{u}} = \mathbf{\hat{y}}.
+\end{align}
+The problem is then to solve two equations, firstly for $\mathbf{\hat{y}}$ and lastly for $\mathbf{\hat{u}}$. Suppose the matrices have dimension ($n\times n$). The solution can then be found by iterating $n$-times for each equation, to a total of $2n$ iterations. The Armadillo library solves this problem simply with the \texttt{solve}-function.
+
+\bigskip
 
 \begin{center}
 \textsc{4. Results}
@@ -466,9 +478,30 @@ Having computed the relative error for $n = 10, ..., 10^7$ grid points, we can e
 
 We see that the relative error decreases linearly with increasing number of grid points, which is expected. However, once we reach $n > 10^6$ grid points, the error starts to increase again. 
 
+\bigskip
+\noindent4.5 \textbf{LU-decomposition} \\
+As described is section \textit{3.2}, the \texttt{solve}-function is implemented in \texttt{problem\_e.cpp}, with the number of columns and rows in the square matrix, $n$, given as a command line input. The runtimes for this code can be found in table \ref{tab:LUres}. Generally speaking, we see clearly that the LU-decomposition has a longer computational time than the other algorithms to get the same results. Note also that the LU-solver would not run for $n = 10^5$, due to memory allocation error.
 
 
-\begin{table}[h]  \label{fig:5}
+\begin{table}[]
+\begin{tabular}{llll}
+\hline
+\hline
+$n$ &General Algorithm  & Special Algorithm & LU-Decomposition \\
+\hline
+$10^1$ & $1.2\cdot 10^{-6}$ s & $1.2\cdot 10^{-6}$ s & $4.4\cdot 10^{-5}$ s\\
+$10^2$ & $3.1\cdot 10^{-6}$ s & $2.9\cdot 10^{-6}$ s & $8.8\cdot 10^{-5}$ s\\
+$10^3$ & $2.2\cdot 10^{-5}$ s & $2.2\cdot 10^{-5}$ s & $5.2\cdot 10^{-3}$ s\\
+$10^4$ & $2.2\cdot 10^{-4}$ s & $2.3\cdot 10^{-4}$ s & $5.1\cdot 10^{-1}$ s\\
+$10^5$ & $2.2\cdot 10^{-3}$ s & $2.2\cdot 10^{-3}$ s & N/A               \\
+$10^6$ & $2.1\cdot 10^{-2}$ s & $2.1\cdot 10^{-2}$ s & N/A
+\end{tabular}
+\caption{Average time usage for 500 executions of the different algorithms, tested on Lenovo laptop running linux.}
+\label{tab:LUres}
+\end{table}
+
+
+\begin{table}[h]
 \begin{tabular}{lll}
 \hline
 General Algorithm  & Special Algorithm & LU-Decomposition \\
@@ -488,9 +521,11 @@ Average Time Spent &                   &                  \\
 \hline
 0.0286824          & 0.0238702         &                 
 \end{tabular}
+\label{fig:5}
+\caption{Table 5}
 \end{table}
 
-\begin{table}[]  \label{fig:5}
+\begin{table}[]
 \begin{tabular}{lll}
 \hline
 General Algorithm  & Special Algorithm \\
@@ -510,6 +545,8 @@ Average Time Spent &                                \\
 \hline
 0.1072475          & 0.068466                      
 \end{tabular}
+\label{fig:6}
+\caption{Table 6}
 \end{table}
 
 
@@ -518,23 +555,25 @@ Average Time Spent &                                \\
 \end{center}
 The results presented in section ? shows that by only including the first terms of the Taylor expansion to approximate the second derivative, does not give a big error. At least not when using a big $n$.  [...] \\
 
-Section ? shows that even though we know from the mathematical theory that a bigger $n$ and a smaller stepsize $h$ shoud give better results, this is not the case nummerically. The reason for this, is that there is a limit on how accurate a number can be represented on a computer. Beacuse of this limit, the computer has to make round offs, which increases the total error. This means that there has to be a ideal stepsize $h$, giving the best results. From figure ?, we found that this ideal stepsize was ??. [...] \\
 
-From table ? we can see that it was not big difference in the run time between the general and the special algorithm. The special was only a bit faster, even thogh it had half as many flops as the general. But when we ran the program on a older computer with a worse processor we could see a much bigger difference between the two run times. On this computer the special algorithm was almost twice as fast as the general. This is also what we expected, since this algorithm had half as many FLOPS as the general. \\
+The relative error in figure \ref{fig:4} is decreasing steadily to about $n = 10^6$, after which it starts increasing. In other words, the error in the calculations is at its lowest at $n=10^6$. The reason for the increase in error with $n$ larger than this, might seem difficult to explain with an analytical mindset, but there is a lower limit to the precision of a number that a computer can represent. This means that that a larger $n$ will actually make the computations more imprecise as the differences calculated becomes smaller than the machine precision. The ideal stepsize $h$ is then $h = 1/n = 10^{-6}$. \\
 
-Bare noen tanker, trenger ikke være med.
+The difference in run time between the specialized algorithm discussed in section 4.2 and the general algorithm discussed in section 4.1 seems to depend heavily on the computer doing the operations. As seen in table \ref{tab:LUres}, the results from the Lenovo laptop has a minimal difference in rum time between the general and specialized algorithm, and the small differences there is, might be explained by random chance. The reason for this result is difficult to tell. As seen in table [METINS/MARENS RESULTATER], the results differ when running on another machine. These values are more as expected as the run times for the general algorithm is slower than for the specialized algorithm. The reason this is (and should be) the case, is that the specialized algorithm uses less FLOPS per iteration than the general algorithm.\\
+
+
+The results seen in section 4.5 and table \ref{tab:LUres} shows that the LU-decomposition is noticeably slower than the two other algorithms discussed here. This can be explained by the number of elements that are needed to compute the LU-decomposition. The more specialized only need to to operations with 3 vector of length $n$, while the solution with LU-decompositions needs to do operations on matrices with dimensions $n\times n$. The problem with this can be seen in table \ref{tab:LUres}, where already at $n = 10^5$, the computer in use does not have enough memory to store all the numbers needed. On the other hand of this problem, the other algorithms exclusively solve a banded matrix, while the LU-decomposition can solve a more general linear algebra problem. So each method has its advantages and drawbacks.
 
 \bigskip
 
 \textbf{Punkter som bør diskuteres: (hvis vi skjønner hvorfor)}\\
 - Hvorfor numerisk kommer neden ifra (figure 1)\\
-- Hvorfor run time er som den er\\
-- Relative Error, hvorfor den begynner å øke\\
-- Noe om LU
+- Hvorfor run time er som den er ?\checkmark?\\
+- Relative Error, hvorfor den begynner å øke \checkmark\\
+- Noe om LU \checkmark
 \bigskip
 
 \textbf{Andre ting som må fikses:}\\
-- Sette inn LU info i method, litt i resultater og diskusjon\\
+- Sette inn LU info i method, litt i resultater og diskusjon \checkmark \\
 - Skrive en bedre Abstract siden den bør skrives til slutt.\\
 - Prøve å fikse posisjonen til figurene og bestemme hvilke/hvilken tabell med run times vi skal bruke.\\
 - Finne en bedre tittel??

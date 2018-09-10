@@ -23,4 +23,4 @@ Start by compiling the c++ programs.
 
 * **Maren Rasmussen** - (https://github.com/mjauren)
 
-* **Metin San** - (https://github.com/maraspr)
+* **Markus Leira Asprusten** - (https://github.com/maraspr)

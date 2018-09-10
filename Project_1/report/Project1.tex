@@ -6,7 +6,7 @@
 \usepackage[T1]{fontenc,url}
 \usepackage[english,]{babel}
 \usepackage{blindtext}
-\usepackage{natbib}
+%\usepackage{natbib}
 \usepackage{gensymb}
 \usepackage{amsmath}
 \usepackage{changepage}
@@ -22,6 +22,7 @@
 \usepackage{wrapfig}
 \usepackage{fancyhdr}
 \usepackage{color}
+\usepackage{cite}
 
 \definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -65,8 +66,10 @@
 }
  \date{\normalsize{4. September 2018} }
  \author{\textsc{\small{Markus Leira Asprusten}}
-\and \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Metin San}}
+\and \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Metin San}} \and
+\textsc{\small\url{https://github.com/MetinSa/FYS4150/tree/master/Project_1}}
  }
+
  
 \newcommand{\der}[2]{\frac{d #1}{d #2}}
 \newcommand{\dder}[2]{\frac{d^2 #1}{d #2 ^2}}
@@ -76,6 +79,7 @@
  %starting the document
 \begin{document}
 \maketitle
+
 \begin{center}
 \textsc{Abstract}
 \end{center}
@@ -461,10 +465,25 @@ For the third and final precision test at $n = 1000$ seen in figure \ref{fig:3} 
 \noindent 4.2. \textbf{Special Tridiagonal Algorithm.}
 The results produced by the special tridiagonal algorithm are the same as the once for the general algorithm, as was to be expected. The specialized algorithms only objective was to reduce the number of floating point operations and therefore cut the computation time of the calculation. \\
 
-\noindent 4.3 \textbf{Execution time.}
-The efficiency of the algorithms is compared by extracting the execution time for each of the algorithms separately. The execution time should be proportional to the number of FLOPS required in the algorithm. The following results has been found using a MacBook Pro (Early 2015) to run the program. The program has been executed 10 times in rapid succession collecting each run time. These are then used to find an average executing time. The run time results can be seen in figure \ref{fig:5}. 
+\begin{table}[]
+\begin{tabular}{llll}
+\hline
+\hline
+Machine &General Algorithm  & Special Algorithm \\
+\hline
+Old Dell (2012)& $1.1\cdot 10^{-1}$ s & $6.8\cdot 10^{-2}$ s\\
+Macbook (2015) & $2.9\cdot 10^{-2}$ s & $2.4\cdot 10^{-2}$ s\\
+Lenovo Y50-70 (2015) & $2.1\cdot 10^{-2}$ s & $2.1\cdot 10^{-2}$ s
+\end{tabular}
+\caption{Average time usage for different machines with $n = 10^6$.}
+\label{tab:timeres}
+\end{table}
 
-For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. \\
+\noindent 4.3 \textbf{Execution time.}
+The efficiency of the algorithms is compared by extracting the execution time for each of the algorithms separately. The execution time should be proportional to the number of FLOPS required in the algorithm. The following results has been found using a MacBook Pro (Early 2015) to run the program. The program has been executed 10 times in rapid succession collecting each run time. These are then used to find an average executing time.\\
+
+
+For the tridiagonal algorithm, we find that that the specialized version has a faster run time than the general one. By taking the ratio of the time averages we find that it the execution time was reduced by $20.16\%$, as seen in table \ref{tab:timeres}. This is a marginal improvement in the algorithms efficiency. However, one would likely expect a run time reduction by as much as $50\%$ as the number of FLOPS was halved in the specialized version of the algorithm. With an older Dell computer, this is seen more as expected, where the average time was reduced by almost $50 \%$. The results from the Lenovo computer show no difference in run time.\\
 
 \noindent 4.4 \textbf{Relative Error.}
 Having computed the relative error for $n = 10, ..., 10^7$ grid points, we can extract the maximum value of the error for each set of grid points. Max$[\epsilon_i]$ is then plotted as a function if the grid points. The result is seen in figure \ref{fig:4}.
@@ -501,83 +520,27 @@ $10^6$ & $2.1\cdot 10^{-2}$ s & $2.1\cdot 10^{-2}$ s & N/A
 \end{table}
 
 
-\begin{table}[h]
-\begin{tabular}{lll}
-\hline
-General Algorithm  & Special Algorithm & LU-Decomposition \\
-\hline
-0.030738           & 0.023905          &                  \\
-0.028017           & 0.024106          &                  \\
-0.028026           & 0.024124          &                  \\
-0.028299           & 0.023557          &                  \\
-0.028742           & 0.024067          &                  \\
-0.028511           & 0.023537          &                  \\
-0.028791           & 0.02406           &                  \\
-0.028829           & 0.024148          &                  \\
-0.028296           & 0.023556          &                  \\
-0.028575           & 0.023642          &                  \\
-                   &                   &                  \\\hline
-Average Time Spent &                   &                  \\
-\hline
-0.0286824          & 0.0238702         &                 
-\end{tabular}
-\label{fig:5}
-\caption{Table 5}
-\end{table}
-
-\begin{table}[]
-\begin{tabular}{lll}
-\hline
-General Algorithm  & Special Algorithm \\
-\hline
-0.106575           & 0.066029                       \\
-0.106026           & 0.066126                       \\
-0.115654           & 0.066128                       \\
-0.106315           & 0.068742                       \\
-0.106237           & 0.067858                       \\
-0.105891           & 0.067724                       \\
-0.106279           & 0.068543                       \\
-0.107324           & 0.068350                        \\
-0.105830           & 0.067883                        \\
-0.106344           & 0.068466                        \\
-                   &                   &                  \\\hline
-Average Time Spent &                                \\
-\hline
-0.1072475          & 0.068466                      
-\end{tabular}
-\label{fig:6}
-\caption{Table 6}
-\end{table}
 
 
 \begin{center}
-\textsc{Conclusion / Discussion ellerno}
+\textsc{5. Discussion and Conclusion}
 \end{center}
-The results presented in section ? shows that by only including the first terms of the Taylor expansion to approximate the second derivative, does not give a big error. At least not when using a big $n$.  [...] \\
 
 
 The relative error in figure \ref{fig:4} is decreasing steadily to about $n = 10^6$, after which it starts increasing. In other words, the error in the calculations is at its lowest at $n=10^6$. The reason for the increase in error with $n$ larger than this, might seem difficult to explain with an analytical mindset, but there is a lower limit to the precision of a number that a computer can represent. This means that that a larger $n$ will actually make the computations more imprecise as the differences calculated becomes smaller than the machine precision. The ideal stepsize $h$ is then $h = 1/n = 10^{-6}$. \\
 
-The difference in run time between the specialized algorithm discussed in section 4.2 and the general algorithm discussed in section 4.1 seems to depend heavily on the computer doing the operations. As seen in table \ref{tab:LUres}, the results from the Lenovo laptop has a minimal difference in rum time between the general and specialized algorithm, and the small differences there is, might be explained by random chance. The reason for this result is difficult to tell. As seen in table [METINS/MARENS RESULTATER], the results differ when running on another machine. These values are more as expected as the run times for the general algorithm is slower than for the specialized algorithm. The reason this is (and should be) the case, is that the specialized algorithm uses less FLOPS per iteration than the general algorithm.\\
+The difference in run time between the specialized algorithm discussed in section 4.2 and the general algorithm discussed in section 4.1 seems to depend heavily on the computer doing the operations. As seen in table \ref{tab:LUres}, the results from the Lenovo laptop has a minimal difference in rum time between the general and specialized algorithm, and the small differences there is, might be explained by random chance. The reason for this result is difficult to tell. As seen in table \ref{tab:timeres}, the results differ when running on other machines. These values for computers with lower processing speeds have run times that are more as expected, with the specialized algorithm using noticeably shorter time. This makes more sense, as the specialized algorithm uses about half the FLOPS per iteration compared to the general algorithm. It might be natural to conclude that with higher speed processors, there are other factors that limit the lower time duration of the calculation, but this needs more research.\\
 
 
 The results seen in section 4.5 and table \ref{tab:LUres} shows that the LU-decomposition is noticeably slower than the two other algorithms discussed here. This can be explained by the number of elements that are needed to compute the LU-decomposition. The more specialized only need to to operations with 3 vector of length $n$, while the solution with LU-decompositions needs to do operations on matrices with dimensions $n\times n$. The problem with this can be seen in table \ref{tab:LUres}, where already at $n = 10^5$, the computer in use does not have enough memory to store all the numbers needed. On the other hand of this problem, the other algorithms exclusively solve a banded matrix, while the LU-decomposition can solve a more general linear algebra problem. So each method has its advantages and drawbacks.
 
-\bigskip
 
-\textbf{Punkter som bør diskuteres: (hvis vi skjønner hvorfor)}\\
-- Hvorfor numerisk kommer neden ifra (figure 1)\\
-- Hvorfor run time er som den er ?\checkmark?\\
-- Relative Error, hvorfor den begynner å øke \checkmark\\
-- Noe om LU \checkmark
-\bigskip
+\begin{thebibliography}{9}
 
-\textbf{Andre ting som må fikses:}\\
-- Sette inn LU info i method, litt i resultater og diskusjon \checkmark \\
-- Skrive en bedre Abstract siden den bør skrives til slutt.\\
-- Prøve å fikse posisjonen til figurene og bestemme hvilke/hvilken tabell med run times vi skal bruke.\\
-- Finne en bedre tittel??
+\bibitem{hjorth-jensen}
+  Hjorth-Jensen, M. (2018) \textit{Overview of couse material: Computational Physics}, University of Oslo, URL: \url{https://compphysics.github.io/ComputationalPhysics/doc/web/course} (2018.09.10)
 
+\end{thebibliography}
 
 
 \end{document}

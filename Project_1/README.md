@@ -1,4 +1,4 @@
-# Project 1 - FYS4150 Computational Physics 
+# Project 1 - Solving the Poisson Equation in 1D
 
 This repository contains all files and results for project 1 in addition to the report.
 

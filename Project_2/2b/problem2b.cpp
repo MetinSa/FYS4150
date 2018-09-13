@@ -73,5 +73,7 @@ int main(int argc, char *argv[]){
 	A = constructA(n, rho_0, rho_n);
 	lambda = Analytic_Eigenvalues(n, rho_0, rho_n);
 	lambda.print("lambda: ");
+
+	
 	return 0;
 }

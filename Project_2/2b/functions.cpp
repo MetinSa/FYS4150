@@ -2,7 +2,7 @@
 #include <cmath>
 #include <armadillo>
 
-// #include "functions.h"
+#include "functions.h"
 
 // using namespace std;
 
@@ -133,7 +133,7 @@ void jacobiRotate(arma::mat &A, arma::mat &R, int &k, int &l, int n ){
 
 		//making eigenvectors
 		r_ik = R(i,k);
-		r_il = R(i,k);
+		r_il = R(i,l);
 
 		R(i,k) = r_ik*c - r_il*s;
 		R(i,l) = r_il*c + r_ik*s;

@@ -25,48 +25,27 @@ int main(int argc, char *argv[]){
 		rho_n = atof(argv[3]);
 	}
 
-	//initializing initial matrix A, and identity matrix R
+	//constructing matrix A, and identity matrix R
 	arma::mat A(n,n);
 	arma::mat R(n,n);
-
-	//constructing the matrices
 	R.eye(n,n);
+
 	A = constructA(rho_0, rho_n, n);
 
-	//initializing element positions k, l, number of itterations it, and max allowed itterations max it
-	int k, l, it, max_it;
-	double max, eps;
+	// diagonalizing matrix A
+	int k, l;
+	diagJacobi(A, R, k, l, n);
 
-	//starting iteration
-	it = 0;
+	//printing the eigenvalues
+	cout << "============" << endl;
+	cout << "Eigenvalues: " << endl;
+	cout << "============" << endl;
+	for (int i = 0; i < n; i++){
 
-	//starting max value
-	max = getMax(A, k, l, n);
+		cout << A(i,i) << endl;
 
-	//maximum number of iterations we allow
-	max_it = n*n*n;
-
-	//tolarance for the non-diag elements
-	eps = 1.0E-8;
-
-	//jacobi method 
-	while (max > eps && it <= max_it) {
-
-		jacobiRotate(A, R, k, l, n);
-		max = getMax(A, k, l, n);
-		it++;
 	}
-
-	cout << max <<endl;
-	cout << it << endl;
-
-	A.print("new A:");
-	R.print("R :");
-
-	arma::vec eigval;
-	arma::eig_sym(eigval, A);
-
-	eigval.print("arma eig: ");
+	cout << "============" << endl;
 
 	return 0;
 }

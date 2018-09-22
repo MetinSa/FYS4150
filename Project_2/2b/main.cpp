@@ -5,10 +5,8 @@
 
 using namespace std;
 
-
 //main program which takes a matrix A and extracts the eigenvalues through the Jacobi method.
 int main(int argc, char *argv[]){
-
 
 	//reading in commandline arguments (rho_0, rho_n, n)
 	int n;
@@ -29,8 +27,6 @@ int main(int argc, char *argv[]){
 
 	}
 
-
-	
 	//initializing initial matrix A, and identity matrix R
 	arma::mat A(n,n);
 	arma::mat R(n,n);
@@ -73,7 +69,6 @@ int main(int argc, char *argv[]){
 	arma::eig_sym(eigval, A);
 
 	eigval.print("arma eig: ");
-
 
 	return 0;
 }

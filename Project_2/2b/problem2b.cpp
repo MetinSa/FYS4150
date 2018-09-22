@@ -39,8 +39,31 @@ arma::mat constructA(int n, double rho_0, double rho_n){
 
 }
 
+//finding the max element in the matrix
+double getMax(arma::mat A, int n) {
+	double max;
+	//only checking the upper triangular part
+	for (int i = 0; i < n; i++){
+		for (int j = i+1; j < n; j++){
 
-arma::vec Analytic_Eigenvalues(int n){
+			double aij = fabs(A(i,j));
+
+			if (aij > max) {
+				max = aij;
+
+			}
+		}
+
+	}
+
+	return max;
+}
+
+
+
+
+
+arma::vec AnalyticEigenvalues(int n, double rho_0, double rho_n){
 	//function that computes the analytic eigenvalues of a toeplitz tridiagonal matrix
 
 	//making empty lambda
@@ -58,22 +81,3 @@ arma::vec Analytic_Eigenvalues(int n){
 	return lambda;
 }
 
-
-
-int main(int argc, char *argv[]){
-
-	//reading in number of gridpoints
-	int n = atoi(argv[1]);
-	double rho_0 = atof(argv[2]);
-	double rho_n = atof(argv[3]);
-
-	arma::mat A(n,n);
-	arma::mat lambda(n,n);
-
-	A = constructA(n, rho_0, rho_n);
-	lambda = Analytic_Eigenvalues(n, rho_0, rho_n);
-	lambda.print("lambda: ");
-
-	
-	return 0;
-}

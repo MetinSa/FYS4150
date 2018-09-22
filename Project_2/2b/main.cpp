@@ -16,7 +16,6 @@ int main(int argc, char *argv[]){
 
 		cout << "Bad Usage: Please include the number of gid points n, rho_0 and rho_n. 3 arguments total. " << endl;
 		exit(1);
-
 	}
 
 	else {
@@ -24,7 +23,6 @@ int main(int argc, char *argv[]){
 		n = atoi(argv[1]);
 		rho_0 = atof(argv[2]);
 		rho_n = atof(argv[3]);
-
 	}
 
 	//initializing initial matrix A, and identity matrix R

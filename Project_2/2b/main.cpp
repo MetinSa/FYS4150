@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <armadillo>
+#include <ctime>
 #include "functions.cpp"
 
 using namespace std;
@@ -25,27 +26,39 @@ int main(int argc, char *argv[]){
 		rho_n = atof(argv[3]);
 	}
 
-	//constructing matrix A, and identity matrix R
+	//initializing matrix A, and identity matrix R, and other quantities that are to be used
 	arma::mat A(n,n);
 	arma::mat R(n,n);
 	R.eye(n,n);
+	int k, l, N_it;
 
+	//starting the timer
+	clock_t start = clock();
+
+	//constructing matrix A
 	A = constructA(rho_0, rho_n, n);
 
-	// diagonalizing matrix A
-	int k, l;
-	diagJacobi(A, R, k, l, n);
+	//diagonalizing matrix A
+	diagJacobi(A, R, k, l, N_it , n);
 
-	//printing the eigenvalues
-	cout << "============" << endl;
-	cout << "Eigenvalues: " << endl;
-	cout << "============" << endl;
+
+	//stopping the timer
+	clock_t stop = clock();
+
+	//printing the results of the diagonalization
+	cout << "============================" << endl;
+	cout << "Eigenvalues of matrix A: " << endl;
+	cout << "============================" << endl;
+
 	for (int i = 0; i < n; i++){
-
 		cout << A(i,i) << endl;
-
 	}
-	cout << "============" << endl;
+
+	cout << "============================" << endl;
+	cout << "Number of transformations: " << N_it << endl;
+	cout << "============================" << endl;
+	cout << "Time used computing: " << (double) (stop-start)/CLOCKS_PER_SEC << "seconds" << endl;
+	cout << "============================" << endl;
 
 	return 0;
 }

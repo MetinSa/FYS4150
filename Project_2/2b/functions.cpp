@@ -142,7 +142,7 @@ void jacobiRotate(arma::mat &A, arma::mat &R, int &k, int &l, int n ){
 }
 
 //diagonalizing a matrix A, using Jacobis rotation
-void diagJacobi(arma::mat &A, arma::mat &R, int &k, int &l, int n ){
+void diagJacobi(arma::mat &A, arma::mat &R, int &k, int &l, int &N_it, int n ){
 
 	//restricting itterations
 	int it = 0; 
@@ -152,15 +152,17 @@ void diagJacobi(arma::mat &A, arma::mat &R, int &k, int &l, int n ){
 	double eps = 1.0E-10;
 
 	//initial max non diagonal value
- 	double max = getMax(A, k, l, n);
+ 	double max;
+ 	max = getMax(A, k, l, n);
 
 	//jacobi rotation
 	while (max > eps && it <= max_it) {
 
 		jacobiRotate(A, R, k, l, n);
-		double max = getMax(A, k, l, n);
+		max = getMax(A, k, l, n);
 		it++;
 	}
+	N_it = it;
 }
 
 

@@ -6,16 +6,17 @@
 
 using namespace std;
 
-//main program which takes a matrix A and extracts the eigenvalues through the Jacobi method.
+// Main program which diagonalizes a given matrix using Jacobi's algorithm
 int main(int argc, char *argv[]){
 
-	//reading in commandline arguments (rho_0, rho_n, n)
+	// Reading in commandline arguments (rho_0, rho_n, n)
 	int n;
 	double rho_0, rho_n;
 
+	// Checking if the correct commandline arguments are used when compiling
 	if (argc < 4){
 
-		cout << "Bad Usage: Please include the number of gid points n, rho_0 and rho_n. 3 arguments total. " << endl;
+		cout << "Bad Usage: Please include 'n', 'rho_0' and 'rho_n'. 3 arguments in total. " << endl;
 		exit(1);
 	}
 
@@ -26,26 +27,28 @@ int main(int argc, char *argv[]){
 		rho_n = atof(argv[3]);
 	}
 
-	//initializing matrix A, and identity matrix R, and other quantities that are to be used
+	// Initializing matrix A, and identity matrix R
 	arma::mat A(n,n);
 	arma::mat R(n,n);
 	R.eye(n,n);
-	int k, l, N_it;
 
-	//starting the timer
+	// Starting the timer
 	clock_t start = clock();
 
-	//constructing matrix A
+	// Constructing matrix A
 	A = constructA(rho_0, rho_n, n);
 
-	//diagonalizing matrix A
+	// Initializing quantities to be used in diagonalization process
+	int k, l, N_it;
+
+	// Diagonalizing matrix A using Jacobi's rotation method
 	diagJacobi(A, R, k, l, N_it , n);
 
 
-	//stopping the timer
+	// Stopping the timer
 	clock_t stop = clock();
 
-	//printing the results of the diagonalization
+	// Printing the results of the diagonalization
 	cout << "============================" << endl;
 	cout << "Eigenvalues of matrix A: " << endl;
 	cout << "============================" << endl;

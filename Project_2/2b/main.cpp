@@ -2,7 +2,7 @@
 #include <cmath>
 #include <armadillo>
 #include <ctime>
-#include "functions.cpp"
+#include "functions.h"
 
 using namespace std;
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
 	int k, l, N_it;
 
 	// Diagonalizing matrix A using Jacobi's rotation method
-	diagJacobi(A, R, k, l, N_it , n);
+	diagJacobi(A, R, k, l, N_it, n);
 
 
 	// Stopping the timer

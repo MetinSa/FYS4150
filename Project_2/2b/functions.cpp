@@ -2,8 +2,10 @@
 #include <cmath>
 #include <armadillo>
 
+#include "functions.h"
+
 // Constructing tridiagonal Toeplitz matrix A
-arma::mat constructA(double &rho_0, double &rho_n, int n){
+arma::mat constructA(double rho_0, double rho_n, int n){
 
 	// Initializing empty matrix A
 	arma::mat A = arma::mat(n,n);
@@ -37,7 +39,7 @@ arma::mat constructA(double &rho_0, double &rho_n, int n){
 
 
 // Extracting largest element in a symmetric matrix
-double getMax(arma::mat &A, int &k, int &l, int n) {
+double getMax(arma::mat A, int &k, int &l, int n) {
 
 	// Initializing the max value
 	double max;
@@ -64,7 +66,7 @@ double getMax(arma::mat &A, int &k, int &l, int n) {
 
 
 // Jacobi rotation algorithm
-void jacobiRotate(arma::mat &A, arma::mat &R, int &k, int &l, int n ){
+void jacobiRotate(arma::mat &A, arma::mat &R, int k, int l, int n){
 
 	// Initializing sin(angle) and cos(angle)
 	double s, c;
@@ -142,7 +144,7 @@ void jacobiRotate(arma::mat &A, arma::mat &R, int &k, int &l, int n ){
 
 
 // Diagonalizing a matrix using Jacobi's rotation algorithm
-void diagJacobi(arma::mat &A, arma::mat &R, int &k, int &l, int &N_it, int n ){
+void diagJacobi(arma::mat &A, arma::mat &R, int k, int l, int &N_it, int n ){
 
 	// Restricting itterations
 	int it = 0; 
@@ -166,4 +168,5 @@ void diagJacobi(arma::mat &A, arma::mat &R, int &k, int &l, int &N_it, int n ){
 
 	// Extracting number of transformations
 	N_it = it;
+
 }

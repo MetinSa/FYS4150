@@ -45,14 +45,13 @@ int main(int argc, char *argv[]){
 	// Diagonalizing matrix A using Jacobi's rotation method
 	diagJacobi(A, R, k, l, N_it, n);
 
-
 	// Stopping the timer
 	clock_t stop = clock();
 
 	// Extracting the eigenvalues from the diagonal and sorting
 	eigval = A.diag();
 	eigval = arma::sort(eigval);
-
+	
 	// Printing the results of the diagonalization
 	cout << "============================" << endl;
 	cout << "Eigenvalues of matrix A: " << endl;

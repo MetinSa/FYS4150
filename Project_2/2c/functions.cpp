@@ -12,7 +12,7 @@ arma::mat constructA(double rho_0, double rho_n, int n){
 	A.zeros();
 
 	// Steplength calculated from given rho values and number of gridpoints
-	double h = (rho_n - rho_0)/n;
+	double h = (rho_n - rho_0)/(double)n;
 
 	// Second derivative diagonal constants
 	double d = 2/(h*h);

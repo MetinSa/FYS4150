@@ -1,7 +1,36 @@
 #include "catch.hpp"
 #include "functions.h"
 
-TEST_CASE("Testing eigenvalues of Toeplitz matrix"){
+TEST_CASE("Testing max value of Toeplitz matrix") {
+
+	// Testing for 5 x 5 matrix with rho_0 = 3 and rho_n = 7
+	int n = 5;
+	double rho_0 = 3;
+	double rho_n = 7;
+
+	//the above values willl result in a max element of -1.5625
+	double analytic_max = -1.5625;
+
+	// Initializing matrix A
+	arma::mat A(n,n);
+
+	// Constructing matrix A
+	A = constructA(rho_0, rho_n, n);
+
+	// Extracting max value from matrix
+	int k, l;
+	double max;
+	max = getMax(A, k, l, n);
+
+	// Comparing max values using catch
+	REQUIRE(k == 0);
+	REQUIRE(l == 1);
+	REQUIRE(max == Approx(fabs(analytic_max)));
+
+}
+
+
+TEST_CASE("Testing eigenvalues of Toeplitz matrix") {
 
 	// Testing for 10 x 10 matrix
 	int n = 10;

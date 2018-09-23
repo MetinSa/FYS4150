@@ -27,9 +27,10 @@ int main(int argc, char *argv[]){
 		rho_n = atof(argv[3]);
 	}
 
-	// Initializing matrix A, and identity matrix R
+	// Initializing matrix A, and identity matrix R, and the Eigenvalues of A
 	arma::mat A(n,n);
 	arma::mat R(n,n);
+	arma::vec eigval(n);
 	R.eye(n,n);
 
 	// Starting the timer
@@ -48,15 +49,15 @@ int main(int argc, char *argv[]){
 	// Stopping the timer
 	clock_t stop = clock();
 
+	// Extracting the eigenvalues from the diagonal and sorting
+	eigval = A.diag();
+	eigval = arma::sort(eigval);
+
 	// Printing the results of the diagonalization
 	cout << "============================" << endl;
 	cout << "Eigenvalues of matrix A: " << endl;
 	cout << "============================" << endl;
-
-	for (int i = 0; i < n; i++){
-		cout << A(i,i) << endl;
-	}
-
+	cout << eigval << endl;
 	cout << "============================" << endl;
 	cout << "Number of transformations: " << N_it << endl;
 	cout << "============================" << endl;

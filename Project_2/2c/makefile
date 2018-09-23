@@ -1,11 +1,14 @@
-# Comment lines
 # General makefile for c++ - choose PROG =   name of given program
+
 # Here we define compiler option, libraries and the  target
 CPPflags = c++ -O3
+
 # Here we define the library functions we nee
 LIB = -larmadillo -llapack -lblas
+
 # Here we define the name of the executable
-PROG = testcode.x
+PROG = UnitTest.x
+
 ${PROG} :	   	test-main.o  test-functions.o functions.o
 			${CPPflags} test-main.o test-functions.o functions.o ${LIB} -o ${PROG}
 

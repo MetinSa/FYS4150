@@ -1,0 +1,141 @@
+%setting document class
+\documentclass[a4paper,10pt]{article}
+
+%importing packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc,url}
+\usepackage[english,]{babel}
+\usepackage{blindtext}
+%\usepackage{natbib}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{changepage}
+\usepackage{amssymb}
+\usepackage{commath}
+\usepackage{physics}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{svg}
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{cite}
+
+\definecolor{awesome}{rgb}{1.0, 0.13, 0.32}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{cadetgrey}{rgb}{0.57, 0.64, 0.69}
+
+%listing customization
+\lstset{ %
+  backgroundcolor=\color{white},
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{cadetgrey},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{awesome},       % keyword style
+  language=c++,                 % the language of the code
+  otherkeywords={...},           % if you want to add more keywords to the set
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=3,	                   % sets default tabsize to 2 spaces
+}
+
+%fixing the header 
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[CO]{\textsc{asprusten \& rasmussen \& san }}
+\fancyfoot[C]{\thepage}
+
+%front page title/author setup
+ \title{FYS 4150 - Computational Physics\\
+ Project 2: Eigenvalue problems
+}
+ \date{\normalsize{23. September 2018} }
+ \author{\textsc{\small{Markus Leira Asprusten}}
+\and \textsc{\small{Maren Rasmussen}}\and \textsc{\small{Metin San}} \and
+\textsc{\small\url{https://github.com/MetinSa/FYS4150/tree/master/Project_1}}
+ }
+
+ 
+\newcommand{\der}[2]{\frac{d #1}{d #2}}
+\newcommand{\dder}[2]{\frac{d^2 #1}{d #2 ^2}}
+\newcommand{\peder}[2]{\frac{\partial #1}{\partial #2}}
+
+
+ %starting the document
+\begin{document}
+\maketitle
+
+\begin{center}
+\textsc{Abstract}
+\end{center}
+
+\begin{adjustwidth}{7mm}{7mm}
+
+This project involves [...]
+
+\end{adjustwidth}
+
+
+
+\bigskip
+
+\begin{center}
+\textsc{1. Introduction}
+\end{center}
+The main goal of this project is to develop code for solving eigenvalue problems and use this to study quantum mechanical problems. The project will focus on getting familiar with Jacobi's method, unit testing and scaling equations to obtain dimensionless variables or more convenient variables. First we will study a two-point boundary value problem of a buckling beam or a spring fastened at both sides. Thereafter we will further develop the code by some simple changes to study a harmonic oscillator problem in three dimensions with both one and two electrons. For this problem, we will also study the role of repulsive Coulomb interaction between the electrons. 
+
+
+\bigskip
+\begin{center}
+\textsc{2. Theoretical background}
+\end{center}
+
+\noindent 2.2. \textbf{The buckling beam problem.} 
+The motion of a buckling beam with fixed endpoint at the origin and at $x=L$ can be described by the following differential equation
+\begin{equation*}
+    \gamma \dder{u(x)}{x} = - F u(x).
+\end{equation*}
+Here $u(x)$ is the vertical displacement, $F$ is the force applied at the end of the beam against the origin and $\gamma$ is a constant defined by the properties of the beam, as for instance the rigidity. The fixed endpoints gives us Dirichlet boundary conditions,
+$$u(0) = u(L) = 0. $$
+To simplify the problem and make it dimensionless, we can define $\rho = x/L$. Then we get that $\rho \in [0,1]$. The differential equation then reads 
+\begin{equation*}
+    \dder{u(\rho)}{\rho} = -\frac{FL^2}{R} u(\rho) = \lambda u(\rho),
+\end{equation*}
+where we also have defined $\lambda = FL^2/R$. We know that the second derivative can be approximated as 
+$$u'' = \frac{u(\rho + h) - 2u(\rho) + u(\rho-h)}{h^2} $$
+where $h = (\rho_N - \rho_0)/N$ is the step size when we have $N$ steps. $\rho_0$ is then the first $\rho$-value and $\rho_0$ is the last. The i$^{th}$ $\rho$-value is given by 
+$$ \rho_i = \rho_0 + ih.  $$
+By defining $u(\rho_i + h) = u_{i+1}$, $u(\rho_i) = u_i$ and $u(\rho_{i-1}) = u_{i-1}$, we get a discretized version of the equation 
+\begin{equation*}
+    - \frac{u_{i+1} - 2u_i + u_{i-1}}{h^2} = \lambda u_i.
+\end{equation*}
+At last, we can use linear algebra to rewrite this to an eigenvalue problem 
+\begin{equation*}
+\begin{bmatrix} d& a & 0   & 0    & \dots  &0     & 0 \\
+                                a & d & a & 0    & \dots  &0     &0 \\
+                                0   & a & d & a  &0       &\dots & 0\\
+                                \vdots  & \vdots & \vdots & \vdots  &\vdots  &\vdots & \vdots\\
+                                0   & \dots & \dots & \dots  &a  &d & a\\
+                                0   & \dots & \dots & \dots  &\dots       &a & d\end{bmatrix} 
+                                 \begin{bmatrix} u_1 \\ u_2 \\ u_3 \\ \vdots \\ u_{N-2} \\ u_{N-1}\end{bmatrix} = \lambda \begin{bmatrix} u_1 \\ u_2 \\ u_3 \\ \vdots \\ u_{N-2} \\ u_{N-1}\end{bmatrix},
+\label{eq:matrixse} 
+\end{equation*}
+where $d = 2/h^2$ and $a = -1/h^2$. Because we have Dirichlet boundary conditions, the endpoints are excluded. The eigenvalues can be found analytically, and are given by 
+$$\lambda_j = d + 2a \cos\left(\frac{j\pi}{N+1}\right) \quad j = 1,2, \dots, N-1. $$
+
+\end{document}

@@ -8,7 +8,7 @@ TEST_CASE("Testing max value of Toeplitz matrix") {
 	double rho_0 = 3;
 	double rho_n = 7;
 
-	//the above values willl result in a max element of -1.5625
+	// The above values willl result in a max element of -1.5625
 	double analytic_max = -1.5625;
 
 	// Initializing matrix A

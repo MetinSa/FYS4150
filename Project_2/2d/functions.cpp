@@ -5,8 +5,9 @@
 
 #include "functions.h"
 
+
 // Constructing tridiagonal Toeplitz matrix A
-arma::mat constructA(double rho_0, double rho_n, int n) {
+arma::mat makeTridiagonal(double rho_0, double rho_n, int n) {
 
 	// Initializing empty matrix A
 	arma::mat A = arma::mat(n,n);
@@ -19,19 +20,17 @@ arma::mat constructA(double rho_0, double rho_n, int n) {
 	double d = 2/(h*h);
 	double a = -1/(h*h);
 
-
 	// Initializing potential and rho
 	double rho, V;
 
 	for (int i = 0; i < n; i++){
 
 		// Computing: rho = rho_0 + i*h, and potential V = rho^2
-		rho = i*h;
+		rho = (i+1)*h;
 		V = rho*rho;
 
-		// Main diagonal
-		A(i,i) = d+rho;
-		std::cout << A(i,i) << std::endl;
+		// Main diagonal with the addition of the harmonic potential
+		A(i,i) = d+V;
 
 		// Secondary diagonals
 		if (i < n-1){
@@ -136,7 +135,6 @@ void jacobiRotate(arma::mat &A, arma::mat &R, int k, int l, int n) {
 			// Making the matrix symmetric
 			A(k,i) = A(i,k);
 			A(l,i) = A(i,l);
-
 		}
 
 		// Making eigenvectors
@@ -185,15 +183,18 @@ void diagJacobi(arma::mat &A, arma::mat &R, int k, int l, int &N_it, int &ground
 	}
 }
 
+
 // Writing the groundstate (smallest eigenvalue) to file
-void toFile(arma::mat R, std::string filename, int ground_state, int n) {
+void toFile(arma::mat R, std::string filename, int ground_state, int n, double rho_n) {
 	
 	// Opening file
 	std::ofstream ofile;
 	ofile.open(filename);
 
+	// Writing the number of grid points and rho_max
+	ofile << n << std::endl;
+	ofile << rho_n << std::endl << std::endl;
 	// Writing eigenvector corresponding to groundstate eigenvalue
-	ofile << n << std::endl << std::endl;
 	for (int i = 0; i < n; i++) {
 
 		ofile << R(i, ground_state) << std::endl;

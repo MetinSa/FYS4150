@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
 	clock_t start = clock();
 
 	// Constructing matrix A
-	A = constructA(rho_0, rho_n, n);
+	A = makeTridiagonal(rho_0, rho_n, n);
 
 	// Initializing quantities to be used in diagonalization process
 	int k, l, N_it;

@@ -12,12 +12,12 @@ int main(int argc, char *argv[]){
 
 	// Reading in commandline arguments (rho_0, rho_n, n)
 	int n;
-	double rho_0, rho_n;
+	double rho_0, rho_n, omega;
 
 	// Checking if the correct commandline arguments are used when compiling
-	if (argc < 4){
+	if (argc < 5){
 
-		cout << "Bad Usage: Please include 'n', 'rho_0' and 'rho_n'. 3 arguments in total. " << endl;
+		cout << "Bad Usage: Please include 'n', 'rho_0', 'rho_n' and 'omega'. 4 arguments in total. " << endl;
 		exit(1);
 	}
 
@@ -26,6 +26,7 @@ int main(int argc, char *argv[]){
 		n = atoi(argv[1]);
 		rho_0 = atof(argv[2]);
 		rho_n = atof(argv[3]);
+		omega = atof(argv[4]);
 	}
 
 	// Initializing matrix A, and identity matrix R, and the Eigenvalues of A
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]){
 	clock_t start = clock();
 
 	// Constructing matrix A
-	A = makeTridiagonal(rho_0, rho_n, n);
+	A = makeTridiagonal(rho_0, rho_n, omega, n);
 
 	// Initializing quantities to be used in diagonalization process
 	int k, l, N_it, ground_state;
@@ -53,8 +54,8 @@ int main(int argc, char *argv[]){
 	eigval = arma::sort(eigval);
 
 	// Writing the groundstate energy to file for plotting
-	string filename = to_string(n) + "_" + to_string(int(rho_n)) + ".dat";
-	toFile(R, filename, ground_state, n, rho_n);
+	string filename = to_string(n) + "_" + to_string(int(rho_n)) + "_" + to_string(omega) + ".dat";
+	toFile(R, filename, ground_state, n, rho_n, omega);
 
 	// Printing the first 4 Eigenvalues which can be compared to analytic ones.
 	cout << "============================" << endl;

@@ -5,7 +5,7 @@
 #include "functions.h"
 
 // Constructing tridiagonal Toeplitz matrix A
-arma::mat constructA(double rho_0, double rho_n, int n){
+arma::mat makeTridiagonal(double rho_0, double rho_n, int n){
 
 	// Initializing empty matrix A
 	arma::mat A = arma::mat(n,n);
@@ -25,12 +25,10 @@ arma::mat constructA(double rho_0, double rho_n, int n){
 		A(i,i) = d;
 
 		// Secondary diagonals
-		if (i != 0){
-			A(i,i-1) = a;
-		}
-
-		if (i != n-1){
+		if (i < n-1){
 			A(i,i+1) = a;
+			A(i+1,i) = a;
+			
 		}
 	}
 

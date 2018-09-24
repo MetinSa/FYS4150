@@ -136,6 +136,28 @@ At last, we can use linear algebra to rewrite this to an eigenvalue problem
 \label{eq:matrixse} 
 \end{equation*}
 where $d = 2/h^2$ and $a = -1/h^2$. Because we have Dirichlet boundary conditions, the endpoints are excluded. The eigenvalues can be found analytically, and are given by 
-$$\lambda_j = d + 2a \cos\left(\frac{j\pi}{N+1}\right) \quad j = 1,2, \dots, N-1. $$
+$$\lambda_j = d + 2a \cos\left(\frac{j\pi}{N+1}\right) \quad j = 1,2, \dots, N-1. $$ \\
+
+
+
+\noindent 2.2. \textbf{Unitary transformations.} 
+If we have an unitary or orthogonal transformation, the orthogonality of the obtained eigenvectors is preserved. This we can show by considering a basis of orthogonal vectors $\mathbf{v}_i$, 
+$$
+\mathbf{v}_i = 
+ \begin{bmatrix}
+  v_{i1} \\
+  \vdots \\
+  v_{in}
+ \end{bmatrix}. 
+$$
+Orthogonality gives that 
+$$ \mathbf{v}_j^T \mathbf{v}_i = \delta_{ij}.$$ 
+If we then have an unitary transformation given by $\mathbf{w}_i = \mathbf{U} \mathbf{v}_i, $
+we get that 
+$$\mathbf{w}_j^T \mathbf{w}_i = (\mathbf{U} \mathbf{v}_j)^T (\mathbf{U} \mathbf{v}_i) =  \mathbf{v}_j^T \mathbf{U}^T \mathbf{U} \mathbf{v}_i.  $$
+Because the transformation is orthogonal, we know that $\mathbf{U}^T = \mathbf{U}^{-1} $ and $\mathbf{U}^{-1}\mathbf{U} = \mathbf{I}$, where $\mathbf{I}$ is the identity matrix. This gives us further that 
+$$\mathbf{w}_j^T \mathbf{w}_i = \mathbf{v}_j^T \mathbf{I} \mathbf{v}_i = \mathbf{v}_j^T \mathbf{v}_i = \delta_{ij},  $$
+which proves that the orthogonality is preserved. Because we know that the dot-product is defined by $\mathbf{v}_j \cdot \mathbf{v}_i =  \mathbf{v}_j^T \mathbf{v}_i$, we have aslo proven that the dot-product is preserved. 
+
 
 \end{document}

@@ -11,6 +11,7 @@ The projects found in this repository is a results of the collaboration between
 * **Markus Leira Asprusten** - (https://github.com/maraspr)
 
 ## Project 1
-Solving Poisson's equation in one dimension with spherical symmetry using the tridiagonal matrix algortihm. ([Project description](https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Projects/2018/Project1/pdf/Project1.pdf))
+Solving Poisson's equation in one dimension with spherical symmetry using the tridiagonal matrix algortihm. The project description can be found [here](https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Projects/2018/Project1/pdf/Project1.pdf)
 
-
+## Project 2
+Solving Schrödinger's equation as an eigenvalue problem by using Jacobi's rotation algortihm. The project description can be found [here](https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Projects/2018/Project2/pdf/Project2.pdf)

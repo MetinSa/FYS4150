@@ -13,7 +13,7 @@ arma::mat constructA(double rho_0, double rho_n, int n) {
 	A.zeros();
 
 	// Steplength calculated from given rho values and number of gridpoints
-	double h = (rho_n - rho_0)/(double)n;
+	double h = (rho_n - rho_0)/(double)(n);
 
 	// Second derivative diagonal constants
 	double d = 2/(h*h);
@@ -21,24 +21,23 @@ arma::mat constructA(double rho_0, double rho_n, int n) {
 
 
 	// Initializing potential and rho
-	double V, rho;
+	double rho, V;
 
 	for (int i = 0; i < n; i++){
 
 		// Computing: rho = rho_0 + i*h, and potential V = rho^2
-		rho = (i+1)*h;
+		rho = i*h;
 		V = rho*rho;
-		
+
 		// Main diagonal
-		A(i,i) = d + V;
+		A(i,i) = d+rho;
+		std::cout << A(i,i) << std::endl;
 
 		// Secondary diagonals
-		if (i != 0){
-			A(i,i-1) = a;
-		}
-
-		if (i != n-1){
+		if (i < n-1){
 			A(i,i+1) = a;
+			A(i+1,i) = a;
+	
 		}
 	}
 
@@ -152,7 +151,7 @@ void jacobiRotate(arma::mat &A, arma::mat &R, int k, int l, int n) {
 
 
 // Diagonalizing a matrix using Jacobi's rotation algorithm
-void diagJacobi(arma::mat &A, arma::mat &R, int k, int l, int &N_it, int n) {
+void diagJacobi(arma::mat &A, arma::mat &R, int k, int l, int &N_it, int &ground_state, int n) {
 
 	// Restricting itterations
 	int it = 0; 

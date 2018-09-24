@@ -26,12 +26,12 @@ arma::mat constructA(double rho_0, double rho_n, int n) {
 	for (int i = 0; i < n; i++){
 
 		// Computing: rho = rho_0 + i*h, and potential V = rho^2
-		rho = i*h;
+		rho = (i+1)*h;
 		V = rho*rho;
 
 		// Main diagonal
-		A(i,i) = d+rho;
-		std::cout << A(i,i) << std::endl;
+		A(i,i) = d+V;
+		// std::cout << A(i,i) << std::endl;
 
 		// Secondary diagonals
 		if (i < n-1){

@@ -34,6 +34,9 @@ int main(int argc, char *argv[]){
 	arma::vec eigval(n);
 	R.eye(n,n);
 
+	// Starting the timer
+	clock_t start = clock();
+
 	// Constructing matrix A
 	A = constructA(rho_0, rho_n, n);
 
@@ -42,11 +45,27 @@ int main(int argc, char *argv[]){
 
 	// Diagonalizing matrix A using Jacobi's rotation method
 	diagJacobi(A, R, k, l, N_it, ground_state, n);
-	
-	// Writing the groundstate eigenvector to file
+
+	// Stopping the timer
+	clock_t stop = clock();
+
+	eigval = A.diag();
+	eigval = arma::sort(eigval);
+
+	// Writing the groundstate energy to file for plotting
 	string filename = "eigenvectors.dat";
 	toFile(R, filename, ground_state, n);
 
+	// Printing the first 4 Eigenvalues which can be compared to analytic ones.
+	cout << "============================" << endl;
+	cout << "Eigenvalues  " << endl;
+	cout << "============================" << endl;
+	cout << eigval(0)<< endl << eigval(1) << endl << eigval(2) << endl << eigval(3) << endl;
+	cout << "============================" << endl;
+	cout << "Number of transformations: " << N_it << endl;
+	cout << "============================" << endl;
+	cout << "Time used computing: " << (double) (stop-start)/CLOCKS_PER_SEC << "seconds" << endl;
+	cout << "============================" << endl;
 
 
 	return 0;

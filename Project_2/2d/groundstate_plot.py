@@ -15,7 +15,7 @@ u = np.zeros(n)
 u[:] = file.readlines()[1:]
 
 # Definitions
-rho = np.linspace(0,10,n)
+rho = np.linspace(0,1,n)
 u_squared = u**2
 
 plt.plot(rho,u_squared, color = "royalblue")

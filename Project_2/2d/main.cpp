@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
 
 	// Writing the groundstate energy to file for plotting
 	string filename = "eigenvectors.dat";
-	toFile(R, filename, ground_state, n);
+	toFile(R, filename, ground_state, n, rho_n);
 
 	// Printing the first 4 Eigenvalues which can be compared to analytic ones.
 	cout << "============================" << endl;

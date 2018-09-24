@@ -7,7 +7,7 @@
 
 
 // Constructing tridiagonal Toeplitz matrix A
-arma::mat constructA(double rho_0, double rho_n, int n) {
+arma::mat makeTridiagonal(double rho_0, double rho_n, int n) {
 
 	// Initializing empty matrix A
 	arma::mat A = arma::mat(n,n);

@@ -15,7 +15,7 @@ TEST_CASE("Testing max value of Toeplitz matrix") {
 	arma::mat A(n,n);
 
 	// Constructing matrix A
-	A = constructA(rho_0, rho_n, n);
+	A = makeTridiagonal(rho_0, rho_n, n);
 
 	// Extracting max value from matrix
 	int k, l;
@@ -62,7 +62,7 @@ TEST_CASE("Testing eigenvalues of Toeplitz matrix") {
 	// Constructing matrix A
 	double rho_0 = 0; 
 	double rho_n = 1;
-	A = constructA(rho_0, rho_n, n);
+	A = makeTridiagonal(rho_0, rho_n, n);
 
 	// Initializing quantities to be used in diagonalization process
 	int k, l, N_it;

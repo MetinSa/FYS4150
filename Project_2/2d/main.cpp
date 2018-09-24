@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
 	eigval = arma::sort(eigval);
 
 	// Writing the groundstate energy to file for plotting
-	string filename = "eigenvectors.dat";
+	string filename = to_string(n) + "_" + to_string(int(rho_n)) + ".dat";
 	toFile(R, filename, ground_state, n, rho_n);
 
 	// Printing the first 4 Eigenvalues which can be compared to analytic ones.

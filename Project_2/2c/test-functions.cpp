@@ -74,9 +74,10 @@ TEST_CASE("Testing eigenvalues of Toeplitz matrix") {
 	eigval = A.diag();
 	eigval = arma::sort(eigval);
 
-	// Comparing eigenvalues using catch
-	REQUIRE(eigval(0)==Approx(exact(0)).epsilon(0.00000001));
-	REQUIRE(eigval(1)==Approx(exact(1)).epsilon(0.00000001));
-	REQUIRE(eigval(2)==Approx(exact(2)).epsilon(0.00000001));
+
+	// Comparing all eigenvalues using catch
+	for (int i = 0; i < n; i++){
+		REQUIRE(eigval(i)==Approx(exact(i)).epsilon(0.00000001));
+	}
 
 }

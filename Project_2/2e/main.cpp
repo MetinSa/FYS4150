@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 	A = makeTridiagonal(rho_0, rho_n, omega, n);
 
 	// Initializing quantities to be used in diagonalization process
-	int k, l, N_it, ground_state;
+	int k, l, N_it, ground_state = 0;
 
 	// Diagonalizing matrix A using Jacobi's rotation method
 	diagJacobi(A, R, k, l, N_it, ground_state, n);

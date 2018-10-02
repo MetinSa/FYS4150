@@ -29,6 +29,7 @@ plt.plot(rho_array,u, color = "royalblue")
 plt.xlabel(r"$\rho$")
 plt.ylabel(r"$\mid u(\rho) \mid^2$")
 plt.title(r"Electron in harmonic oscillator potential, $V = \rho^2$")
+plt.grid()
 plt.savefig(name.replace(".dat", ".pdf"))
 
-plt.show()
+#plt.show()

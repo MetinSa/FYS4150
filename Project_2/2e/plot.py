@@ -51,8 +51,6 @@ plt.ylabel(r"$\mid u(\rho) \mid^2$")
 plt.legend()
 plt.title(r"Interacting electrons in potential $V = \omega_r^2 \rho^2 + 1/\rho$")
 plt.grid()
-fig = plt.figure()
-size = fig.get_size_inches()*fig.dpi # size in pixels
-print(size)
+
 tikz_save("interacting_%i_%i.tex" %(n,rho_n), figureheight='\\figureheight', figurewidth='\\figurewidth')
 #plt.show()

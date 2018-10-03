@@ -37,7 +37,7 @@ for j in range(N):
 		u[j][i] = float(lines[j][i+5])
 
 	# Squaring and taking the absolute value of u
-	u[j]= np.abs(u[j]**2)
+	u[j]= np.abs(u[j][::-1]**2)
 
 colours = ["darkorchid", "mediumseagreen", "crimson", "royalblue", "hotpink", "lime", "olivedrab", "magenta"]
 

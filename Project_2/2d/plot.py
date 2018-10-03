@@ -22,7 +22,7 @@ for i in range(n):
 	u[i] = float(lines[i+3])
 
 # Squaring and taking the absolute value of u
-u = np.abs(u**2)
+u = np.abs(u[::-1]**2)
 
 # # Plotting
 plt.plot(rho_array,u, color = "royalblue")

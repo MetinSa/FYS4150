@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
 import sys 
+from matplotlib2tikz import save as tikz_save
 
 # Reading in filename and opening it
 name = str(sys.argv[1])
@@ -30,6 +31,6 @@ plt.xlabel(r"$\rho$")
 plt.ylabel(r"$\mid u(\rho) \mid^2$")
 plt.title(r"Electron in harmonic oscillator potential, $V = \rho^2$")
 plt.grid()
-plt.savefig(name.replace(".dat", ".pdf"))
+tikz_save("single_%i_%i.tex" %(n,rho_n), figureheight='\\figureheight', figurewidth='\\figurewidth')
 
-#plt.show()
+plt.show()

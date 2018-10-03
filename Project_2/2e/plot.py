@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
-import sys 
+import sys
+from matplotlib2tikz import save as tikz_save
 
 # Reading in filename and opening it
 names = map(str, sys.argv[1:])
@@ -50,5 +51,8 @@ plt.ylabel(r"$\mid u(\rho) \mid^2$")
 plt.legend()
 plt.title(r"Interacting electrons in potential $V = \omega_r^2 \rho^2 + 1/\rho$")
 plt.grid()
-plt.savefig("interacting_%i_%i.pdf" %(n,rho_n))
+fig = plt.figure()
+size = fig.get_size_inches()*fig.dpi # size in pixels
+print(size)
+tikz_save("interacting_%i_%i.tex" %(n,rho_n), figureheight='\\figureheight', figurewidth='\\figurewidth')
 #plt.show()

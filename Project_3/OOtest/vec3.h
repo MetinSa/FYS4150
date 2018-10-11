@@ -23,6 +23,10 @@ public:
 	vec3 &operator -= (const vec3 &other);		//	Componentwise subtraction with other vector
 	vec3 &operator += (const double &other);	//	Componentwise addition with scalar
 	vec3 &operator -= (const double &other);	//	Componentwise subtraction with scalar
+	vec3 &operator *= (const vec3 &other);		//	Componentwise multiplication with other vector
+	vec3 &operator /= (const vec3 &other);		//	Componentwise division with other vector
+	vec3 &operator *= (const double &other);	//	Componentwise multiplication with scalar
+	vec3 &operator /= (const double &other);	//	Componentwise division with scalar
 
 };
 

@@ -65,11 +65,55 @@ vec3 &vec3::operator+=(const double &other)
 vec3 &vec3::operator-=(const double &other)
 {
 
-	//	Vector-scalar componentwise addition.
+	//	Vector-scalar componentwise subtraction.
 
 	components[0] -= other;
 	components[1] -= other;
 	components[2] -= other;
+	return *this;
+}
+
+vec3 &vec3::operator*=(const vec3 &other)
+{
+
+	//	Vector-vector componentwise multiplication.
+
+	components[0] *= other.components[0];
+	components[1] *= other.components[1];
+	components[2] *= other.components[2];
+	return *this;
+}
+
+vec3 &vec3::operator/=(const vec3 &other)
+{
+
+	//	Vector-vector componentwise division.
+
+	components[0] /= other.components[0];
+	components[1] /= other.components[1];
+	components[2] /= other.components[2];
+	return *this;
+}
+
+vec3 &vec3::operator*=(const double &other)
+{
+
+	//	Vector-scalar componentwise multiplication.
+
+	components[0] *= other;
+	components[1] *= other;
+	components[2] *= other;
+	return *this;
+}
+
+vec3 &vec3::operator/=(const double &other)
+{
+
+	//	Vector-scalar componentwise division.
+
+	components[0] /= other;
+	components[1] /= other;
+	components[2] /= other;
 	return *this;
 }
 

@@ -171,3 +171,14 @@ vec3 &vec3::operator/=(const double &other)
 	return *this;
 }
 
+vec3 &vec3::operator=(const double &other)
+{
+
+	//	Vector-scalar componentwise equals.
+
+	components[0] = other;
+	components[1] = other;
+	components[2] = other;
+	return *this;
+}
+

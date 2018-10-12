@@ -2,6 +2,7 @@
 #define VEC3_H
 
 #include <iostream>
+#include <vector>
 
 class vec3
 {
@@ -47,6 +48,10 @@ public:
 	vec3 &operator /= (const vec3 &other);		//	Componentwise division with other vector
 	vec3 &operator *= (const double &other);	//	Componentwise multiplication with scalar
 	vec3 &operator /= (const double &other);	//	Componentwise division with scalar
+	vec3 &operator = (const double &other);		//	Componentwise equals
+
+ 	//	Lets us use vec3[index] instead of vec3.components[index]
+	double &operator[](int index) { return components[index]; }
 
 };
 

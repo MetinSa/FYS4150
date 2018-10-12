@@ -27,14 +27,13 @@ void CelestialObject::objPrint()
 	std::cout << "Mass: " << mass << std::endl;
 }
 
-void CelestialObject::addForce(double dFx, double dFy, double dFz)
+void CelestialObject::addForce(vec3 dF)
 {
 
 	//	Adding force to an object.
 
-	force.components[0] += dFx;
-	force.components[1] += dFy;
-	force.components[2] += dFz;
+	force += dF;
+
 }
 
 void CelestialObject::resetForce()
@@ -42,7 +41,6 @@ void CelestialObject::resetForce()
 
 	//	Resetting the force for an object.
 
-	force.components[0] = 0;
-	force.components[1] = 0;
-	force.components[2] = 0;
+	force = 0.;
+
 }

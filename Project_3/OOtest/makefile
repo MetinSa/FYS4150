@@ -9,8 +9,8 @@ LIB = -larmadillo -llapack -lblas
 # Here we define the name of the executable
 PROG = run.x
 
-${PROG} :	   	main.o  vec3.o  object.o
-			${CPPflags} main.o vec3.o object.o  ${LIB} -o ${PROG}
+${PROG} :	   	main.o  vec3.o  CelestialObject.o
+			${CPPflags} main.o vec3.o CelestialObject.o  ${LIB} -o ${PROG}
 
 main.o :		main.cpp 
 		        	${CPPflags} -c main.cpp
@@ -18,5 +18,5 @@ main.o :		main.cpp
 vec3.o :	vec3.cpp
 		        	${CPPflags} -c vec3.cpp
 
-object.o :	object.cpp
-		        	${CPPflags} -c object.cpp
+object.o :	CelestialObject.cpp
+		        	${CPPflags} -c CelestialObject.cpp

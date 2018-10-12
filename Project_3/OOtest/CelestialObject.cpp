@@ -1,6 +1,6 @@
-#include "object.h"
+#include "CelestialObject.h"
 
-object::object(vec3 newPosition, vec3 newVelocity, vec3 newForce, double newMass, std::string newName)
+CelestialObject::CelestialObject(vec3 newPosition, vec3 newVelocity, vec3 newForce, double newMass, std::string newName)
 {
 
 	// Initializing a new object and allocating it the below quantities.
@@ -12,7 +12,7 @@ object::object(vec3 newPosition, vec3 newVelocity, vec3 newForce, double newMass
 	name = newName;
 }
 
-void object::objPrint()
+void CelestialObject::objPrint()
 {
 
 	// Printing information about the object.

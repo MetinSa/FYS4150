@@ -1,14 +1,14 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef CELESTIALOBJECT_H
+#define CELESTIALOBJECT_H
 
 #include "vec3.h"
 #include <iostream>
 #include <string>
 
-class object
+class CelestialObject
 {
 
-	//	Class that initializes a object (planet/moon etc).
+	//	Class that initializes a celestial object (planet/moon etc).
 
 public:
 	//	Allocating quantities to the object, using the vec3 class
@@ -19,10 +19,10 @@ public:
 	std::string name;
 
 	//	Initializing a new object
-	object(vec3 newPosition, vec3 newVelocity, vec3 newForce, double newMass, std::string newName);
+	CelestialObject(vec3 newPosition, vec3 newVelocity, vec3 newForce, double newMass, std::string newName);
 
 	//	Printing information about the Object
 	void objPrint();
 };
 
-#endif	// OBJECT_H
+#endif	// CELESTIALOBJECT_H

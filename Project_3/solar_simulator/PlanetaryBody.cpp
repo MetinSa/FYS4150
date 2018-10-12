@@ -1,40 +1,30 @@
 #include "functions.h"
 
 
-Planetary_body::Planetary_body(vec3 newposition, vec3 newvelocity, vec3 newMass, std::string newname)
+Planetary_body::Planetary_body(vec3 newPosition, vec3 newVelocity, double newMass, std::string newName)
 {
 
-	position = newposition;
-	velocity = newvelocity;
+	position = newPosition;
+	velocity = newVelocity;
 	mass = newMass;
-	name = newname;
+	name = newName;
 }
 
 void Planetary_body::addF(vec3 addForce)
 {
 
-	force += addforce;
+	force += addForce;
 
 }
 
 void Planetary_body::resetF()
 {
-	F = 0.;
+	force = 0.;
 }
 
 void Planetary_body::integrate(double &dt)
 {
 
-	v += (F/m) * dt;
-	r += v * dt;
-}
-
-double Planetary_body::getm()
-{
-	return m;
-}
-
-vec3 Planetary_body::getr()
-{
-	return r;
+	velocity += (force/mass) * dt;
+	position += velocity * dt;
 }

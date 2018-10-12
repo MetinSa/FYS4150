@@ -13,12 +13,10 @@ class Planetary_body
 	std::string name;
 
 public:
-	Planetary_body(vec3 newposition, vec3 newvelocity, vec3 newMass, std::string name);
+	Planetary_body(vec3 newPosition, vec3 newVelocity, double newMass, std::string name);
 	void addF(vec3 addForce);
 	void resetF();
 	void integrate(double &dt);
-	double getm();
-	vec3 getr();
 
 };
 

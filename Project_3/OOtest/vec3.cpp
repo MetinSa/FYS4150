@@ -66,6 +66,15 @@ double vec3::dot(vec3 &other)
 	return components[0]*other.components[0] + components[1]*other.components[1] + components[2]*other.components[2];
 }
 
+vec3 vec3::cross(vec3 &other)
+{
+	//	Returning the cross product of two vectors.
+
+	return vec3(components[1]*other.components[2] - components[2]*other.components[1],
+				components[2]*other.components[0] - components[0]*other.components[2],
+				components[0]*other.components[1] - components[1]*other.components[0]);
+}
+
 vec3 &vec3::operator+=(const vec3 &other)
 {
 

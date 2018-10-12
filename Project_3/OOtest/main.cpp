@@ -12,9 +12,12 @@ int main()
 	vec3 v1(1,2,3);
 	vec3 v2(2,2,2);
 	vec3 v3;
-	double a = v1.dot(v2);
-	std::cout << a << std::endl;
-
+	v3 = v1.cross(v2);
+	v3.print();
+	// double a = v1.dot(v2);
+	// std::cout << a << std::endl;
+	// v1.print();
+	// v2.print();
 
 	return 0;
 }

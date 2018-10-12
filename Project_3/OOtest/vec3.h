@@ -30,6 +30,9 @@ public:
 	//	Function that returns the dot product of two vectors
 	double dot(vec3 &other);
 
+	//	Function that returns the cross product of two vectors
+	vec3 cross(vec3 &other);
+
 	//	Operator definitons
 	vec3 &operator += (const vec3 &other);		//	Componentwise addition with other vector
 	vec3 &operator -= (const vec3 &other);		//	Componentwise subtraction with other vector

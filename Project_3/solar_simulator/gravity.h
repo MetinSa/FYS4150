@@ -7,8 +7,8 @@
 
 class Gravity
 {
-	Planetary_body* alpha;
-	Planetary_body* beta;
+	PlanetaryBody* alpha;
+	PlanetaryBody* beta;
 	double G;
 public:
 	Gravity(PlanetaryBody *a, PlanetaryBody *b);

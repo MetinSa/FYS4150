@@ -41,6 +41,14 @@ void vec3::print()
 	std::cout << "[" << components[0] << ", " << components[1] << ", " << components[2] << "]" << std::endl;
 }
 
+void vec3::print(std::string name)
+{
+	//	Prinst the content of a given vector + its name.
+
+	std::cout << name << " = ";
+	print();
+}
+
 double vec3::lengthSquared()
 {
 

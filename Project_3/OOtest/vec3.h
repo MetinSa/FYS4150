@@ -1,6 +1,8 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include <iostream>
+
 class vec3
 {
 
@@ -20,6 +22,9 @@ public:
 
 	//	Function that prints the vector
 	void print();
+
+	//	Function that prints the vector with its name
+	void print(std::string name);
 
 	//	Function that returns the length squared of a vector
 	double lengthSquared();

@@ -21,8 +21,14 @@ public:
 	//	Initializing a new object
 	CelestialObject(vec3 newPosition, vec3 newVelocity, vec3 newForce, double newMass, std::string newName);
 
-	//	Printing information about the Object
+	//	Printing information about the ibject
 	void objPrint();
+
+	//	Adding force to an object
+	void addForce(double dFx, double dFy, double dFz);
+
+	//	Resetting the force of an object
+	void resetForce();
 };
 
 #endif	// CELESTIALOBJECT_H

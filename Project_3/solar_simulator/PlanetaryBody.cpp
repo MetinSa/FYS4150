@@ -28,3 +28,18 @@ void PlanetaryBody::integrate(double &dt)
 	velocity += (force/mass) * dt;
 	position += velocity * dt;
 }
+
+void PlanetaryBody::objPrint()
+{
+
+	// Printing information about the object.
+
+	std::cout << "Object: " << name << std::endl;
+	std::cout << "Position: ";
+	position.print();
+	std::cout << "Velocity: ";
+	velocity.print();
+	std::cout << "Force: ";
+	force.print();
+	std::cout << "Mass: " << mass << std::endl;
+}

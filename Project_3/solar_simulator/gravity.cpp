@@ -10,23 +10,16 @@ Gravity::Gravity(Planetary_body *a, Planetary_body *b)
 }
 void Gravity::calcForce()
 {
-	double* R1 = alpha->getr();
-	double* R2 = beta->getr();
-	double F[3];
-	double negF[3];
+	vec3 R1 = alpha->position;
+	vec3 R2 = beta->position;
+	vec3 F;
 
-	double length = 0;
+	double length = (R2-R1).length();
 
-	for (int i = 0; i<3; i++){
-		length += pow(R2[i] - R1[i], 2);
-	}
-	length = sqrt(length);
 
-	for (int i = 0; i<3; i++){
-		F[i] = (R2[i]-R1[i])*G*alpha->getm()*beta->getm()/pow(length, 3);
-		negF[i] = -F[i];
-	}
+	F[i] = (R2-R1)*G*alpha->mass*beta->mass/pow(length, 3);
+	
 	alpha->addF(F);
-	beta->addF(negF);
+	beta->addF(-F);
 
 }

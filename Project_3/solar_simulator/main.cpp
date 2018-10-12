@@ -3,6 +3,7 @@
 
 int main(int argc, char *argv[]){
 
+
 	vec3 v1(1,2,3);
 	vec3 v2(4,2,1);
 
@@ -11,5 +12,4 @@ int main(int argc, char *argv[]){
 	std::cout << a << std::endl;
 	return 0;
 
-	
 }

@@ -15,8 +15,20 @@ public:
 	//	Parametrized constructor
 	vec3(double x, double y, double z);
 
+	//	Copying a vector
+	vec3(vec3 const &copy);
+
 	//	Function that prints the vector
 	void print();
+
+	//	Function that returns the length squared of a vector
+	double lengthSquared();
+
+	//	Function that returns the length of a vector
+	double length();
+
+	//	Function that returns the dot product of two vectors
+	double dot(vec3 &other);
 
 	//	Operator definitons
 	vec3 &operator += (const vec3 &other);		//	Componentwise addition with other vector
@@ -58,4 +70,33 @@ inline vec3 operator-(vec3 lhs, double rhs)
 	return lhs;
 
 }
+
+inline vec3 operator*(vec3 lhs, vec3 rhs)
+{
+	lhs *= rhs;
+	return lhs;
+
+}
+
+inline vec3 operator/(vec3 lhs, vec3 rhs)
+{
+	lhs /= rhs;
+	return lhs;
+
+}
+
+inline vec3 operator*(vec3 lhs, double rhs)
+{
+	lhs *= rhs;
+	return lhs;
+
+}
+
+inline vec3 operator/(vec3 lhs, double rhs)
+{
+	lhs /= rhs;
+	return lhs;
+
+}
+
 #endif // VEC3_H

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <fstream>
 #include <vector>
+#include <sstream>
 
 #include "vec3.h"
 #include "PlanetaryBody.h"
@@ -14,7 +15,7 @@
 
 
 // define pi
-const double pi  =3.141592653589793238463;
+const double pi = 3.141592653589793238463;
 
 
 

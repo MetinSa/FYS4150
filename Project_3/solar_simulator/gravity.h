@@ -7,11 +7,11 @@
 
 class Gravity
 {
-	Planetary_body* alpha;
-	Planetary_body* beta;
+	PlanetaryBody* alpha;
+	PlanetaryBody* beta;
 	double G;
 public:
-	Gravity(Planetary_body *a, Planetary_body *b);
+	Gravity(PlanetaryBody *a, PlanetaryBody *b);
 	void calcForce();
 };
 

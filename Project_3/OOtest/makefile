@@ -10,13 +10,13 @@ LIB = -larmadillo -llapack -lblas
 PROG = run.x
 
 ${PROG} :	   	main.o  vec3.o  CelestialObject.o
-			${CPPflags} main.o vec3.o CelestialObject.o  ${LIB} -o ${PROG}
+					${CPPflags} main.o vec3.o CelestialObject.o  ${LIB} -o ${PROG}
 
 main.o :		main.cpp 
 		        	${CPPflags} -c main.cpp
 
-vec3.o :	vec3.cpp
+vec3.o :		vec3.cpp
 		        	${CPPflags} -c vec3.cpp
 
-object.o :	CelestialObject.cpp
+object.o :		CelestialObject.cpp
 		        	${CPPflags} -c CelestialObject.cpp

@@ -1,42 +1,32 @@
 #include "functions.h"
 
 
-Planetary_body::Planetary_body(double *r_, double *v_, double &m_)
+Planetary_body::Planetary_body(vec3 newposition, vec3 newvelocity, vec3 newMass, std::string newname)
 {
-	for (int i = 0; i<3; i++)
-	{
-		r[i] = r_[i];
-		v[i] = v_[i];
-		F[i] = 0;
-	}
-	m = m_;
+
+	position = newposition;
+	velocity = newvelocity;
+	mass = newMass;
+	name = newname;
 }
 
-void Planetary_body::addF(double *aF)
+void Planetary_body::addF(vec3 addForce)
 {
-	for (int i = 0; i<3; i++)
-	{
-		F[i] += aF[i];
-	}
+
+	force += addforce;
 
 }
 
 void Planetary_body::resetF()
 {
-	for (int i = 0; i<3; i++)
-	{
-		F[i] = 0;
-	}
+	F = 0.;
 }
 
 void Planetary_body::integrate(double &dt)
 {
-	//Euler-cromer
-	for (int i = 0; i<3; i++)
-	{
-		v[i] += (F[i]/m) * dt;
-		r[i] += v[i] * dt;
-	}
+
+	v += (F/m) * dt;
+	r += v * dt;
 }
 
 double Planetary_body::getm()
@@ -44,7 +34,7 @@ double Planetary_body::getm()
 	return m;
 }
 
-double* Planetary_body::getr()
+vec3 Planetary_body::getr()
 {
 	return r;
 }

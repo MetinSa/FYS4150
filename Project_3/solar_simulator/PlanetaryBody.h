@@ -6,19 +6,20 @@
 
 class Planetary_body
 {
-	double r[3];
-	double v[3];
-	double F[3];
-	double m;
+	vec3 position;
+	vec3 velocity;
+	vec3 force;
+	double mass;
+	std::string name;
 
 public:
-	Planetary_body(double *r_, double *v_, double &m_);
-	void addF(double *aF);
-	void setr(double *r_);
+	Planetary_body(vec3 newposition, vec3 newvelocity, vec3 newMass, std::string name);
+	void addF(vec3 addForce);
 	void resetF();
 	void integrate(double &dt);
 	double getm();
-	double* getr();
+	vec3 getr();
+
 };
 
 #endif

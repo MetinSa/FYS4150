@@ -1,7 +1,7 @@
 #include "functions.h"
 
 
-Planetary_body::Planetary_body(vec3 newPosition, vec3 newVelocity, double newMass, std::string newName)
+PlanetaryBody::PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass, std::string newName)
 {
 
 	position = newPosition;
@@ -10,19 +10,19 @@ Planetary_body::Planetary_body(vec3 newPosition, vec3 newVelocity, double newMas
 	name = newName;
 }
 
-void Planetary_body::addF(vec3 addForce)
+void PlanetaryBody::addF(vec3 addForce)
 {
 
 	force += addForce;
 
 }
 
-void Planetary_body::resetF()
+void PlanetaryBody::resetF()
 {
 	force = 0.;
 }
 
-void Planetary_body::integrate(double &dt)
+void PlanetaryBody::integrate(double &dt)
 {
 
 	velocity += (force/mass) * dt;

@@ -2,7 +2,7 @@
 
 // Defining gravityclass
 
-Gravity::Gravity(Planetary_body *a, Planetary_body *b)
+Gravity::Gravity(PlanetaryBody *a, PlanetaryBody *b)
 {
 	alpha = a;
 	beta = b;
@@ -17,9 +17,9 @@ void Gravity::calcForce()
 	double length = (R2-R1).length();
 
 
-	F[i] = (R2-R1)*G*alpha->mass*beta->mass/pow(length, 3);
+	F = (R2-R1)*G*alpha->mass*beta->mass/pow(length, 3);
 	
 	alpha->addF(F);
-	beta->addF(-F);
+	beta->addF(F-F-F);
 
 }

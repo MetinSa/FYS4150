@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
 	// Create planetary bodies
 	for (int i = 0; i<n; i++)
 	{
-		planets.emplace_back(r[i], v[i], m[i]);
+		planets.push_back(Planetary_body(r[i], v[i], m[i]));
 	}
 	
 	// Create gravitational forces
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
 	{
 		for (int j = i+1; j<n; j++)
 		{
-			gravity.emplace_back(&planets.at(i), &planets.at(j));
+			gravity.push_back(gravity(&planets.at(i), &planets.at(j)));
 		}
 	}
 	

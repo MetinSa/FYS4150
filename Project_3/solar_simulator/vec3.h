@@ -39,6 +39,9 @@ public:
 	//	Function that returns the cross product of two vectors
 	vec3 cross(vec3 &other);
 
+	//	Returning the negative of a vector
+	// vec3 neg(vec3 &other);
+
 	//	Operator definitons
 	vec3 &operator += (const vec3 &other);		//	Componentwise addition with other vector
 	vec3 &operator -= (const vec3 &other);		//	Componentwise subtraction with other vector
@@ -52,7 +55,6 @@ public:
 
  	//	Lets us use vec3[index] instead of vec3.components[index]
 	double &operator[](int index) { return components[index]; }
-
 };
 
 //	Making the coding seem more mathematical

@@ -3,6 +3,7 @@
 
 PlanetaryBody::PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass, std::string newName)
 {
+	// Initializing an object (planet, star, moon etc).
 
 	position = newPosition;
 	velocity = newVelocity;
@@ -12,18 +13,21 @@ PlanetaryBody::PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass,
 
 void PlanetaryBody::addF(vec3 addForce)
 {
+	// Adding force to an object.
 
 	force += addForce;
-
 }
 
 void PlanetaryBody::resetF()
 {
-	force = 0.;
+	// Reseting the force of an object.
+
+	force = 0;
 }
 
 void PlanetaryBody::integrate(double &dt)
 {
+	// Integrating using the Forward Euler method.
 
 	velocity += (force/mass) * dt;
 	position += velocity * dt;
@@ -31,7 +35,6 @@ void PlanetaryBody::integrate(double &dt)
 
 void PlanetaryBody::objPrint()
 {
-
 	// Printing information about the object.
 
 	std::cout << "Object: " << name << std::endl;

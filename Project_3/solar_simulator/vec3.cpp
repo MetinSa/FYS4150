@@ -49,21 +49,12 @@ void vec3::print(std::string name)
 	print();
 }
 
-double vec3::lengthSquared()
-{
-
-	//	Returning the length squared of a vector.
-
-	return components[0]*components[0] + components[1]*components[1] + components[2]*components[2];
-
-}
-
 double vec3::length()
 {
 
 	//	Returning the length squared of a vector.
 
-	return sqrt(lengthSquared());
+	return sqrt(components[0]*components[0] + components[1]*components[1] + components[2]*components[2]);
 
 }
 
@@ -83,15 +74,6 @@ vec3 vec3::cross(vec3 &other)
 				components[0]*other.components[1] - components[1]*other.components[0]);
 }
 
-// vec3 vec3::neg(vec3 &other)
-// {
-// 	//	Returning the cross product of two vectors.
-// 	double newx = -other.components[0];
-// 	double newy = -other.components[1];
-// 	double newz = -other.components[2];
-// 	return vec3(newx, newy, newz);
-// }
-
 
 vec3 &vec3::operator+=(const vec3 &other)
 {
@@ -104,17 +86,6 @@ vec3 &vec3::operator+=(const vec3 &other)
 	return *this;
 }
 
-vec3 &vec3::operator-=(const vec3 &other)
-{
-
-	//	Vector-vector componentwise subtraction.
-
-	components[0] -= other.components[0];
-	components[1] -= other.components[1];
-	components[2] -= other.components[2];
-	return *this;
-}
-
 vec3 &vec3::operator+=(const double &other)
 {
 
@@ -123,6 +94,17 @@ vec3 &vec3::operator+=(const double &other)
 	components[0] += other;
 	components[1] += other;
 	components[2] += other;
+	return *this;
+}
+
+vec3 &vec3::operator-=(const vec3 &other)
+{
+
+	//	Vector-vector componentwise subtraction.
+
+	components[0] -= other.components[0];
+	components[1] -= other.components[1];
+	components[2] -= other.components[2];
 	return *this;
 }
 
@@ -190,10 +172,5 @@ vec3 &vec3::operator=(const double &other)
 	components[1] = other;
 	components[2] = other;
 	return *this;
-}
-
-vec3 &vec3::operator-() const
-{	
-	return vec3 (-components[0], -components[1], -components[2])
 }
 

@@ -2,11 +2,13 @@
 #define PLANETARYBODY_H
 
 
-// Declaring Planetary_body class
+// Declaring PlanetaryBody class.
 
 class PlanetaryBody
 {
+
 public:
+
 	// Properties of the object
 	vec3 position;
 	vec3 velocity;
@@ -23,7 +25,7 @@ public:
 	//	Resetting the force of an object	
 	void resetF();
 
-	// Integrating object's velocity and position
+	// Integrating object's velocity and position using the Forward Euler method
 	void integrate(double &dt);
 
 	//	Printing information about the object

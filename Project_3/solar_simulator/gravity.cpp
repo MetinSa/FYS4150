@@ -1,25 +1,32 @@
 #include "functions.h"
 
-// Defining gravityclass
-
 Gravity::Gravity(PlanetaryBody *a, PlanetaryBody *b)
 {
-	alpha = a;
-	beta = b;
+	// Class that computes the Newtonian gravitational force.
+
+	object_a = a;
+	object_b = b;
+
+	// Scaled gravitational constant
 	G = 4*pi*pi;
 }
-void Gravity::calcForce()
+
+void Gravity::calculateForce()
 {
-	vec3 R1 = alpha->position;
-	vec3 R2 = beta->position;
+	// Function that calculates the force between two objects a and b.
+
+	// Defining position and force vectors
+	vec3 r_a = object_a->position;
+	vec3 r_b = object_b->position;
 	vec3 F;
 
-	double length = (R2-R1).length();
+	// Computing the length of position that separates object a and b
+	double length = (r_a-r_b).length();
 
-
-	F = (R2-R1)*G*alpha->mass*beta->mass/pow(length, 3);
+	// Computing the Newtonian gravitational force
+	F = ((r_b-r_a)/pow(length, 3))*(G * object_a->mass * object_b->mass);
 	
-	alpha->addF(F);
-	beta->addF(F-F-F);
+	object_a->addF(F);
+	object_b->addF(-F);
 
 }

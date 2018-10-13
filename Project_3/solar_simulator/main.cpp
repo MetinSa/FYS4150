@@ -8,7 +8,7 @@ int main(int argc, char *argv[]){
 	vec3 v3(-10,-1,2);
 
 	double a = 6.3;
-	v1 =  v1*a;
+	v1 =  a*v1;
 	// v2 = - v2;
 	// v3 = - v3;
 	v1.print("v1");

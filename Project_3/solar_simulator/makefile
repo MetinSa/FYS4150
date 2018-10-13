@@ -22,5 +22,5 @@ vec3.o :			vec3.cpp
 PlanetaryBody.o :	PlanetaryBody.cpp
 		        	${CPPflags} -c PlanetaryBody.cpp
 
-gravity.o :			gravity.cpp
+Gravity.o :			Gravity.cpp
 		        	${CPPflags} -c Gravity.cpp

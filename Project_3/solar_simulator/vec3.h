@@ -97,6 +97,13 @@ inline vec3 operator*(vec3 lhs, double rhs)
 
 }
 
+inline vec3 operator*(double rhs, vec3 lhs)
+{
+	lhs *= rhs;
+	return lhs;
+
+}
+
 inline vec3 operator/(vec3 lhs, vec3 rhs)
 {
 	lhs /= rhs;

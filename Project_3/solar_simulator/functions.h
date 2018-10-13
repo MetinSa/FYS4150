@@ -11,7 +11,7 @@
 
 #include "vec3.h"
 #include "PlanetaryBody.h"
-// #include "gravity.h"
+#include "Gravity.h"
 
 
 // define pi

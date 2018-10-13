@@ -7,12 +7,13 @@ int main(int argc, char *argv[]){
 	vec3 v2(4,2,-5);
 	vec3 v3(-10,-1,2);
 
-	v1 = - v1;
-	v2 = - v2;
-	v3 = - v3;
+	double a = 6.3;
+	v1 =  v1*a;
+	// v2 = - v2;
+	// v3 = - v3;
 	v1.print("v1");
-	v2.print("v2");
-	v3.print("v3");
+	// v2.print("v2");
+	// v3.print("v3");
 
 	// double len = v1.length();
 

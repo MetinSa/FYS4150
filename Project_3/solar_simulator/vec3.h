@@ -97,10 +97,10 @@ inline vec3 operator*(vec3 lhs, double rhs)
 
 }
 
-inline vec3 operator*(double rhs, vec3 lhs)
+inline vec3 operator*(double lhs, vec3 rhs)
 {
-	lhs *= rhs;
-	return lhs;
+	rhs *= lhs;
+	return rhs;
 
 }
 

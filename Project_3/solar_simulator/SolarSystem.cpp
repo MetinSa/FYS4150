@@ -4,6 +4,7 @@
 SolarSystem::SolarSystem(std::string filename){
 	std::ifstream infile(filename);
 	std::string line;
+	double daytoyr = 365;
 
 	std::vector<std::string> name;
 	std::vector<double> rx;
@@ -19,51 +20,27 @@ SolarSystem::SolarSystem(std::string filename){
 		getline(infile, line);
 		std::istringstream ss(line);
 
-		if (i == 0)
-		{
-			extractor(name, ss);
-		}
-		else if (i == 1)
-		{
-			extractor(rx, ss);
-		}
-		else if (i == 2)
-		{
-			extractor(ry, ss);
-		}
-		else if (i == 3)
-		{
-			extractor(rz, ss);
-		}
-		else if (i == 4)
-		{
-			extractor(vx, ss);
-		}
-		else if (i == 5)
-		{
-			extractor(vy, ss);
-		}
-		else if (i == 6)
-		{
-			extractor(vz, ss);
-		}
-		else if (i == 7)
-		{
-			extractor(m, ss);
-		}
+		if (i == 0){extractor(name, ss);}
+		else if (i == 1){extractor(rx, ss);}
+		else if (i == 2){extractor(ry, ss);}
+		else if (i == 3){extractor(rz, ss);}
+		else if (i == 4){extractor(vx, ss);}
+		else if (i == 5){extractor(vy, ss);}
+		else if (i == 6){extractor(vz, ss);}
+		else if (i == 7){extractor(m, ss);}
 	}
 	for (int i = 0; i<name.size(); i++)
 	{
 		vec3 position(rx[i], ry[i], rz[i]);
 		vec3 velocity(vx[i], vy[i], vz[i]);
-		planets.push_back(PlanetaryBody(position, velocity, m[i], name[i]));
+		planets.push_back(PlanetaryBody(position, velocity*daytoyr, m[i], name[i]));
 	}
 
 	for (int i = 0; i < planets.size(); i++)
 	{
 		for (int j = 0; j < planets.size(); j++)
 		{
-			//gravityforces.push_back(&planets.at(i), &planets.at(j));
+			gravityforces.push_back(Gravity(&planets.at(i), &planets.at(j)));
 		}
 	}
 }
@@ -87,5 +64,61 @@ void SolarSystem::extractor(std::vector<double> &vec, std::istringstream &ss)
 	while (ss >> value)
 	{
 		vec.push_back(value);
+	}
+}
+
+void SolarSystem::integrate(double dt, double T_stop)
+{
+	double t = 0;
+	writeheader();
+	dumptofile();
+	while (t <= T_stop)
+	{
+		for (int i = 0; i < gravityforces.size(); i++)
+		{
+			gravityforces[i].calculateForce();
+		}
+		for (int i = 0; i < planets.size(); i++)
+		{
+			planets[i].integrate(dt);
+		}
+
+		dumptofile();
+		t += dt;
+	}
+}
+
+void SolarSystem::dumptofile()
+{
+	std::string path = "output/";
+	std::ofstream outfile;
+	outfile.open(path+"output.txt", std::ios_base::app);
+
+	for (int i = 0; i < planets.size(); i++)
+	{
+		outfile << planets[i].position[0] << " " << planets[i].position[1] << " " << planets[i].position[2] << " ";
+	}
+	outfile << std::endl;
+
+}
+
+void SolarSystem::writeheader()
+{
+	std::string path = "output/";
+
+	std::ofstream outfile(path+"output.txt");
+	for (int i = 0; i < planets.size(); i++)
+	{
+		outfile << planets[i].name << " ";
+	}
+	outfile << std::endl;
+
+}
+
+void SolarSystem::printobjects()
+{
+	for (int i = 0; i < planets.size(); i++)
+	{
+		planets[i].objPrint();
 	}
 }

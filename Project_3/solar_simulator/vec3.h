@@ -46,9 +46,11 @@ public:
 	vec3 &operator /= (const vec3 &other);		//	Componentwise division with other vector
 	vec3 &operator /= (const double &other);	//	Componentwise division with scalar
 	vec3 &operator = (const double &other);		//	Componentwise equals
-
+	vec3 operator-();							//	Returning the negative of a vec3 vector
+	
  	//	Lets us use a[index] instead of a.components[index]
 	double &operator[](int index) { return components[index]; }
+
 };
 
 

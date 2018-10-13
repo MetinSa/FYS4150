@@ -174,3 +174,11 @@ vec3 &vec3::operator=(const double &other)
 	return *this;
 }
 
+vec3 vec3::operator-()
+{
+	//  Returning the negative of a vec3 vector.
+	
+	return vec3(-components[0], -components[1], -components[2]);
+}
+
+

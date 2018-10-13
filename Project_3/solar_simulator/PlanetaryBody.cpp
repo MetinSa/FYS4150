@@ -11,6 +11,7 @@ PlanetaryBody::PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass,
 	name = newName;
 }
 
+
 void PlanetaryBody::addF(vec3 addForce)
 {
 	// Adding force to an object.

@@ -18,7 +18,6 @@ public:
 
 	// Constructor	
 	PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass, std::string name);
-	
 	//	Adding force to an object
 	void addF(vec3 addForce);
 

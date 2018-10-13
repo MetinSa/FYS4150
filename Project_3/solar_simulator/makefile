@@ -10,8 +10,8 @@ LIB = -larmadillo -llapack -lblas
 PROG = run.x
 
 
-${PROG} :	  		main.o  vec3.o PlanetaryBody.o Gravity.o
-					${CPPflags} main.o vec3.o PlanetaryBody.o Gravity.o -o ${PROG} ${LIB}
+${PROG} :	  		main.o  vec3.o PlanetaryBody.o Gravity.o SolarSystem.o
+					${CPPflags} main.o vec3.o PlanetaryBody.o Gravity.o SolarSystem.o -o ${PROG} ${LIB}
 
 main.o :			main.cpp 
 		        	${CPPflags} -c main.cpp
@@ -22,5 +22,8 @@ vec3.o :			vec3.cpp
 PlanetaryBody.o :	PlanetaryBody.cpp
 		        	${CPPflags} -c PlanetaryBody.cpp
 
-gravity.o :			gravity.cpp
+Gravity.o :			Gravity.cpp
 		        	${CPPflags} -c Gravity.cpp
+
+SolarSystem.o :		SolarSystem.cpp
+		        	${CPPflags} -c SolarSystem.cpp		        	

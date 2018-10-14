@@ -27,6 +27,13 @@ void Gravity::calculateForce()
 	// Computing the Newtonian gravitational force
 	F = ((r_b-r_a)/pow(length, 3))*(G * object_a->mass * object_b->mass);
 
+	if (F[0] != F[0])
+	{
+		object_a->objPrint();
+		object_b->objPrint();
+		std::exit(1);
+	}
+
 	object_a->addF(F);
 	object_b->addF(-F);
 

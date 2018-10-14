@@ -36,9 +36,9 @@ SolarSystem::SolarSystem(std::string filename){
 		planets.push_back(PlanetaryBody(position, velocity*daytoyr, m[i], name[i]));
 	}
 
-	for (int i = 0; i < planets.size(); i++)
+	for (int i = 0; i < planets.size()-1; i++)
 	{
-		for (int j = 0; j < planets.size(); j++)
+		for (int j = i+1; j < planets.size(); j++)
 		{
 			gravityforces.push_back(Gravity(&planets.at(i), &planets.at(j)));
 		}

@@ -3,55 +3,47 @@
 
 int main(int argc, char *argv[]){
 
-	// vec3 v1(1,1,1);
-	// vec3 v2(4,2,-5);
-	// vec3 v3(-10,-1,2);
+	double dt = .001;
+	double T_end = 2;
 
-	// double a = 6.3;
-	// v1 =  a*v1;
-	// v2 = - v2;
-	// v3 = - v3;
-	// v1.print("v1");
-	// v2.print("v2");
-	// v3.print("v3");
+	SolarSystem sol("planets.txt");
+	sol.integrate(dt, T_end);
+	sol.printobjects();
 
-	// double len = v1.length();
+	/*
+	vec3 earthposition(1,0,0);
+	vec3 earthvelocity(0,2*pi,0);
+	double earthmass = 0.001;
 
-	// std::cout << len*len*len << std::endl;
+	vec3 solarposition(0,0,0);
+	vec3 solarvelocity(0,0,0);
+	double solarmass = 1;
 
-	// PlanetaryBody metian(vec3(0.4,0.2,0),vec3(0.5,0.1,0),0.3,"Metian");
-	// PlanetaryBody markusian(vec3(0.3,1,0),vec3(0.3,0.7,0),2.3,"Markusian");
+	double dt = 0.00001;
+	double T_stop = 1;
+	double t = 0;
 
-	// metian.objPrint();
-	// // markusian.objPrint();
-	// double dt = 0.1;
-	// Gravity metianMarkusian(&metian, &markusian);
-	// metianMarkusian.calculateForce();
-	// for (int i= 0; i < 10; i++)
-	// {
-	// 	metian.integrate(dt);
-	// 	metian.objPrint();
-	// }
+	PlanetaryBody sun(solarposition, solarvelocity, solarmass, "Sun");
+	PlanetaryBody earth(earthposition, earthvelocity, earthmass, "Earth");
 
-	// markusian.objPrint();
-	// vec3 addForce(1,1,1);
+	Gravity earthpull(&sun, &earth);
 
-	// metian.addF(addForce);
+	std::string path = "output/";
+	std::ofstream outfile(path+"output.txt");
+	outfile << earth.position[0] << " " << earth.position[1] << " " << earth.position[2] << std::endl;
 
-	// metian.objPrint();
-
-	// metian.resetF();
-
-	// metian.objPrint();
-	
-	double dt = 1;
-	double T_end = 10;
-
-	SolarSystem SunEarth("planets.txt");
-	SunEarth.printobjects();
-	// SunEarth.dumptofile();
-	SunEarth.integrate(dt, T_end);
-	// SunEarth.printobjects();
+	while (t <= T_stop)
+	{
+		earthpull.calculateForce();
+		sun.integrate(dt);
+		earth.integrate(dt);
+		outfile << earth.position[0] << " " << earth.position[1] << " " << earth.position[2] << std::endl;
+		t += dt;
+	}
+	outfile.close();
+	sun.objPrint();
+	earth.objPrint();
+	*/
 	return 0;
 
 }

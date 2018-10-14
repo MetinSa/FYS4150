@@ -8,7 +8,6 @@ SolarSystem::SolarSystem(std::string filename)
 	// Reading in planetary information from file
 	std::ifstream infile(filename);
 	std::string line;
-	double daytoyr = 365;
 
 	std::vector<std::string> name;
 	std::vector<double> rx;
@@ -37,7 +36,7 @@ SolarSystem::SolarSystem(std::string filename)
 	{
 		vec3 position(rx[i], ry[i], rz[i]);
 		vec3 velocity(vx[i], vy[i], vz[i]);
-		planets.push_back(PlanetaryBody(position, velocity*daytoyr, m[i], name[i]));
+		planets.push_back(PlanetaryBody(position, velocity, m[i], name[i]));
 	}
 
 	for (int i = 0; i < planets.size()-1; i++)

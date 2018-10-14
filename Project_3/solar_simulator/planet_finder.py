@@ -16,6 +16,7 @@ def getpositions(id, id_type = "majorbody"):
 
 
 def getplanets(lisst):
+	daytoyr = 365
 	r = np.zeros((len(lisst), 3))
 	v = np.zeros((len(lisst), 3))
 	names = []
@@ -24,7 +25,7 @@ def getplanets(lisst):
 		names.append(name)
 		r[i] = r_
 		v[i] = v_
-	return names, r, v
+	return names, r, v*daytoyr
 
 def savetofile(file, names, r, v, mass = None):
 	text = ""

@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]){
 
 	double dt = .001;
-	double T_end = 2;
+	double T_end = 200;
 
 	SolarSystem sol("planets.txt");
 	sol.integrate(dt, T_end);
@@ -44,7 +44,6 @@ int main(int argc, char *argv[]){
 	sun.objPrint();
 	earth.objPrint();
 	*/
-
 	return 0;
 
 }

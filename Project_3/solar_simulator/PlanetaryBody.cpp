@@ -32,6 +32,8 @@ void PlanetaryBody::integrate(double &dt)
 
 	velocity += (force/mass) * dt;
 	position += velocity * dt;
+
+	resetF();
 }
 
 void PlanetaryBody::objPrint()

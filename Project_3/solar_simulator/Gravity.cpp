@@ -29,5 +29,4 @@ void Gravity::calculateForce()
 
 	object_a->addF(-F);
 	object_b->addF(F);
-
 }

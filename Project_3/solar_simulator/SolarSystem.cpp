@@ -42,10 +42,10 @@ SolarSystem::SolarSystem(std::string filename)
 
 	for (int i = 0; i < planets.size()-1; i++)
 	{
-		// for (int j = i+1; j < planets.size(); j++)
-		// {
-		gravityforces.push_back(Gravity(&planets.at(i), &planets.at(i+1)));
-		// }
+		for (int j = i+1; j < planets.size(); j++)
+		{
+			gravityforces.push_back(Gravity(&planets.at(i), &planets.at(j)));
+		}
 	}
 }
 

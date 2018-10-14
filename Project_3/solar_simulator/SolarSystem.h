@@ -1,10 +1,11 @@
 #ifndef SOLARSYSTEM_H
 #define SOLARSYSTEM_H
 
-// Declaring Gravity class
-
 class SolarSystem
 {
+	// Class that creates the Solar system
+public:
+	// Initializing vectors
 	std::vector<PlanetaryBody> smallobjects;
 	std::vector<PlanetaryBody> planets;
 	std::vector<Gravity> gravityforces;
@@ -13,7 +14,7 @@ class SolarSystem
 	void extractor(std::vector<double> &vec, std::istringstream &ss);
 	void dumptofile();
 	void writeheader();
-public:
+// public:
 	// Constructor
 	SolarSystem(std::string filename);
 

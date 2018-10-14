@@ -77,11 +77,11 @@ void SolarSystem::integrate(double dt, double T_stop)
 	dumptofile();
 	while (t <= T_stop)
 	{
-		for (int i = 1; i < gravityforces.size(); i++)
+		for (int i = 0; i < gravityforces.size(); i++)
 		{
 			gravityforces[i].calculateForce();
 		}
-		for (int i = 1; i < planets.size(); i++)
+		for (int i = 0; i < planets.size(); i++)
 		{
 			planets[i].integrate(dt);
 		}

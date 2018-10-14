@@ -1,4 +1,5 @@
 #include "functions.h"
+#include <ostream>
 
 Gravity::Gravity(PlanetaryBody *a, PlanetaryBody *b)
 {
@@ -21,11 +22,10 @@ void Gravity::calculateForce()
 	vec3 F;
 
 	// Computing the length of position that separates object a and b
-	double length = (r_a-r_b).length();
-
+	double length = (r_b-r_a).length();
+	
 	// Computing the Newtonian gravitational force
 	F = ((r_b-r_a)/pow(length, 3))*(G * object_a->mass * object_b->mass);
-	
 	object_a->addF(F);
 	object_b->addF(-F);
 

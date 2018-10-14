@@ -181,4 +181,3 @@ vec3 vec3::operator-()
 	return vec3(-components[0], -components[1], -components[2]);
 }
 
-

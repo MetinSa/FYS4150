@@ -1,7 +1,11 @@
 #include "functions.h"
 
 
-SolarSystem::SolarSystem(std::string filename){
+SolarSystem::SolarSystem(std::string filename)
+{
+	// Class that creates a system by reading in given planetary bodies.
+
+	// Reading in planetary information from file
 	std::ifstream infile(filename);
 	std::string line;
 	double daytoyr = 365;
@@ -36,12 +40,12 @@ SolarSystem::SolarSystem(std::string filename){
 		planets.push_back(PlanetaryBody(position, velocity*daytoyr, m[i], name[i]));
 	}
 
-	for (int i = 0; i < planets.size(); i++)
+	for (int i = 0; i < planets.size()-1; i++)
 	{
-		for (int j = 0; j < planets.size(); j++)
-		{
-			gravityforces.push_back(Gravity(&planets.at(i), &planets.at(j)));
-		}
+		// for (int j = i+1; j < planets.size(); j++)
+		// {
+		gravityforces.push_back(Gravity(&planets.at(i), &planets.at(i+1)));
+		// }
 	}
 }
 
@@ -74,11 +78,11 @@ void SolarSystem::integrate(double dt, double T_stop)
 	dumptofile();
 	while (t <= T_stop)
 	{
-		for (int i = 0; i < gravityforces.size(); i++)
+		for (int i = 1; i < gravityforces.size(); i++)
 		{
 			gravityforces[i].calculateForce();
 		}
-		for (int i = 0; i < planets.size(); i++)
+		for (int i = 1; i < planets.size(); i++)
 		{
 			planets[i].integrate(dt);
 		}

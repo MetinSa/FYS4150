@@ -1,5 +1,9 @@
 #include <iostream>
+#include <iomanip>
 #include "armadillo"
+#include <fstream>
+#include <sstream>
+
 using namespace arma;
 using namespace std;
 
@@ -8,7 +12,7 @@ using namespace std;
 int main()
 {
 double t_max = 10;          // Number of years
-int N = 1e6;                // Number of iterations
+int N = 1e4;                // Number of iterations
 double h = t_max/N;         // Step size
 double r = 1.0;             // Radius or distance between the Sun and the Earth [AU]
 double pi = 3.14159265359;
@@ -42,4 +46,17 @@ for (int i = 0; i < N; i++){
   // Update time
   t(i+1) = t(i) + h;
 }
+
+
+// Write data  to file
+ofstream myfile;
+string name = "solarsystem.dat";
+myfile.open (name.c_str());
+myfile << "t:" << setw(15) << "x:" << setw(15) << "y:" << endl;
+
+// printing to file using iomanip to setw and precision
+for (int i = 0; i < N+1; i++){
+  myfile << setprecision(7) << t(i) << setw(16) << setprecision(7) << x(i) << setw(16) << setprecision(7) << y(i) << endl;
+}
+myfile.close();
 }

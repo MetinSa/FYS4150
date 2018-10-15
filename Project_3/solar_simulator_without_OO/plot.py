@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
-#reading in the name of the file and opening it
+# Reading in the name of the file and opening it
 name = str(sys.argv[1])
 file = open(name, "r")
 
@@ -10,6 +10,8 @@ t = []
 x = []
 y = []
 
+#extracting number of grid points
+expo = int(file.readline())
 
 # Iterating over all the lines in the file
 for i, line in enumerate(file):
@@ -28,6 +30,8 @@ plt.grid()
 plt.legend()
 plt.xlabel("x [AU]")
 plt.ylabel("y [AU]")
-plt.title("Sun-Earth system")
-#plt.savefig("plot_"+str(n)+".png")
+if name[12] == 'e':
+	plt.title(r"Sun-Earth system using Euler's method ($N=10^{%d}$)" %expo)
+if name[12] == 'v':
+	plt.title(r"Sun-Earth system using the velocity Verlet method ($N=10^{%d}$)" %expo)
 plt.show()

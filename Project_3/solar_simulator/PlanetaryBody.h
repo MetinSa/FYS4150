@@ -18,16 +18,18 @@ public:
 
 	// Constructor	
 	PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass, std::string name);
-	//	Adding force to an object
+	// Adding force to an object
 	void addF(vec3 addForce);
 
-	//	Resetting the force of an object	
+	// Resetting the force of an object	
 	void resetF();
 
 	// Integrating object's velocity and position using the Forward Euler method
-	void integrate(double &dt);
+	void ForwardEuler(double &dt);	
 
-	//	Printing information about the object
+	void VelocityVerlet(double &dt);
+
+	// Printing information about the object
 	void objPrint();
 
 };

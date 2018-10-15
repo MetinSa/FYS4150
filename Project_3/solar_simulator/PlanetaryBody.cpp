@@ -26,7 +26,7 @@ void PlanetaryBody::resetF()
 	force = 0;
 }
 
-void PlanetaryBody::integrate(double &dt)
+void PlanetaryBody::ForwardEuler(double &dt)
 {
 	// Integrating using the Forward Euler method.
 
@@ -34,6 +34,24 @@ void PlanetaryBody::integrate(double &dt)
 	position += velocity * dt;
 
 	resetF();
+}
+
+void PlanetaryBody::VelocityVerlet(double &dt)
+{
+	vec3 acceleration = (force/mass);
+	position += velocity*dt + acceleration*(dt*dt)/2;
+
+	// Somehow compute new acceleration here
+	// ----------------------
+	// gravityforces[i].calculateForce();
+	// ----------------------
+
+	vec3 accelerationNew = (force/mass);
+	velocity += (accelerationNew + acceleration)*(dt/2);
+
+	resetF();
+
+
 }
 
 void PlanetaryBody::objPrint()

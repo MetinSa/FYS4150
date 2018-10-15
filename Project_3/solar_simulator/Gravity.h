@@ -5,6 +5,8 @@
 
 class Gravity
 {
+	// Initializing vectors and the gravitational constant.
+
 	PlanetaryBody* object_a;
 	PlanetaryBody* object_b;
 	double G;

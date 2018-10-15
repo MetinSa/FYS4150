@@ -10,8 +10,12 @@ t = []
 x = []
 y = []
 
-#extracting number of grid points
+# Extracting number of grid points
 expo = int(file.readline())
+
+# Extracting method
+method = file.readline().strip()
+
 
 # Iterating over all the lines in the file
 for i, line in enumerate(file):
@@ -30,8 +34,5 @@ plt.grid()
 plt.legend()
 plt.xlabel("x [AU]")
 plt.ylabel("y [AU]")
-if name[12] == 'e':
-	plt.title(r"Sun-Earth system using Euler's method ($N=10^{%d}$)" %expo)
-if name[12] == 'v':
-	plt.title(r"Sun-Earth system using the velocity Verlet method ($N=10^{%d}$)" %expo)
+plt.title(r"Sun-Earth system using %s ($N=10^{%d}$)" %(method, expo))
 plt.show()

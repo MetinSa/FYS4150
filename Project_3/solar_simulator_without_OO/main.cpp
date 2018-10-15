@@ -90,7 +90,8 @@ if(method == "euler") {
 ofstream myfile;
 string name = "solarsystem_" + method + "_" + argv[2] + ".dat";
 myfile.open (name.c_str());
-myfile << expo << endl << endl;
+myfile << expo << endl;
+myfile << method << endl << endl;
 myfile << "t:" << setw(15) << "x:" << setw(15) << "y:" << endl;
 
 // printing to file using iomanip to setw and precision

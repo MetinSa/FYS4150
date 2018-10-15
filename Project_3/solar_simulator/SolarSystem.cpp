@@ -32,6 +32,8 @@ SolarSystem::SolarSystem(std::string filename)
 		else if (i == 6){extractor(vz, ss);}
 		else if (i == 7){extractor(m, ss);}
 	}
+
+	// Creating objects for all given planets
 	for (int i = 0; i<name.size(); i++)
 	{
 		vec3 position(rx[i], ry[i], rz[i]);
@@ -39,6 +41,7 @@ SolarSystem::SolarSystem(std::string filename)
 		planets.push_back(PlanetaryBody(position, velocity, m[i], name[i]));
 	}
 
+	// Computing the gravitational forces between all objects
 	for (int i = 0; i < planets.size()-1; i++)
 	{
 		for (int j = i+1; j < planets.size(); j++)
@@ -50,6 +53,9 @@ SolarSystem::SolarSystem(std::string filename)
 
 void SolarSystem::extractor(std::vector<std::string> &vec, std::istringstream &ss)
 {
+
+	// Function that extracts items from file (string)
+
 	std::string item;
 	ss >> item;
 
@@ -60,6 +66,9 @@ void SolarSystem::extractor(std::vector<std::string> &vec, std::istringstream &s
 }
 void SolarSystem::extractor(std::vector<double> &vec, std::istringstream &ss)
 {
+
+	// Function that extracts items from file (vector)
+
 	std::string item;
 	double value;
 	ss >> item;
@@ -72,9 +81,15 @@ void SolarSystem::extractor(std::vector<double> &vec, std::istringstream &ss)
 
 void SolarSystem::integrate(double dt, double T_stop)
 {
+
+	// Function that computes the forces between all objects and integrates using given method
+
 	double t = 0;
+
+	// Writing header to file
 	writeheader();
 	dumptofile();
+
 	while (t <= T_stop)
 	{
 		for (int i = 0; i < gravityforces.size(); i++)
@@ -83,16 +98,21 @@ void SolarSystem::integrate(double dt, double T_stop)
 		}
 		for (int i = 0; i < planets.size(); i++)
 		{
-			planets[i].integrate(dt);
+			planets[i].ForwardEuler(dt);
 		}
 
+		// Writing information to file instead of saving the arrays
 		dumptofile();
+
 		t += dt;
 	}
 }
 
 void SolarSystem::dumptofile()
 {
+
+	// Writing the position of the planets to file instead of saving the information in arrays
+
 	std::string path = "output/";
 	std::ofstream outfile;
 	outfile.open(path+"output.txt", std::ios_base::app);
@@ -107,6 +127,8 @@ void SolarSystem::dumptofile()
 
 void SolarSystem::writeheader()
 {
+
+	// Writing a header with the name of the planets
 	std::string path = "output/";
 
 	std::ofstream outfile(path+"output.txt");
@@ -120,6 +142,9 @@ void SolarSystem::writeheader()
 
 void SolarSystem::printobjects()
 {
+
+	// Using the objPrint() function to print all relevant information about all planets
+
 	for (int i = 0; i < planets.size(); i++)
 	{
 		planets[i].objPrint();

@@ -27,6 +27,7 @@ void Gravity::calculateForce()
 	// Computing the Newtonian gravitational force
 	F = ((r_b-r_a)/pow(length, 3))*(G * object_a->mass * object_b->mass);
 
+	// Adding force which can be used when integrating
 	object_a->addF(F);
 	object_b->addF(-F);
 }

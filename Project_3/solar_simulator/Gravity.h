@@ -17,6 +17,7 @@ public:
 
 	// Function that computes the forces between object a and b.
 	void calculateForce();
+	double PotentialEnergy();
 };
 
 #endif

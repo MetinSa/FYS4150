@@ -26,6 +26,21 @@ void PlanetaryBody::resetF()
 	force = 0;
 }
 
+double PlanetaryBody::AngularMomentum()
+{
+	// Returning the angular momentum of an object.
+
+	vec3 rv = position.cross(velocity);
+	return mass*rv.length();
+}
+
+double PlanetaryBody::KineticEnergy()
+{
+	// Returning the kinetic energy of an object.
+	double v = velocity.length();
+	return (1./2)*mass*v*v;
+}
+
 void PlanetaryBody::ForwardEuler(double &dt)
 {
 	// Integrating using the Forward Euler method.

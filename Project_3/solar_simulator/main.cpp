@@ -4,12 +4,15 @@
 int main(int argc, char *argv[]){
 
 	double dt = .001;
-	double T_end = 200;
+	double T_end = 10;
 
 	SolarSystem sol("planets.txt");
 	sol.integrate(dt, T_end);
 	sol.printobjects();
-
+	// sol.planets[4].objPrint();
+	// double l = sol.planets[4].AngularMomentum();
+	// double kinetic = sol.planets[4].KineticEnergy();
+	// std::cout << kinetic << std::endl;
 	/*
 	vec3 earthposition(1,0,0);
 	vec3 earthvelocity(0,2*pi,0);

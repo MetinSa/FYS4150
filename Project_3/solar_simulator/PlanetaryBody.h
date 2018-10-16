@@ -24,9 +24,16 @@ public:
 	// Resetting the force of an object	
 	void resetF();
 
+	// Computing the angular momentum of the object
+	double AngularMomentum();
+
+	// Computing the kinetic energy of the object
+	double KineticEnergy();
+
 	// Integrating object's velocity and position using the Forward Euler method
 	void ForwardEuler(double &dt);	
 
+	// Integrating object's velocity and position using the Velocity Verlet method 
 	void VelocityVerlet(double &dt);
 
 	// Printing information about the object

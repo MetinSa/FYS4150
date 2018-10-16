@@ -17,9 +17,9 @@ void Gravity::calculateForce()
 	// Function that calculates the force between two objects a and b.
 
 	// Defining position and force vectors
+	vec3 F;
 	vec3 r_a = object_a->position;
 	vec3 r_b = object_b->position;
-	vec3 F;
 
 	// Computing the length of position that separates object a and b
 	double length = (r_b-r_a).length();
@@ -30,4 +30,16 @@ void Gravity::calculateForce()
 	// Adding force which can be used when integrating
 	object_a->addF(F);
 	object_b->addF(-F);
+}
+
+double Gravity::PotentialEnergy()
+{
+	// Returning the potential energy of an object.
+
+	vec3 r_a = object_a->position;
+	vec3 r_b = object_b->position;
+
+	// Computing the length of position that separates object a and b
+	double length = (r_b-r_a).length();
+	return (G*object_a->mass*object_b->mass)/(length);
 }

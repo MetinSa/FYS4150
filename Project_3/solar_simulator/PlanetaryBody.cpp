@@ -37,8 +37,7 @@ double PlanetaryBody::AngularMomentum()
 double PlanetaryBody::KineticEnergy()
 {
 	// Returning the kinetic energy of an object.
-	double v = velocity.length();
-	return (1./2)*mass*v*v;
+	return (1./2)*mass*velocity.dot(velocity);
 }
 
 void PlanetaryBody::ForwardEuler(double &dt)

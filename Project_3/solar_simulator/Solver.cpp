@@ -2,10 +2,10 @@
 
 
 
-Solver::Solver(SolarSystem* input_system)
+Solver::Solver(SolarSystem &input_system)
 {
-  system = input_system;
-  totalObjects = system->planets.size()
+  system = &input_system;
+  totalObjects = system->objects.size();
 
   // Write position-values to file
   system->writeheader();
@@ -22,7 +22,7 @@ void Solver::forwardEuler(int N, double Tfinal)
   double dt = Tfinal/N;
   double t = 0;
 
-  system->writeheader()
+  system->writeheader();
   system->dumptofile();
 
   // For each time step dt

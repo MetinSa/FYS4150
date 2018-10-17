@@ -5,16 +5,13 @@ class Solver
 {
 public:
   int totalObjects;
-  SolarSystem* system; 
+  SolarSystem* system;
 
   // Constructor
-  Solver();
+  Solver(SolarSystem &input_system);
 
   // Functions
-  void add(PlanetaryBody newObject);
-  void setupForces();
   void forwardEuler(int N, double Tfinal);
-  void dumptofile();
 
 };
 

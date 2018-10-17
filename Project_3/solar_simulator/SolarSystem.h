@@ -4,13 +4,13 @@
 class SolarSystem
 {
 	// Class that creates the Solar system
-	
+
 public:
 
 	// Initializing vectors
 	std::vector<PlanetaryBody> smallobjects;
-	std::vector<PlanetaryBody> planets;
-	std::vector<Gravity> gravityforces;
+	std::vector<PlanetaryBody> objects;
+	std::vector<Gravity> gravityForces;
 
 	// Read and write to file functions
 	void extractor(std::vector<std::string> &vec, std::istringstream &ss);

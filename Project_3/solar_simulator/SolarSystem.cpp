@@ -92,9 +92,9 @@ void SolarSystem::integrate(double dt, double T_stop)
 
 	while (t <= T_stop)
 	{
-		for (int i = 0; i < gravityforces.size(); i++)
+		for (int i = 0; i < gravityForces.size(); i++)
 		{
-			gravityforces[i].calculateForce();
+			gravityForces[i].calculateForce();
 		}
 		for (int i = 0; i < objects.size(); i++)
 		{

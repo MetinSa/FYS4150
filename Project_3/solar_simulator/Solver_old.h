@@ -5,7 +5,8 @@ class Solver
 {
 public:
   int totalObjects;
-  SolarSystem* system; 
+  std::vector<PlanetaryBody> allObjects;
+  std::vector<Gravity> gravityForces;
 
   // Constructor
   Solver();

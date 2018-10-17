@@ -3,16 +3,16 @@
 
 int main(int argc, char *argv[]){
 
-	double dt = .001;
-	double T_end = 10;
+	double dt = 0.01;
+	double T_end = 20;
+	SolarSystem sol("3body.txt");
+	sol.integrate(dt, T_end);
+	sol.printobjects();
+	// sol.planets[4].objPrint();
 
-	SolarSystem sol("planets.txt");
-	// sol.integrate(dt, T_end);
-	// sol.printobjects();
-	sol.planets[4].objPrint();
 	// double l = sol.planets[4].AngularMomentum();
-	double kinetic = sol.planets[4].KineticEnergy();
-	std::cout << kinetic << std::endl;
+	// double kinetic = sol.planets[4].KineticEnergy();
+	// std::cout << kinetic << std::endl;
 	/*
 	vec3 earthposition(1,0,0);
 	vec3 earthvelocity(0,2*pi,0);
@@ -22,8 +22,7 @@ int main(int argc, char *argv[]){
 	vec3 solarvelocity(0,0,0);
 	double solarmass = 1;
 
-	double dt = 0.00001;
-	double T_stop = 1;
+
 	double t = 0;
 
 	PlanetaryBody sun(solarposition, solarvelocity, solarmass, "Sun");

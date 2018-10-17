@@ -5,7 +5,7 @@ int main(int argc, char *argv[]){
 
   SolarSystem sol("planets.txt");
   Solver solve(sol);
-  solve.forwardEuler(1000, 10);
+  solve.velocityVerlet(0.01, 10);
 
 	// double dt = .001;
 	// double T_end = 10;

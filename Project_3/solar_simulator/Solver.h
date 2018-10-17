@@ -11,7 +11,9 @@ public:
   Solver(SolarSystem &input_system);
 
   // Functions
-  void forwardEuler(int N, double Tfinal);
+  void forwardEuler(double dt, double Tfinal);
+  void velocityVerlet(double dt, double Tfinal);
+  void updateGravity();
 
 };
 

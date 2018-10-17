@@ -3,49 +3,13 @@
 
 int main(int argc, char *argv[]){
 
-	double dt = 0.01;
-	double T_end = 20;
-	SolarSystem sol("3body.txt");
-	sol.integrate(dt, T_end);
-	sol.printobjects();
-	// sol.planets[4].objPrint();
 
-	// double l = sol.planets[4].AngularMomentum();
-	// double kinetic = sol.planets[4].KineticEnergy();
-	// std::cout << kinetic << std::endl;
-	/*
-	vec3 earthposition(1,0,0);
-	vec3 earthvelocity(0,2*pi,0);
-	double earthmass = 0.001;
+  SolarSystem sol("SunEarthSystem.txt");
+  // SolarSystem sol("SunEarthJupiterSystem.txt");
+  Solver solve(sol);
+  solve.velocityVerlet(0.01, 5);
+  // solve.forwardEuler(0.01, 5);
 
-	vec3 solarposition(0,0,0);
-	vec3 solarvelocity(0,0,0);
-	double solarmass = 1;
-
-
-	double t = 0;
-
-	PlanetaryBody sun(solarposition, solarvelocity, solarmass, "Sun");
-	PlanetaryBody earth(earthposition, earthvelocity, earthmass, "Earth");
-
-	Gravity earthpull(&sun, &earth);
-
-	std::string path = "output/";
-	std::ofstream outfile(path+"output.txt");
-	outfile << earth.position[0] << " " << earth.position[1] << " " << earth.position[2] << std::endl;
-
-	while (t <= T_stop)
-	{
-		earthpull.calculateForce();
-		sun.integrate(dt);
-		earth.integrate(dt);
-		outfile << earth.position[0] << " " << earth.position[1] << " " << earth.position[2] << std::endl;
-		t += dt;
-	}
-	outfile.close();
-	sun.objPrint();
-	earth.objPrint();
-	*/
 	return 0;
 
 }

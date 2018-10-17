@@ -5,17 +5,15 @@ class Solver
 {
 public:
   int totalObjects;
-  std::vector<PlanetaryBody> allObjects;
-  std::vector<Gravity> gravityForces;
+  SolarSystem* system;
 
   // Constructor
-  Solver();
+  Solver(SolarSystem &input_system);
 
   // Functions
-  void add(PlanetaryBody newObject);
-  void setupForces();
-  void forwardEuler(int N, double Tfinal);
-  void dumptofile();
+  void forwardEuler(double dt, double Tfinal);
+  void velocityVerlet(double dt, double Tfinal);
+  void updateGravity();
 
 };
 

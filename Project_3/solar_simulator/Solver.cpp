@@ -13,9 +13,15 @@ Solver::Solver(SolarSystem &input_system)
 void Solver::forwardEuler(double dt, double Tfinal)
 {
   double t = 0;
+  std::string name = "Forward Euler";
 
   system->writeheader();
   system->dumptofile();
+
+  // Printing information about the Integration
+  printPreIntegration(dt, Tfinal, name);
+ 
+  clock_t start = clock();
 
   // For each time step dt
   while (t <= Tfinal){
@@ -41,16 +47,23 @@ void Solver::forwardEuler(double dt, double Tfinal)
 	system->dumptofile();
 	t += dt;
   }
+
+  clock_t stop = clock();
+  double totalTime = double (stop-start)/CLOCKS_PER_SEC;
+  printPostIntegration(totalTime);
 }
 
 void Solver::velocityVerlet(double dt, double Tfinal)
 {
   double t = 0;
+  std::string name = "Velocity Verlet";
 
   system->writeheader();
   system->dumptofile();
 
+  printPreIntegration(dt, Tfinal, name);
 
+  clock_t start = clock();
 
   // For each time step dt
   while (t <= Tfinal){
@@ -86,6 +99,10 @@ void Solver::velocityVerlet(double dt, double Tfinal)
     system->dumptofile();
 	t += dt;
   }
+
+  clock_t stop = clock();
+  double totalTime = double (stop-start)/CLOCKS_PER_SEC;
+  printPostIntegration(totalTime);
 }
 
 
@@ -94,4 +111,29 @@ void Solver::updateGravity()
   for (int i = 0; i < system->gravityForces.size(); i++){
     system->gravityForces[i].calculateForce();
   }
+}
+
+void Solver::printPreIntegration(double dt, double Tfinal, std::string name)
+{
+    std::cout 
+    << "----------------------------------------" << std::endl
+    << "INTEGRATION STARTED" << std::endl
+    << "----------------------------------------" << std::endl
+    << "Integration method: " << name <<std::endl
+    << "Total integration time: " << Tfinal << " years" << std::endl
+    << "Timestep, dt: " << dt << std::endl
+    << "Number of objects: " << totalObjects << std::endl
+    << "----------------------------------------" << std::endl;
+
+}
+
+void Solver::printPostIntegration(double totalTime)
+{
+    std::cout 
+    << "INTEGRATION FINISHED " << std::endl
+    << "----------------------------------------" << std::endl
+    << "Time spent: " << totalTime << " seconds" <<std::endl
+    << "Data dumped to file." << std::endl
+    << "----------------------------------------" << std::endl;
+
 }

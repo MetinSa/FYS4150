@@ -14,6 +14,8 @@ public:
   void forwardEuler(double dt, double Tfinal);
   void velocityVerlet(double dt, double Tfinal);
   void updateGravity();
+  void printPreIntegration(double dt, double Tfinal, std::string name);
+  void printPostIntegration(double totalTime);
 
 };
 

@@ -8,6 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <ctime>
 
 #include "vec3.h"
 #include "PlanetaryBody.h"

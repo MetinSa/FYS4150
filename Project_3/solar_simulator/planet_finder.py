@@ -1,6 +1,7 @@
 from astroquery.jplhorizons import Horizons
 from datetime import date, timedelta as td
 import numpy as np
+import sys
 
 
 
@@ -59,8 +60,15 @@ def savetofile(file, names, r, v, mass = None):
 
 
 if __name__ == "__main__":
-	names, r, v = getplanets(["10", "199", "299", "301", "399", "499", "599", "699", "799", "899", "999"]) 					
+	planets = ["10", "199", "299", "301", "399", "499", "599", "699", "799", "899", "999"]
 	mass = [1, 1.66012e-7, 2.44781e-6, 3.6943e-8, 3.003467e-6, 3.22713e-7, 9.5458e-4, 2.85812e-4, 4.36576e-5, 5.15028e-5, 6.583e-9]
+
+	for i in range(len(sys.argv) - 1):
+		planets.append(sys.argv[i+1])
+		mass.append(0)
+
+	names, r, v = getplanets(planets) 					
+	
 
 	savetofile("planets.txt", names, r, v, mass)
 	

@@ -17,7 +17,7 @@ public:
 	std::string name;
 
 	// Constructor	
-	PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass, std::string name);
+	PlanetaryBody(vec3 newPosition, vec3 newVelocity, double newMass, std::string newName);
 	// Adding force to an object
 	void addF(vec3 addForce);
 
@@ -29,12 +29,6 @@ public:
 
 	// Computing the kinetic energy of the object
 	double KineticEnergy();
-
-	// Integrating object's velocity and position using the Forward Euler method
-	void ForwardEuler(double &dt);	
-
-	// Integrating object's velocity and position using the Velocity Verlet method 
-	void VelocityVerlet(double &dt);
 
 	// Printing information about the object
 	void objPrint();

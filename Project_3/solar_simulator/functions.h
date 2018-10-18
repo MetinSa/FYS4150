@@ -11,9 +11,11 @@
 
 #include "vec3.h"
 #include "PlanetaryBody.h"
+#include "SmallObject.h"
 #include "Gravity.h"
 #include "SolarSystem.h"
 #include "Solver.h"
+
 
 
 // define pi

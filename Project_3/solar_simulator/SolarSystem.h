@@ -6,9 +6,11 @@ class SolarSystem
 	// Class that creates the Solar system
 
 public:
+	// Name of system
+	std::string name;
 
 	// Initializing vectors
-	std::vector<PlanetaryBody> smallobjects;
+	std::vector<SmallObject> smallobjects;
 	std::vector<PlanetaryBody> objects;
 	std::vector<Gravity> gravityForces;
 
@@ -20,9 +22,6 @@ public:
 
 	// Constructor
 	SolarSystem(std::string filename);
-
-	// Integration function
-	void integrate(double dt, double T_stop);
 
 	// print planetary information function
 	void printobjects();

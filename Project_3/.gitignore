@@ -49,5 +49,4 @@
 #################
 .cproject
 .project
-.settings/*
-solar_simulator/.settings/*
+.settings/

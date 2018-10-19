@@ -60,15 +60,41 @@ def savetofile(file, names, r, v, mass = None):
 
 
 if __name__ == "__main__":
-	planets = ["10", "199", "299", "301", "399", "499", "599", "699", "799", "899", "999"]
-	mass = [1, 1.66012e-7, 2.44781e-6, 3.6943e-8, 3.003467e-6, 3.22713e-7, 9.5458e-4, 2.85812e-4, 4.36576e-5, 5.15028e-5, 6.583e-9]
+	# planets = ["10", "199", "299", "301", "399", "499", "599", "699", "799", "899", "999"]
+	# mass = [1, 1.66012e-7, 2.44781e-6, 3.6943e-8, 3.003467e-6, 3.22713e-7, 9.5458e-4, 2.85812e-4, 4.36576e-5, 5.15028e-5, 6.583e-9]
 
-	for i in range(len(sys.argv) - 1):
-		planets.append(sys.argv[i+1])
-		mass.append(0)
+	Planets = {}
+	Planets["Sun"] = ["10", 1]
+	Planets["Mercury"] = ["199", 1.66012e-7]
+	Planets["Venus"] = ["299", 2.44781e-6]
+	Planets["Moon"] = ["301", 3.6943e-8]
+	Planets["Earth"] = ["399", 3.003467e-6]
+	Planets["Mars"] = ["499", 3.22713e-7]
+	Planets["Jupiter"] = ["599", 9.5458e-4]
+	Planets["Saturn"] = ["699", 2.85812e-4]
+	Planets["Uranus"] = ["799", 4.36576e-5]
+	Planets["Neptune"] = ["899", 5.15028e-5]
+	Planets["Pluto"] = ["999", 6.583e-9]
+
+	planets = []
+	mass = []
+
+	if sys.argv[1] == ".":
+		for i in range(len(Planets)):
+			planets.append(list(Planets.values())[i][0])
+			mass.append(list(Planets.values())[i][1])
+
+	else:
+
+		for i in range(len(sys.argv) - 1):
+
+			planets.append(Planets[str(sys.argv[i+1])][0])
+			mass.append(Planets[str(sys.argv[i+1])][1])
+
 
 	names, r, v = getplanets(planets) 					
-	
+	print("Please insert name of data file here")
+	filename = str(input())
 
-	savetofile("planets.txt", names, r, v, mass)
-	
+	savetofile(filename, names, r, v, mass)
+

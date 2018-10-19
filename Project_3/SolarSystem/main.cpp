@@ -7,13 +7,13 @@ int main(int argc, char *argv[]){
 	std::string systemname;
 
 	// Commandline arguments
-	if (argc > 1)
+	if (argc == 2)
 	{
 		systemname = argv[1];
 		years = 10;
 		dt = 0.01;
 	}
-	else if (argc > 3)
+	else if (argc >= 4)
 	{
 		systemname = argv[1];
 		years = atof(argv[2]);

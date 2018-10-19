@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.cm as mplcm
-import matplotlib.colors as colors
+
 
 import sys
 
@@ -23,7 +23,7 @@ mass = []
 with open(filename, "r") as file:
 	for i in file.readline().split():
 		n, m = i.split("||")
-		names.append(n)
+		names.append(n.replace("_", " "))
 		mass.append(float(m))
 
 r = np.loadtxt(filename, skiprows = 1)
@@ -42,15 +42,15 @@ colours = {"Sun":"gold", "Mercury":"silver", "Venus":"goldenrod", "Moon":"gray",
 
 # Using distinct colours for objects not predefined
 num_col = len([i for i in names if i not in colours.keys()])
+k = len(colours.keys()) - num_col
+
 cm = plt.get_cmap('gist_rainbow')
-cNorm  = colors.Normalize(vmin=0, vmax=num_col-1)
-scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
 
 def colourpicker(i):
 	if names[i] in colours.keys():
 		return colours[names[i]]
 	else:
-		return scalarMap.to_rgba(i)
+		return cm((i - k)/(num_col+1))
 
 
 centreofmass = np.average(r, weights=mass, axis=0)

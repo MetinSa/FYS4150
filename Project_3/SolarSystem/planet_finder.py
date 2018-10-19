@@ -12,7 +12,9 @@ def getpositions(id, id_type = "majorbody"):
 
 	table = obj.vectors()
 
-	return table["targetname"].item().split()[0], (table["x"].item(), table["y"].item(), table["z"].item()), (table["vx"].item(), table["vy"].item(), table["vz"].item())
+
+
+	return table["targetname"].item().rsplit(" ", 1)[0], (table["x"].item(), table["y"].item(), table["z"].item()), (table["vx"].item(), table["vy"].item(), table["vz"].item())
 
 
 
@@ -22,7 +24,16 @@ def getplanets(lisst):
 	v = np.zeros((len(lisst), 3))
 	names = []
 	for i in range(len(lisst)):
-		name, r_, v_ = getpositions(lisst[i])
+		if lisst[i].startswith("S"):
+			name, r_, v_ = getpositions(lisst[i][1:], id_type="smallbody")
+		elif lisst[i].startswith("I"):
+			name, r_, v_ = getpositions(lisst[i][1:], id_type="id")
+
+		elif lisst[i].startswith("n"):
+			name, r_, v_ = getpositions(lisst[i][1:], id_type="name")
+
+		else:
+			name, r_, v_ = getpositions(lisst[i])
 		names.append(name)
 		r[i] = r_
 		v[i] = v_
@@ -35,7 +46,7 @@ def savetofile(file, names, r, v, mass = None):
 		text += rows[i] + " "
 		for j in range(len(names)):
 			if rows[i] == "Name":
-				text += names[j] + " "
+				text += names[j].replace(" ", "_") + " "
 			elif rows[i] == "x":
 				text += str(r[j,0]) + " "
 			elif rows[i] == "y":
@@ -60,41 +71,48 @@ def savetofile(file, names, r, v, mass = None):
 
 
 if __name__ == "__main__":
-	# planets = ["10", "199", "299", "301", "399", "499", "599", "699", "799", "899", "999"]
-	# mass = [1, 1.66012e-7, 2.44781e-6, 3.6943e-8, 3.003467e-6, 3.22713e-7, 9.5458e-4, 2.85812e-4, 4.36576e-5, 5.15028e-5, 6.583e-9]
 
-	Planets = {}
-	Planets["Sun"] = ["10", 1]
-	Planets["Mercury"] = ["199", 1.66012e-7]
-	Planets["Venus"] = ["299", 2.44781e-6]
-	Planets["Moon"] = ["301", 3.6943e-8]
-	Planets["Earth"] = ["399", 3.003467e-6]
-	Planets["Mars"] = ["499", 3.22713e-7]
-	Planets["Jupiter"] = ["599", 9.5458e-4]
-	Planets["Saturn"] = ["699", 2.85812e-4]
-	Planets["Uranus"] = ["799", 4.36576e-5]
-	Planets["Neptune"] = ["899", 5.15028e-5]
-	Planets["Pluto"] = ["999", 6.583e-9]
+	nam = ["Sun", "Mercury", "Venus", "Moon", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Netpune", "Pluto"]
+	planets = ["10", "199", "299", "301", "399", "499", "599", "699", "799", "899", "999"]
+	mass = [1, 1.66012e-7, 2.44781e-6, 3.6943e-8, 3.003467e-6, 3.22713e-7, 9.5458e-4, 2.85812e-4, 4.36576e-5, 5.15028e-5, 6.583e-9]
 
-	planets = []
-	mass = []
+	for i in range(len(sys.argv) - 1):
+		if sys.argv[i+1] == "-h":
+			print("Usage:")
+			print("    -h - Print this help page.\n")
+			print("    -f - Change filename. Use as '-f %desired filename%'.\n")
+			print("    -o - Only include objects given. Must be used at the end of the commandline arguments. ex. '-o Sun Earth Jupiter'")
+			print("         Possible objects are Sun, Mercury, Venus, Moon, Earth, Mars, Jupiter, Saturn, Uranus, Netpune and Pluto.")
+			print("         This option does not affect manually given objects.\n\n")
+			print("    Otherwise add objects as desired. Default id_type is majorbody (planets, large moons and large satelites).")
+			print("    To use other id types, prefix the ID-number with 'S' for smallbody, 'I' for global ID and 'n' for name search (might not yield best result).")
+			print("    Example: S301, where S is the prefix and 301 is the ID. Also nEarth, where n is the prefix and Earth is the search term.")
+			sys.exit()
 
-	if sys.argv[1] == ".":
-		for i in range(len(Planets)):
-			planets.append(list(Planets.values())[i][0])
-			mass.append(list(Planets.values())[i][1])
+		if sys.argv[i] == "-f":
+			filename = sys.argv[i+1]
+		
+		elif sys.argv[i] == "-o":
+			for j in range(11)[::-1]:
+				if nam[j] not in sys.argv[i+1:]:
+					del planets[j]
+					del mass[j]
 
-	else:
+			break
 
-		for i in range(len(sys.argv) - 1):
+				
 
-			planets.append(Planets[str(sys.argv[i+1])][0])
-			mass.append(Planets[str(sys.argv[i+1])][1])
-
+		elif sys.argv[i] == "-m":
+			mass.append(sys.argv[i+1])
+		
+		elif sys.argv[i+1] not in ["-f", "-o", "-m"]:
+			planets.append(sys.argv[i+1])
+			if len(mass) != len(planets):
+				mass.append(0)
 
 	names, r, v = getplanets(planets) 					
-	print("Please insert name of data file here")
-	filename = str(input())
+	
+	if not filename.endswith(".txt"):
+		filename += ".txt"
 
 	savetofile(filename, names, r, v, mass)
-

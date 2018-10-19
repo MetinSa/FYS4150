@@ -8,8 +8,14 @@ Gravity::Gravity(PlanetaryBody *a, PlanetaryBody *b)
 	object_a = a;
 	object_b = b;
 
-	// Scaled gravitational constant
-	G = 4*pi*pi;
+}
+
+Gravity::Gravity(PlanetaryBody *a, PlanetaryBody *b, bool isrelativistic)
+{
+	object_a = a;
+	object_b = b;
+
+	relativistic = isrelativistic;
 }
 
 void Gravity::calculateForce()
@@ -25,7 +31,14 @@ void Gravity::calculateForce()
 	double length = (r_b-r_a).length();
 	
 	// Computing the Newtonian gravitational force
-	F = ((r_b-r_a)/pow(length, 3))*(G * object_a->mass * object_b->mass);
+	if (relativistic)
+	{
+		F = 0; //insert relativistic formula her
+	}
+	else
+	{
+		F = ((r_b-r_a)/pow(length, 3))*(G * object_a->mass * object_b->mass);
+	}
 
 	// Adding force which can be used when integrating
 	object_a->addF(F);

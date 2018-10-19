@@ -7,9 +7,17 @@ SmallObject::SmallObject(vec3 newPosition, vec3 newVelocity, std::string newName
 	name = newName;
 
 	planets = innplanets;
+}
 
-	// Scaled gravitational constant
-	G = 4*pi*pi;
+SmallObject::SmallObject(vec3 newPosition, vec3 newVelocity, std::string newName, std::vector<PlanetaryBody> * innplanets, bool isrelativistic)
+{
+	position = newPosition;
+	velocity = newVelocity;
+	name = newName;
+
+	planets = innplanets;
+
+	relativistic = isrelativistic;
 }
 
 void SmallObject::calcA()
@@ -23,7 +31,14 @@ void SmallObject::calcA()
 		r_p = planets->at(i).position;
 		length = (r_p-position).length();
 
-		acceleration += ((r_p-position)/pow(length, 3))*(G * planets->at(i).mass);
+		if (relativistic)
+		{
+			acceleration += 0; // Insert relativistic formula here.
+		}
+		else
+		{
+			acceleration += ((r_p-position)/pow(length, 3))*(G * planets->at(i).mass);
+		}
 	}
 }
 

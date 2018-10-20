@@ -19,9 +19,15 @@ public:
 	void extractor(std::vector<double> &vec, std::istringstream &ss);
 	void dumptofile();
 	void writeheader();
+	void filereader(bool relativistic);
 
 	// Constructor
 	SolarSystem(std::string filename);
+	SolarSystem(std::string filename, bool relativistic);
+	SolarSystem(std::string filename, std::vector<PlanetaryBody> objects_);
+	SolarSystem(std::string filename, std::vector<PlanetaryBody>, bool relativistic);
+
+	void CreateGravity(bool relativistic);
 
 	// print planetary information function
 	void printobjects();

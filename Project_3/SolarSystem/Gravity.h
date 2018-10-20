@@ -1,6 +1,5 @@
 #ifndef GRAVITY_H
 #define GRAVITY_H
-
 // Declaring Gravity class
 
 class Gravity
@@ -9,11 +8,13 @@ class Gravity
 
 	PlanetaryBody* object_a;
 	PlanetaryBody* object_b;
-	double G;
+
+	bool relativistic = false;
 
 public:
 	// Constructor 
 	Gravity(PlanetaryBody *a, PlanetaryBody *b);
+	Gravity(PlanetaryBody *a, PlanetaryBody *b, bool isrelativistic);
 
 	// Function that computes the forces between object a and b.
 	void calculateForce();

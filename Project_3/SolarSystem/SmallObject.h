@@ -9,9 +9,11 @@ public:
 	vec3 acceleration;
 	std::string name;
 	std::vector<PlanetaryBody> * planets;
-	double G;
+
+	bool relativistic = false;
 
 	SmallObject(vec3 newPosition, vec3 newVelocity, std::string newName, std::vector<PlanetaryBody> * innplanets);
+	SmallObject(vec3 newPosition, vec3 newVelocity, std::string newName, std::vector<PlanetaryBody> * innplanets, bool isrelativistic);
 
 	// Calculate total acceleration to an object
 	void calcA();

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import mpl_toolkits.mplot3d.axes3d as p3
-import matplotlib.cm as mplcm
+
 
 
 import sys
@@ -42,15 +42,14 @@ colours = {"Sun":"gold", "Mercury":"silver", "Venus":"goldenrod", "Moon":"gray",
 
 # Using distinct colours for objects not predefined
 num_col = len([i for i in names if i not in colours.keys()])
-k = len(colours.keys()) - num_col
+k = len([i for i in names if i in colours.keys()])
 
-cm = plt.get_cmap('gist_rainbow')
 
 def colourpicker(i):
 	if names[i] in colours.keys():
 		return colours[names[i]]
 	else:
-		return cm((i - k)/(num_col+1))
+		return plt.cm.rainbow((i-k)/(num_col))
 
 
 centreofmass = np.average(r, weights=mass, axis=0)

@@ -198,6 +198,17 @@ void SolarSystem::writeheader()
 
 }
 
+void SolarSystem::writeenergyheader()
+{
+
+	// Writing a header with the name of the objects
+	std::string path = "output/";
+  std::string energystring = "energy";
+
+	std::ofstream outfile(path+energystring+name);
+}
+
+
 void SolarSystem::printobjects()
 {
 

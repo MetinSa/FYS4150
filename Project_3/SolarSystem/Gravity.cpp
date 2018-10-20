@@ -29,7 +29,7 @@ void Gravity::calculateForce()
 
 	// Computing the length of position that separates object a and b
 	double length = (r_b-r_a).length();
-	
+
 	// Computing the Newtonian gravitational force
 	if (relativistic)
 	{

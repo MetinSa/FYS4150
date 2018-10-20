@@ -16,9 +16,10 @@ void Solver::forwardEuler(double dt, double Tfinal)
   std::string name = "Forward Euler";
 
   system->writeheader();
+  system->writeenergyheader();
   system->dumptofile();
   system->dumpenergytofile();
-  
+
   // Printing information about the Integration
   printPreIntegration(dt, Tfinal, name);
 
@@ -61,6 +62,7 @@ void Solver::velocityVerlet(double dt, double Tfinal)
   std::string name = "Velocity Verlet";
 
   system->writeheader();
+  system->writeenergyheader();
   system->dumptofile();
   system->dumpenergytofile();
 

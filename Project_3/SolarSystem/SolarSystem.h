@@ -20,6 +20,7 @@ public:
 	void dumptofile();
 	void dumpenergytofile();
 	void writeheader();
+	void writeenergyheader();
 	void filereader(bool relativistic);
 
 	// Constructor

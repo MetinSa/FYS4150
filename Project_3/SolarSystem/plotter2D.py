@@ -4,6 +4,7 @@ import matplotlib.animation as animation
 import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.cm as mplcm
 import matplotlib.colors as colors
+from matplotlib2tikz import save as tikz_save
 
 import sys
 
@@ -45,4 +46,10 @@ colours = {"Sun":"gold", "Mercury":"silver", "Venus":"goldenrod", "Moon":"gray",
 
 for i in range(n):
 	plt.plot(r[i,0], r[i,1], color=colours[names[i]])
+	plt.plot(r[i,0][-1], r[i,1][-1], 'o', color=colours[names[i]])
+plt.grid()
+plt.xlabel('x-position [AU]')
+plt.ylabel('y-position [AU]')
+plt.axis("equal")
+tikz_save("Figures/figure.tex", figureheight='\\figureheight', figurewidth='\\figurewidth')
 plt.show()

@@ -24,10 +24,12 @@ Ek, Ep = (np.loadtxt(filename, unpack=True))
 
 
 plt.semilogy(Ek, color='blue', label='Total kinetic energy')
-plt.plot(Ep, color='magenta', label='Total potential energy')
+plt.semilogy(Ep, color='magenta', label='Total potential energy')
+plt.semilogy(Ep+Ek, color='teal', label=r'Total energy ($E_k + E_p$)')
 plt.grid()
 plt.xlabel('Timestep')
 plt.ylabel('Energy')
 plt.axis("equal")
+plt.legend()
 #tikz_save("Figures/figure.tex", figureheight='\\figureheight', figurewidth='\\figurewidth')
 plt.show()

@@ -18,6 +18,7 @@ public:
 	void extractor(std::vector<std::string> &vec, std::istringstream &ss);
 	void extractor(std::vector<double> &vec, std::istringstream &ss);
 	void dumptofile();
+	void dumpenergytofile();
 	void writeheader();
 	void filereader(bool relativistic);
 

@@ -17,10 +17,11 @@ void Solver::forwardEuler(double dt, double Tfinal)
 
   system->writeheader();
   system->dumptofile();
-
+  system->dumpenergytofile();
+  
   // Printing information about the Integration
   printPreIntegration(dt, Tfinal, name);
- 
+
   clock_t start = clock();
 
   // For each time step dt
@@ -44,6 +45,7 @@ void Solver::forwardEuler(double dt, double Tfinal)
         };
 
     // Writing information to file instead of saving the arrays
+  system->dumpenergytofile();
 	system->dumptofile();
 	t += dt;
   }
@@ -60,6 +62,7 @@ void Solver::velocityVerlet(double dt, double Tfinal)
 
   system->writeheader();
   system->dumptofile();
+  system->dumpenergytofile();
 
   printPreIntegration(dt, Tfinal, name);
 
@@ -97,6 +100,7 @@ void Solver::velocityVerlet(double dt, double Tfinal)
 
     // Writing information to file instead of saving the arrays
     system->dumptofile();
+    system->dumpenergytofile();
 	t += dt;
   }
 
@@ -115,7 +119,7 @@ void Solver::updateGravity()
 
 void Solver::printPreIntegration(double dt, double Tfinal, std::string name)
 {
-    std::cout 
+    std::cout
     << "----------------------------------------" << std::endl
     << "INTEGRATION STARTED" << std::endl
     << "----------------------------------------" << std::endl
@@ -129,7 +133,7 @@ void Solver::printPreIntegration(double dt, double Tfinal, std::string name)
 
 void Solver::printPostIntegration(double totalTime)
 {
-    std::cout 
+    std::cout
     << "INTEGRATION FINISHED " << std::endl
     << "----------------------------------------" << std::endl
     << "Time spent: " << totalTime << " seconds" <<std::endl

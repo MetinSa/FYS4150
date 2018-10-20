@@ -148,6 +148,37 @@ void SolarSystem::dumptofile()
 
 }
 
+void SolarSystem::dumpenergytofile()
+{
+	double Ek;
+	double Ep;
+
+	std::string path = "output/";
+	std::string energystring = "energy";
+	std::ofstream outfile;
+	outfile.open(path+energystring+name, std::ios_base::app);
+
+	for (int i = 0; i < objects.size(); i++){
+		Ek += objects[i].KineticEnergy();
+	}
+
+	for (int i = 0; i < gravityForces.size(); i++){
+    Ep += gravityForces[i].PotentialEnergy();
+  }
+
+	for (int i = 0; i < smallobjects.size(); i++){
+		Ek += objects[i].KineticEnergy();
+	}
+
+
+	outfile <<  Ek << " " << Ep << " ";
+	outfile << std::endl;
+
+	Ek = 0;
+	Ep = 0;
+
+}
+
 void SolarSystem::writeheader()
 {
 

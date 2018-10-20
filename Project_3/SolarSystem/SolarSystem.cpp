@@ -6,7 +6,7 @@ SolarSystem::SolarSystem(std::string filename)
 	// Class that creates a system by reading in given planetary bodies.
 
 	name = filename;
-	filereader(false);
+	filereader();
 	CreateGravity(false);
 
 }
@@ -34,12 +34,12 @@ SolarSystem::SolarSystem(std::string filename, bool relativistic)
 
 	// Reading in planetary information from file
 	name = filename;
-	filereader(relativistic);
+	filereader();
 	CreateGravity(relativistic);
 
 }
 
-void SolarSystem::filereader(bool relativistic)
+void SolarSystem::filereader()
 {
 	// Reading in planetary information from file
 	std::ifstream infile(name);

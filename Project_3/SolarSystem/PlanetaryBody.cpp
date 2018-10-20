@@ -41,6 +41,7 @@ double PlanetaryBody::KineticEnergy()
 }
 
 
+
 void PlanetaryBody::objPrint()
 {
 	// Printing information about the object.

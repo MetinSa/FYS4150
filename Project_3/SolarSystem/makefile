@@ -1,7 +1,7 @@
 # General makefile for c++ - choose PROG =   name of given program
 
 # Here we define compiler option, libraries and the  target
-CPPflags = c++ -O3 -std=c++11
+CPPflags = c++ -O3 -std=c++17
 
 # Here we define the library functions we nee
 LIB = -larmadillo -llapack -lblas

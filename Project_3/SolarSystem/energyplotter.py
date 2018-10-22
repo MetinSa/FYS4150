@@ -22,12 +22,13 @@ else:
 
 Ek, Ep = (np.loadtxt(filename, unpack=True))
 
+years = np.linspace(0,10,len(Ek))
 
-plt.semilogy(Ek, color='blue', label='Total kinetic energy')
-plt.semilogy(Ep, color='magenta', label='Total potential energy')
-plt.semilogy(Ep+Ek, color='teal', label=r'Total energy ($E_k + E_p$)')
+plt.plot(years,Ek, color='blue', label='Total kinetic energy')
+plt.plot(years,Ep, color='magenta', label='Total potential energy')
+plt.plot(years,Ek+Ep, color='teal', label=r'Total energy ($E_k + E_p$)')
 plt.grid()
-plt.xlabel('Timestep')
+plt.xlabel('Time [years]')
 plt.ylabel('Energy')
 plt.legend()
 #tikz_save("Figures/figure.tex", figureheight='\\figureheight', figurewidth='\\figurewidth')

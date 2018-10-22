@@ -42,7 +42,7 @@ SolarSystem::SolarSystem(std::string filename, bool relativistic)
 void SolarSystem::filereader()
 {
 	// Reading in planetary information from file
-	std::ifstream infile(name);
+	std::ifstream infile("PlanetarySystems/" + name);
 	std::string line;
 
 	std::vector<std::string> names;

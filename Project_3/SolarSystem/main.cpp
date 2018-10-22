@@ -21,20 +21,23 @@ int main(int argc, char *argv[]){
 	}
 	else
 	{
-		systemname = "planets.txt";
+		systemname = "DefaultSystem.txt";
 		years = 10;
 		dt = 0.01;
 	}
 
 	// Setting up the system
-	SolarSystem planetary_system(systemname);
+	bool relativistic = false;
+	SolarSystem planetary_system(systemname, relativistic);
 
 	// Integrating the system using desired method
 	Solver Integrate(planetary_system);
 
 	// Integrate.forwardEuler(dt, years);
 	Integrate.velocityVerlet(dt, years);
+	// planetary_system.dumpenergytofile();
 
-	return 0;
+
+	// return 0;
 
 }

@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
+from matplotlib2tikz import save as tikz_save
 import sys
 
 
@@ -12,6 +13,8 @@ else:
 		filename = "output/" + sys.argv[1]
 	else:
 		filename = "output/" + sys.argv[1] + ".txt"
+
+savefile = sys.argv[2]
 
 names = []
 mass = []
@@ -51,41 +54,35 @@ normed_cm = np.linalg.norm(centreofmass, axis=0)
 
 print("Maximum deviation of centre of mass: %.2e Au" %(max(normed_cm)))
 
-if len(sys.argv) > 2:
-	plt.plot(centreofmass[:,0], centreofmass[:,1])
-	for i in range(n):
-		plt.plot(r[i,0], r[i,1])
-	plt.grid()
-	plt.axis("equal")
-	plt.show()
-
-
-m = np.max(np.abs(r))
-
+# m = np.max(np.abs(r))
+m = 27
 fig = plt.figure()
 ax = p3.Axes3D(fig)
 
 lines = []
 dots = []
 
+k = 100
+
 for i in range(n):
-	line, = ax.plot(r[i,0], r[i,1], r[i,2], color=colourpicker(i))
+	line, = ax.plot(r[i,0,::k], r[i,1,::k], r[i,2,::k], color=colourpicker(i))
 	dot,  = ax.plot([r[i,0,0]], [r[i,1,0]], [r[i,2,0]], "o", markeredgecolor="k", color=colourpicker(i))
 	lines.append(line)
 	dots.append(dot)
 
 
 
-fig.legend(dots, names)
+fig.legend(dots, names,loc = "upper left")
 
 ax.grid()
+ax.set_xlabel('x-position [AU]')
+ax.set_ylabel('y-position [AU]')
+ax.set_zlabel('z-position [AU]')
 ax.set_xlim(-m,m)
 ax.set_ylim(-m,m)
 ax.set_zlim(-m,m)
 ax.set_aspect("equal")
-ax.view_init(90)
-
-k = 1
-
+# ax.view_init(90)
+tikz_save("Figures/" + savefile +".tex", figureheight="\\figureheight", figurewidth="\\figureheight")
 
 plt.show()

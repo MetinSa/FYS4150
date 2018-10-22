@@ -1,23 +1,22 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 from matplotlib2tikz import save as tikz_save
-
 import sys
 
 
 
 if len(sys.argv) < 2:
-	print("Please provide filename in commandline")
+	print("Please provide filename and savefile in commandline")
 	sys.exit()
 else:
 	if sys.argv[1].endswith(".txt"):
 		filename = "output/" + sys.argv[1]
 	else:
 		filename = "output/" + sys.argv[1] + ".txt"
+
+savefile = sys.argv[2]
 
 names = []
 mass = []
@@ -43,14 +42,15 @@ colours = {"Sun":"gold", "Mercury":"silver", "Venus":"goldenrod", "Moon":"gray",
 			"Saturn":"palegoldenrod", "Uranus":"powderblue", "Neptune":"deepskyblue",
 			"Pluto":"chocolate"}
 
+k = 10
 
 for i in range(n):
-	plt.plot(r[i,0], r[i,1], color=colours[names[i]], label = names[i] )
+	plt.plot(r[i,0,::k], r[i,1,::k], color=colours[names[i]], label = names[i] )
 	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colours[names[i]])
 plt.grid()
 plt.xlabel('x-position [AU]')
 plt.ylabel('y-position [AU]')
-plt.legend()
+plt.legend(loc = "upper right")
 plt.axis("equal")
-tikz_save("Figures/figure.tex", figureheight='\\figureheight', figurewidth='\\figurewidth')
+tikz_save("Figures/" + savefile +".tex", figureheight="\\figureheight", figurewidth="\\figureheight")
 plt.show()

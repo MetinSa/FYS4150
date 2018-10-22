@@ -21,7 +21,7 @@ public:
 	void dumpenergytofile();
 	void writeheader();
 	void writeenergyheader();
-	void filereader(bool relativistic);
+	void filereader();
 
 	// Constructor
 	SolarSystem(std::string filename);

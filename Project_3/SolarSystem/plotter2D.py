@@ -45,11 +45,12 @@ colours = {"Sun":"gold", "Mercury":"silver", "Venus":"goldenrod", "Moon":"gray",
 
 
 for i in range(n):
-	plt.plot(r[i,0], r[i,1], color=colours[names[i]])
-	plt.plot(r[i,0][-1], r[i,1][-1], 'o', color=colours[names[i]])
+	plt.plot(r[i,0], r[i,1], color=colours[names[i]], label = names[i] )
+	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colours[names[i]])
 plt.grid()
 plt.xlabel('x-position [AU]')
 plt.ylabel('y-position [AU]')
+plt.legend()
 plt.axis("equal")
 tikz_save("Figures/figure.tex", figureheight='\\figureheight', figurewidth='\\figurewidth')
 plt.show()

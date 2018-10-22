@@ -49,10 +49,9 @@ double Gravity::PotentialEnergy()
 {
 	// Returning the potential energy of an object.
 
-	vec3 r_a = object_a->position;
-	vec3 r_b = object_b->position;
+	vec3 r = object_b->position - object_a->position;
 
 	// Computing the length of position that separates object a and b
-	double length = (r_b-r_a).length();
+	double length = r.length();
 	return (G*object_a->mass*object_b->mass)/(length);
 }

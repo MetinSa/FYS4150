@@ -163,7 +163,7 @@ void SolarSystem::dumpenergytofile()
 	}
 
 	for (int i = 0; i < gravityForces.size(); i++){
-    Ep += gravityForces[i].PotentialEnergy();
+    Ep -= gravityForces[i].PotentialEnergy();
   }
 
 	for (int i = 0; i < smallobjects.size(); i++){

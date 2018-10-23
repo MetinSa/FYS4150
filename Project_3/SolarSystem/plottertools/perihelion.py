@@ -39,13 +39,12 @@ perang = np.degrees(np.arctan(r[1,1,index]/r[1,0,index]))
 
 test = True
 
+c = 100
+
 for i in range(len(index)):
-	if t[index[i]] >= 100 and test:
-		test = False
-		print(perang[i] - perang[0])
-	elif t[index[i]] >= 200:
-		print((perang[i] - perang[0])/2)
-		break
+	if t[index[i]] >= c:
+		print((perang[i] - perang[0])*100/c, "per century after %i years" %c)
+		c += 100
 
 """
 plt.plot(t[index[0]], perang, "-o")

@@ -76,7 +76,7 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
   printPreIntegration(dt, Tfinal, name);
 
   int j = 0;
-  double printcheck = 0.5;
+  double printcheck = 0.05;
   clock_t start = clock();
 
   // For each time step dt

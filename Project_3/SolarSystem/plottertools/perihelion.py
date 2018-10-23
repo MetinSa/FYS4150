@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 import sys
+from sklearn import linear_model
 
 
 
@@ -40,20 +41,24 @@ print("Read in %i lines" %(N))
 dist = np.linalg.norm(r[1], axis = 0)
 index = find_peaks(-dist, width=100, height = -0.307550)[0]
 
-perang = np.degrees(np.arctan(r[1,1,index]/r[1,0,index]))*3600
+perang = -np.degrees(np.arctan(r[1,1,index]/r[1,0,index]))*3600
 
-test = True
-
+"""
 c = 100
-
-index[0] = 0
 
 for i in range(len(index)):
 	if t[index[i]] >= c:
 		print((perang[i] - perang[0])*100/t[index[i]], "per century after %.2f years" %(t[index[i]]))
 		c += 100
+"""
 
-plt.plot(t[index], perang, "-o")
+lm = linear_model.LinearRegression()
+X = np.c_[np.ones((len(index))), t[index]]
+model = lm.fit(X,perang)
+
+print(model.coef_)
+
+plt.plot(t[index], perang)
 plt.grid()
 plt.show()
 

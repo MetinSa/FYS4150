@@ -57,7 +57,7 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
     if (j%SaveEvery == 0)
     {
     	system->dumpenergytofile();
-    	//system->dumptofile(t);
+    	system->dumptofile(outfile, t);
     }
 
 

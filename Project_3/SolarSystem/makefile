@@ -9,7 +9,7 @@ SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 TESTSOURCES := $(shell find src -type f \( -name "*.cpp" ! -name "main.cpp" \))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CPPFLAGS := -O3 -std=c++17
-LIB := -L lib -larmadillo -llapack -lblas
+LIB := -larmadillo -llapack -lblas
 INC := -I include
 
 $(TARGET):			$(OBJECTS)

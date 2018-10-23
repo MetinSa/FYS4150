@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 	}
 
 
-	int writeevery = 1/dt/(4*50);
+	int writeevery = 1;
 
 	// Setting up the system
 	bool relativistic = true;

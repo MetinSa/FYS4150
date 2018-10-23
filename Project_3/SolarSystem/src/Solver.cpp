@@ -23,8 +23,9 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
   // Printing information about the Integration
   printPreIntegration(dt, Tfinal, name);
 
-  clock_t start = clock();
   int j = 0;
+
+  clock_t start = clock();
   // For each time step dt
   while (t < Tfinal){
     // For each Large object in solar system
@@ -52,6 +53,8 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
     	system->dumpenergytofile();
     	system->dumptofile(t);
     }
+
+
     j += 1;
   }
 
@@ -73,6 +76,7 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
   printPreIntegration(dt, Tfinal, name);
 
   int j = 0;
+  double printcheck = 0.1;
   clock_t start = clock();
 
   // For each time step dt
@@ -113,6 +117,14 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
     	system->dumpenergytofile();
     	system->dumptofile(t);
     }
+    if (t/Tfinal > printcheck)
+    {
+    	clock_t used = (clock() - start)/CLOCKS_PER_SEC;
+
+    	std::cout << 100*t/Tfinal << " % done! Time used: " << used/CLOCKS_PER_SEC << " s. Estimated time remaining: " << (used/printcheck - used)/CLOCKS_PER_SEC << " s." << std::endl;
+    	printcheck += 0.1;
+    }
+
     j += 1;
 
   }

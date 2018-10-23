@@ -33,16 +33,29 @@ r = r[:,1:]
 r = r.reshape((N,n,3)).swapaxes(0,1).swapaxes(1,2)
 
 dist = np.linalg.norm(r[1], axis = 0)
-index = find_peaks(dist, width=10)
+index = find_peaks(-dist, width=10)[0]
 
-perang = np.degrees(np.arctan(r[1,1,index[0]]/r[1,0,index[0]]))*3600
+perang = np.degrees(np.arctan(r[1,1,index]/r[1,0,index]))
 
-print("Perihelion of Mercury:")
-print(perang)
+test = True
 
+for i in range(len(index)):
+	if t[index[i]] >= 100 and test:
+		test = False
+		print(perang[i] - perang[0])
+	elif t[index[i]] >= 200:
+		print((perang[i] - perang[0])/2)
+		break
+
+"""
+plt.plot(t[index[0]], perang, "-o")
+
+plt.grid()
+
+plt.figure()
 plt.plot(t, dist)
 for i in index[0]:
 	plt.plot(t[i], dist[i], "bo")
-
 plt.grid()
 plt.show()
+"""

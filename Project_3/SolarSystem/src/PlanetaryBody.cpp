@@ -28,10 +28,10 @@ void PlanetaryBody::resetF()
 
 double PlanetaryBody::AngularMomentum()
 {
-	// Returning the angular momentum of an object.
+	// Returning the angular momentum per mass of an object.
 
 	vec3 rv = position.cross(velocity);
-	return mass*rv.length();
+	return rv.length();
 }
 
 double PlanetaryBody::KineticEnergy()

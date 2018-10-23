@@ -26,15 +26,17 @@ int main(int argc, char *argv[]){
 		dt = 0.01;
 	}
 
+	int writeevery = 1/dt/(4*50);
+
 	// Setting up the system
-	bool relativistic = false;
+	bool relativistic = true;
 	SolarSystem planetary_system(systemname, relativistic);
 
 	// Integrating the system using desired method
 	Solver Integrate(planetary_system);
 
-	// Integrate.forwardEuler(dt, years);
-	Integrate.velocityVerlet(dt, years);
+	// Integrate.forwardEuler(dt, years, writeevery);
+	Integrate.velocityVerlet(dt, years, writeevery);
 	// planetary_system.dumpenergytofile();
 
 

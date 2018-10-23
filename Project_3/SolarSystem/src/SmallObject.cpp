@@ -9,6 +9,16 @@ SmallObject::SmallObject(vec3 newPosition, vec3 newVelocity, std::string newName
 	planets = innplanets;
 }
 
+SmallObject::SmallObject(vec3 newPosition, vec3 newVelocity, std::string newName, std::vector<PlanetaryBody> * innplanets, bool isrelativistic)
+{
+	position = newPosition;
+	velocity = newVelocity;
+	name = newName;
+
+	planets = innplanets;
+	relativistic = isrelativistic;
+}
+
 
 void SmallObject::calcA()
 {
@@ -18,12 +28,29 @@ void SmallObject::calcA()
 
 	for (int i = 0; i < planets->size(); i++)
 	{
+		vec3 a;
 		r_p = planets->at(i).position;
 		length = (r_p-position).length();
 
-		acceleration += ((r_p-position)/pow(length, 3))*(G * planets->at(i).mass);
+		a = ((r_p-position)/pow(length, 3))*(G * planets->at(i).mass);
+
+		if (relativistic)
+		{
+			acceleration += a*(1+3*pow(AngularMomentum(),2)/(position.dot(position)*c*c));
+		}
+		else;
+		{
+			acceleration += a;
+		}
 
 	}
+}
+
+double SmallObject::AngularMomentum()
+{
+	// Returning the angular momentum per mass of an object.
+
+	return position.cross(velocity).length();
 }
 
 void SmallObject::objPrint()

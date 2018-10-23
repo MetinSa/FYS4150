@@ -17,6 +17,14 @@ else:
 	else:
 		filename = "../output/" + sys.argv[1] + ".txt"
 
+if len(sys.argv) > 2:
+	try:
+		l = int(sys.argv[2])
+	except ValueError:
+		l = 1
+else:
+	l = 1
+
 names = []
 mass = []
 
@@ -60,7 +68,7 @@ normed_cm = np.linalg.norm(centreofmass, axis=0)
 
 print("Maximum deviation of centre of mass: %.2e Au" %(max(normed_cm)))
 
-if len(sys.argv) > 2:
+if len(sys.argv) > 3:
 	plt.plot(centreofmass[:,0], centreofmass[:,1])
 	for i in range(n):
 		plt.plot(r[i,0], r[i,1])
@@ -94,10 +102,10 @@ ax.set_zlim(-m,m)
 ax.set_aspect("equal")
 ax.view_init(90)
 
-k = 1
+
 
 def run(i):
-    i *= k
+    i *= l
     # update the data
     #x, y, z = r[i, 9:12]
     #a = 0.005
@@ -112,5 +120,5 @@ def run(i):
 
 
 
-ani = animation.FuncAnimation(fig, run, int(N/k), blit=False, interval=1)
+ani = animation.FuncAnimation(fig, run, int(N/l), blit=False, interval=1)
 plt.show()

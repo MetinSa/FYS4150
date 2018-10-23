@@ -12,17 +12,17 @@ if len(sys.argv) < 2:
 	sys.exit()
 else:
 	if sys.argv[1].endswith(".txt"):
-		filename = "output/" + sys.argv[1]
+		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".txt"
 
 
 savefile = None
 if len(sys.argv) > 2:
 	if sys.argv[2].endswith(".tex"):
-		savefile = "Figures/" + sys.argv[2]
+		savefile = "../Figures/" + sys.argv[2]
 	else:
-		savefile = "Figures/" + sys.argv[2] + ".tex"
+		savefile = "../Figures/" + sys.argv[2] + ".tex"
 
 names = []
 mass = []

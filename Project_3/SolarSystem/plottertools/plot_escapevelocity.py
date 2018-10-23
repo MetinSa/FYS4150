@@ -16,9 +16,9 @@ colors = pylab.cm.nipy_spectral(np.linspace(0,1,9))
 
 r_list = []
 for i in range(7):
-	r_list.append(np.loadtxt('output/ev%d.txt' %i, skiprows = 1, unpack=True))
+	r_list.append(np.loadtxt('../output/ev%d.txt' %i, skiprows = 1, unpack=True))
 
-exact = np.loadtxt('output/exact_ev.txt', skiprows = 1, unpack=True)
+exact = np.loadtxt('../output/exact_ev.txt', skiprows = 1, unpack=True)
 
 
 n = 10

@@ -21,7 +21,7 @@ public:
 	void dumpenergytofile();
 	void writeheader();
 	void writeenergyheader();
-	void filereader();
+	void filereader(bool isrelativistic);
 
 	// Constructor
 	SolarSystem(std::string filename);
@@ -30,6 +30,8 @@ public:
 	SolarSystem(std::string filename, std::vector<PlanetaryBody>, bool relativistic);
 
 	void CreateGravity(bool relativistic);
+
+	void CreateSmallObject(vec3 newPosition, vec3 newVelocity, std::string newName, bool isrelativistic);
 
 	// print planetary information function
 	void printobjects();

@@ -5,12 +5,12 @@
 Solver::Solver(SolarSystem &input_system)
 {
   system = &input_system;
-  totalObjects = system->objects.size();
+  totalObjects = system->objects.size() + system->smallobjects.size();
 }
 
 
 
-void Solver::forwardEuler(double dt, double Tfinal)
+void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
 {
   double t = 0;
   std::string name = "Forward Euler";
@@ -24,13 +24,13 @@ void Solver::forwardEuler(double dt, double Tfinal)
   printPreIntegration(dt, Tfinal, name);
 
   clock_t start = clock();
-
+  int j = 0;
   // For each time step dt
-  while (t <= Tfinal){
+  while (t < Tfinal){
     // For each Large object in solar system
     updateGravity();
 
-    for (int i=0; i < totalObjects; i++){
+    for (int i=0; i < system->objects.size(); i++){
     	vec3 acceleration = system->objects[i].force/system->objects[i].mass;
     	system->objects[i].velocity += acceleration * dt;
     	system->objects[i].position += system->objects[i].velocity * dt;
@@ -47,8 +47,12 @@ void Solver::forwardEuler(double dt, double Tfinal)
 
 	t += dt;
     // Writing information to file instead of saving the arrays
-    system->dumpenergytofile();
-	system->dumptofile(t);
+    if (j%SaveEvery == 0)
+    {
+    	system->dumpenergytofile();
+    	system->dumptofile(t);
+    }
+    j += 1;
   }
 
   clock_t stop = clock();
@@ -56,7 +60,7 @@ void Solver::forwardEuler(double dt, double Tfinal)
   printPostIntegration(totalTime);
 }
 
-void Solver::velocityVerlet(double dt, double Tfinal)
+void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
 {
   double t = 0;
   std::string name = "Velocity Verlet";
@@ -68,14 +72,15 @@ void Solver::velocityVerlet(double dt, double Tfinal)
 
   printPreIntegration(dt, Tfinal, name);
 
+  int j = 0;
   clock_t start = clock();
 
   // For each time step dt
-  while (t <= Tfinal){
+  while (t < Tfinal){
     // For each Large object in solar system
     updateGravity();
     std::vector<vec3> acceleration;
-    for (int i=0; i < totalObjects; i++){
+    for (int i=0; i < system->objects.size(); i++){
       acceleration.push_back(system->objects[i].force/system->objects[i].mass);
       system->objects[i].position += system->objects[i].velocity * dt + acceleration[i]*(dt*dt)/2;
       system->objects[i].resetF();
@@ -83,7 +88,7 @@ void Solver::velocityVerlet(double dt, double Tfinal)
 
     updateGravity();
 
-    for (int i=0; i < totalObjects; i++){
+    for (int i=0; i < system->objects.size(); i++){
       vec3 accelerationNew = system->objects[i].force/system->objects[i].mass;
       system->objects[i].velocity += (acceleration[i] + accelerationNew) * dt/2;
       system->objects[i].resetF();
@@ -93,6 +98,7 @@ void Solver::velocityVerlet(double dt, double Tfinal)
     vec3 smallacceleration;
     for (int i = 0; i < system->smallobjects.size(); i++)
     {
+    	std::cout << t << " " << i << std::endl;
     	system->smallobjects[i].calcA();
     	smallacceleration = system->smallobjects[i].acceleration;
     	system->smallobjects[i].position += system->smallobjects[i].velocity * dt + smallacceleration*(dt*dt)/2;
@@ -102,8 +108,12 @@ void Solver::velocityVerlet(double dt, double Tfinal)
 
 	t += dt;
     // Writing information to file instead of saving the arrays
-    system->dumptofile(t);
-    system->dumpenergytofile();
+    if (j%SaveEvery == 0)
+    {
+    	system->dumpenergytofile();
+    	system->dumptofile(t);
+    }
+    j += 1;
 
   }
 

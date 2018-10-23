@@ -11,8 +11,8 @@ public:
   Solver(SolarSystem &input_system);
 
   // Functions
-  void forwardEuler(double dt, double Tfinal);
-  void velocityVerlet(double dt, double Tfinal);
+  void forwardEuler(double dt, double Tfinal, int SaveEvery);
+  void velocityVerlet(double dt, double Tfinal, int SaveEvery);
   void updateGravity();
   void printPreIntegration(double dt, double Tfinal, std::string name);
   void printPostIntegration(double totalTime);

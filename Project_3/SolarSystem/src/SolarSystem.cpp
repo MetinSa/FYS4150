@@ -6,7 +6,7 @@ SolarSystem::SolarSystem(std::string filename)
 	// Class that creates a system by reading in given planetary bodies.
 
 	name = filename;
-	filereader();
+	filereader(false);
 	CreateGravity(false);
 
 }
@@ -25,21 +25,20 @@ SolarSystem::SolarSystem(std::string filename, std::vector<PlanetaryBody> object
 	name = filename;
 	objects = objects_;
 	CreateGravity(relativistic);
-
 }
 
-SolarSystem::SolarSystem(std::string filename, bool relativistic)
+SolarSystem::SolarSystem(std::string filename, bool isrelativistic)
 {
 	// Class that creates a system by reading in given planetary bodies.
 
 	// Reading in planetary information from file
 	name = filename;
-	filereader();
-	CreateGravity(relativistic);
+	filereader(isrelativistic);
+	CreateGravity(isrelativistic);
 
 }
 
-void SolarSystem::filereader()
+void SolarSystem::filereader(bool isrelativistic)
 {
 	// Reading in planetary information from file
 	std::ifstream infile("PlanetarySystems/" + name);
@@ -76,7 +75,7 @@ void SolarSystem::filereader()
 		vec3 velocity(vx[i], vy[i], vz[i]);
 		if (m[i] == 0)
 		{
-			smallobjects.push_back(SmallObject(position, velocity, names[i], &objects));
+			smallobjects.push_back(SmallObject(position, velocity, names[i], &objects, isrelativistic));
 		}
 		else
 		{
@@ -95,6 +94,11 @@ void SolarSystem::CreateGravity(bool relativistic)
 			gravityForces.push_back(Gravity(&objects.at(i), &objects.at(j), relativistic));
 		}
 	}
+}
+
+void SolarSystem::CreateSmallObject(vec3 newPosition, vec3 newVelocity, std::string newName, bool isrelativistic)
+{
+	smallobjects.push_back(SmallObject(newPosition, newVelocity, newName, &objects, isrelativistic));
 }
 
 void SolarSystem::extractor(std::vector<std::string> &vec, std::istringstream &ss)

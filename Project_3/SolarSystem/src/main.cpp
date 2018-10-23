@@ -4,6 +4,7 @@
 int main(int argc, char *argv[]){
 
 	double years, dt;
+	int writeevery = 1;
 	std::string systemname;
 
 	// Commandline arguments
@@ -13,11 +14,18 @@ int main(int argc, char *argv[]){
 		years = 10;
 		dt = 0.01;
 	}
-	else if (argc >= 4)
+	else if (argc == 4)
 	{
 		systemname = argv[1];
 		years = atof(argv[2]);
 		dt = atof(argv[3]);
+	}
+	else if (argc >= 5)
+	{
+		systemname = argv[1];
+		years = atof(argv[2]);
+		dt = atof(argv[3]);
+		writeevery = atoi(argv[4]);
 	}
 	else
 	{
@@ -26,7 +34,6 @@ int main(int argc, char *argv[]){
 		dt = 0.01;
 	}
 
-	int writeevery = 1;
 
 	// Setting up the system
 	bool relativistic = true;

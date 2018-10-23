@@ -122,7 +122,9 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
     	clock_t used = (clock() - start)/CLOCKS_PER_SEC ;
 
     	std::cout << 100*t/Tfinal << " % done! Time used: " << used << " s. Estimated time remaining: " << (used/printcheck - used) << " s." << std::endl;
+
     	printcheck += 0.05;
+
     }
 
     j += 1;

@@ -102,7 +102,6 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
     vec3 smallacceleration;
     for (int i = 0; i < system->smallobjects.size(); i++)
     {
-    	std::cout << t << " " << i << std::endl;
     	system->smallobjects[i].calcA();
     	smallacceleration = system->smallobjects[i].acceleration;
     	system->smallobjects[i].position += system->smallobjects[i].velocity * dt + smallacceleration*(dt*dt)/2;

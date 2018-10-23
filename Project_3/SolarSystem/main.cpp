@@ -13,18 +13,21 @@ int main(int argc, char *argv[]){
 		years = 10;
 		dt = 0.01;
 	}
+	
+	else if (argc == 1)
+	{
+		systemname = "DefaultSystem.txt";
+		years = 10;
+		dt = 0.01;
+	}
+
 	else if (argc >= 4)
 	{
 		systemname = argv[1];
 		years = atof(argv[2]);
 		dt = atof(argv[3]);
 	}
-	else
-	{
-		systemname = "DefaultSystem.txt";
-		years = 10;
-		dt = 0.01;
-	}
+
 
 	// Setting up the system
 	bool relativistic = false;

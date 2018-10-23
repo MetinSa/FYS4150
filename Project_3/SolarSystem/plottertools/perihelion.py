@@ -6,25 +6,28 @@ import sys
 
 
 if len(sys.argv) < 2:
-	filename = "../output/" + "RelativisticMercury.txt"
+	filename = "../output/" + "RelativisticMercury.bin"
 else:
-	if sys.argv[1].endswith(".txt"):
+	if sys.argv[1].endswith(".bin"):
 		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "../output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".bin"
 
 names = []
 mass = []
 
-with open(filename, "r") as file:
+with open(filename+".txt", "r") as file:
 	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
-		names.append(n)
+		names.append(n.replace("_", " "))
 		mass.append(float(m))
 
-r = np.loadtxt(filename, skiprows = 1)
-N = len(r)
+r = np.fromfile(filename)
+nn = len(r)
 n = len(names)
+N = int(nn/(3*n+1))
+
+r = r.reshape((N, 3*n+1))
 
 t = r[:,0]
 r = r[:,1:]
@@ -50,15 +53,7 @@ for i in range(len(index)):
 		print((perang[i] - perang[0])*100/t[index[i]], "per century after %.2f years" %(t[index[i]]))
 		c += 100
 
-"""
-plt.plot(t[index[0]], perang, "-o")
-
-plt.grid()
-
-plt.figure()
-plt.plot(t, dist)
-for i in index[0]:
-	plt.plot(t[i], dist[i], "bo")
+plt.plot(t[index], perang, "-o")
 plt.grid()
 plt.show()
-"""
+

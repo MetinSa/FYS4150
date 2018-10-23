@@ -76,7 +76,7 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
   printPreIntegration(dt, Tfinal, name);
 
   int j = 0;
-  double printcheck = 0.1;
+  double printcheck = 0.05;
   clock_t start = clock();
 
   // For each time step dt
@@ -119,10 +119,12 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
     }
     if (t/Tfinal > printcheck)
     {
-    	clock_t used = (clock() - start)/CLOCKS_PER_SEC;
+    	clock_t used = (clock() - start)/CLOCKS_PER_SEC ;
 
     	std::cout << 100*t/Tfinal << " % done! Time used: " << used << " s. Estimated time remaining: " << (used/printcheck - used) << " s." << std::endl;
-    	printcheck += 0.1;
+
+    	printcheck += 0.05;
+
     }
 
     j += 1;

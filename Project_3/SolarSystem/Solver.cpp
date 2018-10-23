@@ -17,7 +17,7 @@ void Solver::forwardEuler(double dt, double Tfinal)
 
   system->writeheader();
   system->writeenergyheader();
-  system->dumptofile();
+  system->dumptofile(t);
   system->dumpenergytofile();
 
   // Printing information about the Integration
@@ -45,10 +45,10 @@ void Solver::forwardEuler(double dt, double Tfinal)
     	system->smallobjects[i].position += system->smallobjects[i].velocity * dt;
         };
 
-    // Writing information to file instead of saving the arrays
-  system->dumpenergytofile();
-	system->dumptofile();
 	t += dt;
+    // Writing information to file instead of saving the arrays
+    system->dumpenergytofile();
+	system->dumptofile(t);
   }
 
   clock_t stop = clock();
@@ -63,7 +63,7 @@ void Solver::velocityVerlet(double dt, double Tfinal)
 
   system->writeheader();
   system->writeenergyheader();
-  system->dumptofile();
+  system->dumptofile(t);
   system->dumpenergytofile();
 
   printPreIntegration(dt, Tfinal, name);
@@ -100,10 +100,11 @@ void Solver::velocityVerlet(double dt, double Tfinal)
     	system->smallobjects[i].velocity += (smallacceleration + system->smallobjects[i].acceleration) * dt/2;
     }
 
-    // Writing information to file instead of saving the arrays
-    system->dumptofile();
-    system->dumpenergytofile();
 	t += dt;
+    // Writing information to file instead of saving the arrays
+    system->dumptofile(t);
+    system->dumpenergytofile();
+
   }
 
   clock_t stop = clock();

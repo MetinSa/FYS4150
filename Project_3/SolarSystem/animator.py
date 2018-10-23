@@ -21,7 +21,7 @@ names = []
 mass = []
 
 with open(filename, "r") as file:
-	for i in file.readline().split():
+	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
 		names.append(n.replace("_", " "))
 		mass.append(float(m))
@@ -29,6 +29,9 @@ with open(filename, "r") as file:
 r = np.loadtxt(filename, skiprows = 1)
 N = len(r)
 n = len(names)
+
+t = r[:,0]
+r = r[:,1:]
 
 # Reshape for better intuitive understanding of the positions. Axis: [planet, {x,y,z}, integration_step]
 r = r.reshape((N,n,3)).swapaxes(0,1).swapaxes(1,2)

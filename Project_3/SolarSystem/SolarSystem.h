@@ -17,7 +17,7 @@ public:
 	// Read and write to file functions
 	void extractor(std::vector<std::string> &vec, std::istringstream &ss);
 	void extractor(std::vector<double> &vec, std::istringstream &ss);
-	void dumptofile();
+	void dumptofile(double t);
 	void dumpenergytofile();
 	void writeheader();
 	void writeenergyheader();

@@ -14,13 +14,18 @@ else:
 	else:
 		filename = "output/" + sys.argv[1] + ".txt"
 
-savefile = sys.argv[2]
+savefile = None
+if len(sys.argv) > 2:
+	if sys.argv[2].endswith(".tex"):
+		savefile = "Figures/" + sys.argv[2].replace(".tex", "3D.tex")
+	else:
+		savefile = "Figures/" + sys.argv[2] + "3D.tex"
 
 names = []
 mass = []
 
 with open(filename, "r") as file:
-	for i in file.readline().split():
+	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
 		names.append(n.replace("_", " "))
 		mass.append(float(m))
@@ -28,6 +33,9 @@ with open(filename, "r") as file:
 r = np.loadtxt(filename, skiprows = 1)
 N = len(r)
 n = len(names)
+
+t = r[:,0]
+r = r[:,1:]
 
 # Reshape for better intuitive understanding of the positions. Axis: [planet, {x,y,z}, integration_step]
 r = r.reshape((N,n,3)).swapaxes(0,1).swapaxes(1,2)
@@ -54,8 +62,8 @@ normed_cm = np.linalg.norm(centreofmass, axis=0)
 
 print("Maximum deviation of centre of mass: %.2e Au" %(max(normed_cm)))
 
-# m = np.max(np.abs(r))
-m = 27
+m = np.max(np.abs(r))
+#m = 27
 fig = plt.figure()
 ax = p3.Axes3D(fig)
 
@@ -83,6 +91,7 @@ ax.set_ylim(-m,m)
 ax.set_zlim(-m,m)
 ax.set_aspect("equal")
 # ax.view_init(90)
-tikz_save("Figures/" + savefile +".tex", figureheight="\\figureheight", figurewidth="\\figureheight")
+if savefile:
+	tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
 
 plt.show()

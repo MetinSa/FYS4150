@@ -127,7 +127,7 @@ void SolarSystem::extractor(std::vector<double> &vec, std::istringstream &ss)
 
 
 
-void SolarSystem::dumptofile()
+void SolarSystem::dumptofile(double t)
 {
 
 	// Writing the position of the objects to file instead of saving the information in arrays
@@ -135,6 +135,7 @@ void SolarSystem::dumptofile()
 	std::string path = "output/";
 	std::ofstream outfile;
 	outfile.open(path+name, std::ios_base::app);
+	outfile << t << " ";
 
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -186,6 +187,9 @@ void SolarSystem::writeheader()
 	std::string path = "output/";
 
 	std::ofstream outfile(path+name);
+
+	outfile << "time" << " ";
+
 	for (int i = 0; i < objects.size(); i++)
 	{
 		outfile << objects[i].name << "||" << objects[i].mass << " ";

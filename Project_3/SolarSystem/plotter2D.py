@@ -16,13 +16,19 @@ else:
 	else:
 		filename = "output/" + sys.argv[1] + ".txt"
 
-savefile = sys.argv[2]
+
+savefile = None
+if len(sys.argv) > 2:
+	if sys.argv[2].endswith(".tex"):
+		savefile = "Figures/" + sys.argv[2]
+	else:
+		savefile = "Figures/" + sys.argv[2] + ".tex"
 
 names = []
 mass = []
 
 with open(filename, "r") as file:
-	for i in file.readline().split():
+	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
 		names.append(n)
 		mass.append(float(m))
@@ -30,6 +36,9 @@ with open(filename, "r") as file:
 r = np.loadtxt(filename, skiprows = 1)
 N = len(r)
 n = len(names)
+
+t = r[:,0]
+r = r[:,1:]
 
 # Reshape for better intuitive understanding of the positions. Axis: [planet, {x,y,z}, integration_step]
 r = r.reshape((N,n,3)).swapaxes(0,1).swapaxes(1,2)
@@ -52,5 +61,6 @@ plt.xlabel('x-position [AU]')
 plt.ylabel('y-position [AU]')
 plt.legend(loc = "upper right")
 plt.axis("equal")
-tikz_save("Figures/" + savefile +".tex", figureheight="\\figureheight", figurewidth="\\figureheight")
+if savefile:
+	tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
 plt.show()

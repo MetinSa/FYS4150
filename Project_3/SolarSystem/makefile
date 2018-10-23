@@ -21,11 +21,15 @@ $(BUILDDIR)/%.o:	$(SRCDIR)/%.$(SRCEXT)
 
 clean:
 					@echo " Cleaning..."; 
-					$(RM) $(OBJECTS) $(TARGET)
+					$(RM) $(OBJECTS)
+					
+cleanall:
+					@echo " Cleaning..."; 
+					$(RM) $(OBJECTS) $(TARGET) test.x
 					
 cleantest:
 					@echo " Cleaning..."; 
-					$(RM) -r test.x
+					$(RM) test.x
 
 
 # Tests

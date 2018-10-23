@@ -172,7 +172,7 @@ void SolarSystem::dumpenergytofile()
   }
 
 	for (int i = 0; i < smallobjects.size(); i++){
-		Ek += objects[i].KineticEnergy();
+		Ek += smallobjects[i].KineticEnergy();
 	}
 
 

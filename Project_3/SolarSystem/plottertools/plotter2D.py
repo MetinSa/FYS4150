@@ -51,11 +51,22 @@ colours = {"Sun":"gold", "Mercury":"silver", "Venus":"goldenrod", "Moon":"gray",
 			"Saturn":"palegoldenrod", "Uranus":"powderblue", "Neptune":"deepskyblue",
 			"Pluto":"chocolate"}
 
-k = 10
+# Using distinct colours for objects not predefined
+num_col = len([i for i in names if i not in colours.keys()])
+k = len([i for i in names if i in colours.keys()])
+
+
+def colourpicker(i):
+	if names[i] in colours.keys():
+		return colours[names[i]]
+	else:
+		return plt.cm.rainbow((i-k)/(num_col))
+
+j = 10
 
 for i in range(n):
-	plt.plot(r[i,0,::k], r[i,1,::k], color=colours[names[i]], label = names[i] )
-	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colours[names[i]])
+	plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
+	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
 plt.grid()
 plt.xlabel('x-position [AU]')
 plt.ylabel('y-position [AU]')

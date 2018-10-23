@@ -38,6 +38,6 @@ int main(int argc, char *argv[]){
 	// planetary_system.dumpenergytofile();
 
 
-	// return 0;
+	return 0;
 
 }

@@ -1,35 +1,36 @@
-# General makefile for c++ - choose PROG =   name of given program
+CC := c++
 
-# Here we define compiler option, libraries and the  target
-CPPflags = c++ -O3 -std=c++17
+SRCDIR := src
+BUILDDIR := build
+TARGET := run.x
+ 
+SRCEXT := cpp
+SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+CPPFLAGS := -O3 -std=c++17
+LIB := -L lib -larmadillo -llapack -lblas
+INC := -I include
 
-# Here we define the library functions we nee
-LIB = -larmadillo -llapack -lblas
+$(TARGET):			$(OBJECTS)
+					@echo " Linking..."
+					$(CC) $^ -o $(TARGET) $(LIB)
 
-# Here we define the name of the executable
-PROG = run.x
+$(BUILDDIR)/%.o:	$(SRCDIR)/%.$(SRCEXT)
+					@mkdir -p $(BUILDDIR)
+					$(CC) $(CPPFLAGS) $(INC) -c -o $@ $<
 
-
-${PROG} :			main.o  vec3.o PlanetaryBody.o Gravity.o SolarSystem.o Solver.o SmallObject.o
-					${CPPflags} main.o vec3.o PlanetaryBody.o Gravity.o SolarSystem.o Solver.o SmallObject.o -o ${PROG} ${LIB}
-
-main.o :			main.cpp functions.h
-					${CPPflags} -c main.cpp
-
-vec3.o :			vec3.cpp vec3.h
-					${CPPflags} -c vec3.cpp
-
-PlanetaryBody.o :	PlanetaryBody.cpp PlanetaryBody.h
-					${CPPflags} -c PlanetaryBody.cpp
-
-Gravity.o :			Gravity.cpp Gravity.h
-					${CPPflags} -c Gravity.cpp
-
-SolarSystem.o :		SolarSystem.cpp SolarSystem.h
-					${CPPflags} -c SolarSystem.cpp
-
-Solver.o :  		Solver.cpp Solver.h
-					${CPPflags} -c Solver.cpp
+clean:
+					@echo " Cleaning..."; 
+					$(RM) $(OBJECTS) $(TARGET)
 					
-SmallObject.o : 	SmallObject.cpp SmallObject.h
-					${CPPflags} -c SmallObject.cpp	        	
+cleantest:
+					@echo " Cleaning..."; 
+					$(RM) -r test.x
+
+
+# Tests
+test.x:
+					$(CC) $(CPPFLAGS) test/test.cpp $(INC) $(LIB) -o test.x
+
+
+.PHONY: clean

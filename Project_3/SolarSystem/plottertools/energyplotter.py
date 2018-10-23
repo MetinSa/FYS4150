@@ -1,3 +1,4 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -15,21 +16,31 @@ if len(sys.argv) < 2:
 	sys.exit()
 else:
 	if sys.argv[1].endswith(".txt"):
-		filename = "../output/" + sys.argv[1]
+		filename = "output/" + sys.argv[1]
 	else:
-		filename = "../output/" + sys.argv[1] + ".txt"
+		filename = "output/" + sys.argv[1] + ".txt"
 
 
-Ek, Ep = (np.loadtxt(filename, unpack=True))
+Ek, Ep, momentum = (np.loadtxt(filename, unpack=True))
 
 years = np.linspace(0,10,len(Ek))
 
-plt.plot(years,Ek, color='blue', label='Total kinetic energy')
-plt.plot(years,Ep, color='magenta', label='Total potential energy')
-plt.plot(years,Ek+Ep, color='teal', label=r'Total energy ($E_k + E_p$)')
+plt.figure()
+plt.plot(years, Ek, color='blue', label='Total kinetic energy')
+plt.plot(years, Ep, color='magenta', label='Total potential energy')
+plt.plot(years, Ek+Ep, color='teal', label=r'Total energy ($E_k + E_p$)')
 plt.grid()
 plt.xlabel('Time [years]')
-plt.ylabel('Energy')
+plt.ylabel(r'Energy [$M_{sun} (AU/yr)^2$]')
+plt.legend()
+#tikz_save("Figures/figure.tex", figureheight='\\figureheight', figurewidth='\\figurewidth')
+
+
+plt.figure()
+plt.plot(years, momentum, color='blue')
+plt.grid()
+plt.xlabel('Time [years]')
+plt.ylabel(r'Total angular momentum per mass [$AU^2/yr$]')
 plt.legend()
 #tikz_save("Figures/figure.tex", figureheight='\\figureheight', figurewidth='\\figurewidth')
 plt.show()

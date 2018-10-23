@@ -32,18 +32,22 @@ r = r[:,1:]
 # Reshape for better intuitive understanding of the positions. Axis: [planet, {x,y,z}, integration_step]
 r = r.reshape((N,n,3)).swapaxes(0,1).swapaxes(1,2)
 
-dist = np.linalg.norm(r[1], axis = 0)
-index = find_peaks(-dist, width=10)[0]
+print("Read in %i lines" %(N))
 
-perang = np.degrees(np.arctan(r[1,1,index]/r[1,0,index]))
+dist = np.linalg.norm(r[1], axis = 0)
+index = find_peaks(-dist, width=100, height = -0.307550)[0]
+
+perang = np.degrees(np.arctan(r[1,1,index]/r[1,0,index]))*3600
 
 test = True
 
 c = 100
 
+index[0] = 0
+
 for i in range(len(index)):
 	if t[index[i]] >= c:
-		print((perang[i] - perang[0])*100/c, "per century after %i years" %c)
+		print((perang[i] - perang[0])*100/t[index[i]], "per century after %.2f years" %(t[index[i]]))
 		c += 100
 
 """

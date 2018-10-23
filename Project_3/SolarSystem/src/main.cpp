@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
 		systemname = argv[1];
 		years = atof(argv[2]);
 		dt = atof(argv[3]);
-		writeevery = atoi(argv[4]);
+		writeevery = atof(argv[4]);
 	}
 	else
 	{

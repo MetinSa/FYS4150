@@ -111,7 +111,7 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
 
 	t += dt;
     // Writing information to file instead of saving the arrays
-    if (j%SaveEvery == 0)
+    if (j%SaveEvery == 0 or (((t > 99.85 and t < 100.15) or (t > 199.85 and t < 200.15)) and j%2 == 0))
     {
     	system->dumpenergytofile();
     	system->dumptofile(t);

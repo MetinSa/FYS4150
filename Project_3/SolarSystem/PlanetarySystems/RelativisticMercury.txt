@@ -1,0 +1,8 @@
+Name Sun Mercury
+x 0 0.3075
+y 0 0
+z 0 0
+vx 0 0
+vy 0 12.44
+vz 0 0
+mass 1 1.66012e-7

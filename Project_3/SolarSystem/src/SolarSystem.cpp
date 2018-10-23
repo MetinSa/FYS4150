@@ -171,9 +171,9 @@ void SolarSystem::dumpenergytofile()
     Ep -= gravityForces[i].PotentialEnergy();
   }
 
-	for (int i = 0; i < smallobjects.size(); i++){
-		Ek += smallobjects[i].KineticEnergy();
-	}
+	// for (int i = 0; i < smallobjects.size(); i++){
+	// 	Ek += smallobjects[i].KineticEnergy();
+	// }
 
 
 	outfile <<  Ek << " " << Ep << " ";

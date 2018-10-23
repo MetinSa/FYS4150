@@ -6,12 +6,12 @@ import sys
 
 
 if len(sys.argv) < 2:
-	filename = "output/" + "RelativisticMercury.txt"
+	filename = "../output/" + "RelativisticMercury.txt"
 else:
 	if sys.argv[1].endswith(".txt"):
-		filename = "output/" + sys.argv[1]
+		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".txt"
 
 names = []
 mass = []

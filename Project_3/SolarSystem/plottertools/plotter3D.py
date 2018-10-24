@@ -84,7 +84,7 @@ print (np.shape(r))
 
 for i in range(n):
 	line, = ax.plot(r[i,0,::j], r[i,1,::j], r[i,2,::j], color=colourpicker(i))
-	dot,  = ax.plot([r[i,0,0]], [r[i,1,0]], [r[i,2,0]], "o", markeredgecolor="k", color=colourpicker(i))
+	dot,  = ax.plot([r[i,0,-1]], [r[i,1,-1]], [r[i,2,-1]], "o", markeredgecolor="k", color=colourpicker(i))
 	lines.append(line)
 	dots.append(dot)
 

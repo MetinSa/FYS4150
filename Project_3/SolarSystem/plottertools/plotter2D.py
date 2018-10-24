@@ -67,15 +67,10 @@ def colourpicker(i):
 j = 1
 
 for i in range(n):
-	# plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
-	if names[i] == "Jupiter":
-		plt.plot(r[i,0,::j], r[i,1,::j], color="chocolate", label = names[i] )
-		plt.plot(r[i,0][-1], r[i,1][-1], 'o', markersize = 8, markeredgecolor="k" , color="chocolate")#colourpicker(i))
-	else:
-		plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
-		plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
 
-	# plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
+	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
+	plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
+
 
 plt.grid()
 plt.xlabel('x-position [AU]')

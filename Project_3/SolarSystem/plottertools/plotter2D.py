@@ -11,10 +11,10 @@ if len(sys.argv) < 2:
 	print("Please provide filename and savefile in commandline")
 	sys.exit()
 else:
-	if sys.argv[1].endswith(".txt"):
+	if sys.argv[1].endswith(".bin"):
 		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "../output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".bin"
 
 
 savefile = None
@@ -27,15 +27,18 @@ if len(sys.argv) > 2:
 names = []
 mass = []
 
-with open(filename, "r") as file:
+with open(filename+".txt", "r") as file:
 	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
-		names.append(n)
+		names.append(n.replace("_", " "))
 		mass.append(float(m))
 
-r = np.loadtxt(filename, skiprows = 1)
-N = len(r)
+r = np.fromfile(filename)
+nn = len(r)
 n = len(names)
+N = int(nn/(3*n+1))
+
+r = r.reshape((N, 3*n+1))
 
 t = r[:,0]
 r = r[:,1:]
@@ -51,16 +54,30 @@ colours = {"Sun":"gold", "Mercury":"silver", "Venus":"goldenrod", "Moon":"gray",
 			"Saturn":"palegoldenrod", "Uranus":"powderblue", "Neptune":"deepskyblue",
 			"Pluto":"chocolate"}
 
-k = 10
+# Using distinct colours for objects not predefined
+num_col = len([i for i in names if i not in colours.keys()])
+k = len([i for i in names if i in colours.keys()])
+
+
+def colourpicker(i):
+	if names[i] in colours.keys():
+		return colours[names[i]]
+	else:
+		return plt.cm.rainbow((i-k)/(num_col))
+j = 1
 
 for i in range(n):
-	plt.plot(r[i,0,::k], r[i,1,::k], color=colours[names[i]], label = names[i] )
-	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colours[names[i]])
+
+	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
+	plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
+
+
 plt.grid()
 plt.xlabel('x-position [AU]')
 plt.ylabel('y-position [AU]')
 plt.legend(loc = "upper right")
 plt.axis("equal")
 if savefile:
-	tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
+	# tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
+	plt.savefig(savefile + ".pdf")
 plt.show()

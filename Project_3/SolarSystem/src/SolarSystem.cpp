@@ -41,7 +41,7 @@ SolarSystem::SolarSystem(std::string filename, bool isrelativistic)
 void SolarSystem::filereader(bool isrelativistic)
 {
 	// Reading in planetary information from file
-	std::ifstream infile("PlanetarySystems/" + name);
+	std::ifstream infile("PlanetarySystems/" + name + ".txt");
 	std::string line;
 
 	std::vector<std::string> names;
@@ -131,65 +131,57 @@ void SolarSystem::extractor(std::vector<double> &vec, std::istringstream &ss)
 
 
 
-void SolarSystem::dumptofile(double t)
+void SolarSystem::dumptofile(std::ofstream &outfile, double t)
 {
 
 	// Writing the position of the objects to file instead of saving the information in arrays
 
-	std::string path = "output/";
-	std::ofstream outfile;
-	outfile.open(path+name, std::ios_base::app);
-	outfile << t << " ";
+	//std::string path = "output/";
+	//std::ofstream outfile(path+name, std::ios_base::app);
+	outfile.write(reinterpret_cast<const char*> (&t), 1*sizeof(double));
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		outfile <<  objects[i].position[0] << " " << objects[i].position[1] << " " << objects[i].position[2] << " ";
+		outfile.write(reinterpret_cast<const char*> (objects[i].position.components), 3*sizeof(double));
 	}
 	for (int i = 0; i < smallobjects.size(); i++)
 	{
-		outfile <<  smallobjects[i].position[0] << " " << smallobjects[i].position[1] << " " << smallobjects[i].position[2] << " ";
+		outfile.write(reinterpret_cast<const char*> (smallobjects[i].position.components), 3*sizeof(double));
 	}
-	outfile << std::endl;
 
 }
 
-void SolarSystem::dumpenergytofile()
+void SolarSystem::dumpenergytofile(std::ofstream &outfile)
 {
 	double Ek;
 	double Ep;
-	double momentum;
-
-	std::string path = "output/";
-	std::string energystring = "energy";
-	std::ofstream outfile;
-	outfile.open(path+energystring+name, std::ios_base::app);
 
 	for (int i = 0; i < objects.size(); i++){
 		Ek += objects[i].KineticEnergy();
-		momentum += objects[i].AngularMomentum();
 	}
 
 	for (int i = 0; i < gravityForces.size(); i++){
     Ep -= gravityForces[i].PotentialEnergy();
   }
 
+	// for (int i = 0; i < smallobjects.size(); i++){
+	// 	Ek += smallobjects[i].KineticEnergy();
+	// }
 
-	outfile <<  Ek << " " << Ep << " " << momentum << " ";
+
+	outfile <<  Ek << " " << Ep << " ";
 	outfile << std::endl;
 
 	Ek = 0;
 	Ep = 0;
-	momentum = 0;
 
 }
 
-void SolarSystem::writeheader()
+void SolarSystem::writeheader(std::ofstream &outfile)
 {
 
 	// Writing a header with the name of the objects
-	std::string path = "output/";
 
-	std::ofstream outfile(path+name);
 
 	outfile << "time" << " ";
 
@@ -203,6 +195,7 @@ void SolarSystem::writeheader()
 	}
 	outfile << std::endl;
 
+
 }
 
 void SolarSystem::writeenergyheader()
@@ -210,7 +203,7 @@ void SolarSystem::writeenergyheader()
 
 	// Writing a header with the name of the objects
 	std::string path = "output/";
-  std::string energystring = "energy";
+	std::string energystring = "energy";
 
 	std::ofstream outfile(path+energystring+name);
 }

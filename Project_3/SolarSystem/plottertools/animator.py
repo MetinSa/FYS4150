@@ -12,10 +12,10 @@ if len(sys.argv) < 2:
 	print("Please provide filename in commandline")
 	sys.exit()
 else:
-	if sys.argv[1].endswith(".txt"):
+	if sys.argv[1].endswith(".bin"):
 		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "../output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".bin"
 
 if len(sys.argv) > 2:
 	try:
@@ -28,15 +28,18 @@ else:
 names = []
 mass = []
 
-with open(filename, "r") as file:
+with open(filename+".txt", "r") as file:
 	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
 		names.append(n.replace("_", " "))
 		mass.append(float(m))
 
-r = np.loadtxt(filename, skiprows = 1)
-N = len(r)
+r = np.fromfile(filename)
+nn = len(r)
 n = len(names)
+N = int(nn/(3*n+1))
+
+r = r.reshape((N, 3*n+1))
 
 t = r[:,0]
 r = r[:,1:]

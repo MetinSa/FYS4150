@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
 
 
 	// Setting up the system
-	bool relativistic = true;
+	bool relativistic = false;
 	SolarSystem planetary_system(systemname, relativistic);
 
 	// Integrating the system using desired method

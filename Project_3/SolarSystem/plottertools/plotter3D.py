@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
-from matplotlib2tikz import save as tikz_save
+# from matplotlib2tikz import save as tikz_save
 import sys
 
 
@@ -21,6 +21,11 @@ if len(sys.argv) > 2:
 	else:
 		savefile = "../Figures/" + sys.argv[2] + "3D.tex"
 
+	if sys.argv[2].endswith(".pdf"):
+		savefile = "../Figures/" + sys.argv[2].replace(".pdf", "3D.pdf")
+	else:
+		savefile = "../Figures/" + sys.argv[2] + "3D.pdf"
+
 names = []
 mass = []
 
@@ -31,6 +36,7 @@ with open(filename, "r") as file:
 		mass.append(float(m))
 
 r = np.loadtxt(filename, skiprows = 1)
+print(np.shape(r))
 N = len(r)
 n = len(names)
 
@@ -63,21 +69,29 @@ normed_cm = np.linalg.norm(centreofmass, axis=0)
 print("Maximum deviation of centre of mass: %.2e Au" %(max(normed_cm)))
 
 m = np.max(np.abs(r))
-#m = 27
+# m = 30
 fig = plt.figure()
 ax = p3.Axes3D(fig)
 
 lines = []
 dots = []
 
-k = 100
+j = 1
+print (np.shape(r))
 
 for i in range(n):
-	line, = ax.plot(r[i,0,::k], r[i,1,::k], r[i,2,::k], color=colourpicker(i))
+	line, = ax.plot(r[i,0,::j], r[i,1,::j], r[i,2,::j], color=colourpicker(i))
 	dot,  = ax.plot([r[i,0,0]], [r[i,1,0]], [r[i,2,0]], "o", markeredgecolor="k", color=colourpicker(i))
 	lines.append(line)
 	dots.append(dot)
 
+x = r[1,0,0]
+y = r[1,1,0]
+z = r[1,2,0]
+a = 0.005
+ax.set_xlim(x-a,x+a)
+ax.set_ylim(y-a,y+a)
+ax.set_zlim(z-a,z+3*a)
 
 
 fig.legend(dots, names,loc = "upper left")
@@ -86,12 +100,13 @@ ax.grid()
 ax.set_xlabel('x-position [AU]')
 ax.set_ylabel('y-position [AU]')
 ax.set_zlabel('z-position [AU]')
-ax.set_xlim(-m,m)
-ax.set_ylim(-m,m)
-ax.set_zlim(-m,m)
+# ax.set_xlim(-m,m)
+# ax.set_ylim(-m,m)
+# ax.set_zlim(-m,m)
 ax.set_aspect("equal")
-# ax.view_init(90)
+ax.view_init(18,140)
 if savefile:
-	tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
+	plt.savefig(savefile)
+	# tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
 
 plt.show()

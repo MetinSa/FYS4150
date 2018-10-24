@@ -16,15 +16,18 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
   std::string name = "Forward Euler";
 
   std::string path = "output/";
-  std::ofstream outfile(path+system->name, std::ofstream::binary);
+  std::ofstream outfile(path+system->name+".bin", std::ofstream::binary);
   std::ofstream headeroutfile(path+system->name+".bin.txt");
 
   system->writeheader(headeroutfile);
+  headeroutfile.close();
   system->dumptofile(outfile, t);
-  system->writeheader(headeroutfile);
-  system->writeenergyheader();
-  system->dumptofile(outfile, t);
-  system->dumpenergytofile();
+
+  std::string energystring = "energy";
+  std::ofstream energyoutfile;
+  energyoutfile.open(path+energystring+system->name+".txt");
+
+  system->dumpenergytofile(energyoutfile);
 
   // Printing information about the Integration
   printPreIntegration(dt, Tfinal, name);
@@ -52,18 +55,22 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
     	system->smallobjects[i].position += system->smallobjects[i].velocity * dt;
         };
 
+
+
+
 	t += dt;
     // Writing information to file instead of saving the arrays
     if (j%SaveEvery == 0)
     {
-    	system->dumpenergytofile();
+    	system->dumpenergytofile(energyoutfile);
     	system->dumptofile(outfile, t);
     }
 
 
     j += 1;
   }
-
+  outfile.close();
+  energyoutfile.close();
   clock_t stop = clock();
   double totalTime = double (stop-start)/CLOCKS_PER_SEC;
   printPostIntegration(totalTime);
@@ -83,8 +90,11 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
   headeroutfile.close();
   system->dumptofile(outfile, t);
 
-  //system->writeenergyheader();
-  //system->dumpenergytofile();
+  std::string energystring = "energy";
+  std::ofstream energyoutfile;
+  energyoutfile.open(path+energystring+system->name+".txt");
+
+  system->dumpenergytofile(energyoutfile);
 
   printPreIntegration(dt, Tfinal, name);
 
@@ -126,7 +136,7 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
     // Writing information to file instead of saving the arrays
     if (j%SaveEvery == 0)
     {
-    	//system->dumpenergytofile();
+    	system->dumpenergytofile(energyoutfile);
     	system->dumptofile(outfile, t);
     }
     if (t/Tfinal > printcheck)
@@ -142,6 +152,7 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
 
   }
   outfile.close();
+  energyoutfile.close();
   clock_t stop = clock();
   double totalTime = double (stop-start)/CLOCKS_PER_SEC;
   printPostIntegration(totalTime);

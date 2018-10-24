@@ -12,10 +12,10 @@ if len(sys.argv) < 2:
 	print("Please provide filename in commandline")
 	sys.exit()
 else:
-	if sys.argv[1].endswith(".txt"):
+	if sys.argv[1].endswith(".bin"):
 		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "../output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".bin"
 
 if len(sys.argv) > 2:
 	try:

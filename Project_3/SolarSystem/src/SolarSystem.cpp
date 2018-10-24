@@ -151,15 +151,10 @@ void SolarSystem::dumptofile(std::ofstream &outfile, double t)
 
 }
 
-void SolarSystem::dumpenergytofile()
+void SolarSystem::dumpenergytofile(std::ofstream &outfile)
 {
 	double Ek;
 	double Ep;
-
-	std::string path = "output/";
-	std::string energystring = "energy";
-	std::ofstream outfile;
-	outfile.open(path+energystring+name);
 
 	for (int i = 0; i < objects.size(); i++){
 		Ek += objects[i].KineticEnergy();
@@ -208,7 +203,7 @@ void SolarSystem::writeenergyheader()
 
 	// Writing a header with the name of the objects
 	std::string path = "output/";
-  std::string energystring = "energy";
+	std::string energystring = "energy";
 
 	std::ofstream outfile(path+energystring+name);
 }

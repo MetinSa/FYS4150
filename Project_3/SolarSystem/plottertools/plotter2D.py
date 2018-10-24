@@ -11,10 +11,10 @@ if len(sys.argv) < 2:
 	print("Please provide filename and savefile in commandline")
 	sys.exit()
 else:
-	if sys.argv[1].endswith(".txt"):
+	if sys.argv[1].endswith(".bin"):
 		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "../output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".bin"
 
 
 savefile = None
@@ -27,15 +27,18 @@ if len(sys.argv) > 2:
 names = []
 mass = []
 
-with open(filename, "r") as file:
+with open(filename+".txt", "r") as file:
 	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
-		names.append(n)
+		names.append(n.replace("_", " "))
 		mass.append(float(m))
 
-r = np.loadtxt(filename, skiprows = 1)
-N = len(r)
+r = np.fromfile(filename)
+nn = len(r)
 n = len(names)
+N = int(nn/(3*n+1))
+
+r = r.reshape((N, 3*n+1))
 
 t = r[:,0]
 r = r[:,1:]
@@ -62,7 +65,7 @@ def colourpicker(i):
 	else:
 		return plt.cm.rainbow((i-k)/(num_col))
 j = 1
-plt.figure(figsize=(5, 5))
+
 for i in range(n):
 	# plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
 	if names[i] == "Jupiter":
@@ -78,13 +81,7 @@ plt.grid()
 plt.xlabel('x-position [AU]')
 plt.ylabel('y-position [AU]')
 plt.legend(loc = "upper right")
-# plt.axis("equal")
-x = r[1,0,-1]
-y = r[1,1,-1]
-# z = r[1,2,0]
-a = 0.015
-plt.xlim(x-3.5*a,x+a)
-plt.ylim(y-a,y+2*a)
+plt.axis("equal")
 if savefile:
 	# tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
 	plt.savefig(savefile + ".pdf")

@@ -9,10 +9,10 @@ if len(sys.argv) < 2:
 	print("Please provide filename in commandline")
 	sys.exit()
 else:
-	if sys.argv[1].endswith(".txt"):
+	if sys.argv[1].endswith(".bin"):
 		filename = "../output/" + sys.argv[1]
 	else:
-		filename = "../output/" + sys.argv[1] + ".txt"
+		filename = "../output/" + sys.argv[1] + ".bin"
 
 savefile = None
 if len(sys.argv) > 2:
@@ -29,16 +29,19 @@ if len(sys.argv) > 2:
 names = []
 mass = []
 
-with open(filename, "r") as file:
+with open(filename+".txt", "r") as file:
 	for i in file.readline().split()[1:]:
 		n, m = i.split("||")
 		names.append(n.replace("_", " "))
 		mass.append(float(m))
 
-r = np.loadtxt(filename, skiprows = 1)
-print(np.shape(r))
-N = len(r)
+
+r = np.fromfile(filename)
+nn = len(r)
 n = len(names)
+N = int(nn/(3*n+1))
+
+r = r.reshape((N, 3*n+1))
 
 t = r[:,0]
 r = r[:,1:]
@@ -85,13 +88,14 @@ for i in range(n):
 	lines.append(line)
 	dots.append(dot)
 
-x = r[1,0,0]
-y = r[1,1,0]
-z = r[1,2,0]
-a = 0.005
-ax.set_xlim(x-a,x+a)
-ax.set_ylim(y-a,y+a)
-ax.set_zlim(z-a,z+3*a)
+# Jovian System spesifics
+# x = r[1,0,0]
+# y = r[1,1,0]
+# z = r[1,2,0]
+# a = 0.005
+# ax.set_xlim(x-a,x+a)
+# ax.set_ylim(y-a,y+a)
+# ax.set_zlim(z-a,z+3*a)
 
 
 fig.legend(dots, names,loc = "upper left")
@@ -100,11 +104,11 @@ ax.grid()
 ax.set_xlabel('x-position [AU]')
 ax.set_ylabel('y-position [AU]')
 ax.set_zlabel('z-position [AU]')
-# ax.set_xlim(-m,m)
-# ax.set_ylim(-m,m)
-# ax.set_zlim(-m,m)
+ax.set_xlim(-m,m)
+ax.set_ylim(-m,m)
+ax.set_zlim(-m,m)
 ax.set_aspect("equal")
-ax.view_init(18,140)
+# ax.view_init(18,140)
 if savefile:
 	plt.savefig(savefile)
 	# tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")

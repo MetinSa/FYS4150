@@ -15,9 +15,15 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
   double t = 0;
   std::string name = "Forward Euler";
 
-  system->writeheader();
+  std::string path = "output/";
+  std::ofstream outfile(path+system->name, std::ofstream::binary);
+  std::ofstream headeroutfile(path+system->name+".bin.txt");
+
+  system->writeheader(headeroutfile);
+  system->dumptofile(outfile, t);
+  system->writeheader(headeroutfile);
   system->writeenergyheader();
-  system->dumptofile(t);
+  system->dumptofile(outfile, t);
   system->dumpenergytofile();
 
   // Printing information about the Integration
@@ -51,7 +57,7 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
     if (j%SaveEvery == 0)
     {
     	system->dumpenergytofile();
-    	system->dumptofile(t);
+    	system->dumptofile(outfile, t);
     }
 
 
@@ -68,10 +74,17 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
   double t = 0;
   std::string name = "Velocity Verlet";
 
-  system->writeheader();
-  system->writeenergyheader();
-  system->dumptofile(t);
-  system->dumpenergytofile();
+
+  std::string path = "output/";
+  std::ofstream outfile(path+system->name+".bin", std::ofstream::binary);
+  std::ofstream headeroutfile(path+system->name+".bin.txt");
+
+  system->writeheader(headeroutfile);
+  headeroutfile.close();
+  system->dumptofile(outfile, t);
+
+  //system->writeenergyheader();
+  //system->dumpenergytofile();
 
   printPreIntegration(dt, Tfinal, name);
 
@@ -111,10 +124,10 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
 
 	t += dt;
     // Writing information to file instead of saving the arrays
-    if (j%SaveEvery == 0 or (((t > 99.85 and t < 100.15) or (t > 199.85 and t < 200.15)) and j%2 == 0))
+    if (j%SaveEvery == 0)
     {
-    	system->dumpenergytofile();
-    	system->dumptofile(t);
+    	//system->dumpenergytofile();
+    	system->dumptofile(outfile, t);
     }
     if (t/Tfinal > printcheck)
     {
@@ -125,11 +138,10 @@ void Solver::velocityVerlet(double dt, double Tfinal, int SaveEvery)
     	printcheck += 0.05;
 
     }
-
     j += 1;
 
   }
-
+  outfile.close();
   clock_t stop = clock();
   double totalTime = double (stop-start)/CLOCKS_PER_SEC;
   printPostIntegration(totalTime);

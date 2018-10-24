@@ -25,7 +25,7 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
 
   std::string energystring = "energy";
   std::ofstream energyoutfile;
-  energyoutfile.open(path+energystring+name+".txt");
+  energyoutfile.open(path+energystring+system->name+".txt");
 
   system->dumpenergytofile(energyoutfile);
 

@@ -61,17 +61,31 @@ def colourpicker(i):
 		return colours[names[i]]
 	else:
 		return plt.cm.rainbow((i-k)/(num_col))
-
-j = 10
-
+j = 1
+plt.figure(figsize=(5, 5))
 for i in range(n):
-	plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
-	plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
+	# plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
+	if names[i] == "Jupiter":
+		plt.plot(r[i,0,::j], r[i,1,::j], color="chocolate", label = names[i] )
+		plt.plot(r[i,0][-1], r[i,1][-1], 'o', markersize = 8, markeredgecolor="k" , color="chocolate")#colourpicker(i))
+	else:
+		plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
+		plt.plot(r[i,0,::j], r[i,1,::j], color=colourpicker(i), label = names[i] )
+
+	# plt.plot(r[i,0][-1], r[i,1][-1], 'o', markeredgecolor="k" , color=colourpicker(i))
+
 plt.grid()
 plt.xlabel('x-position [AU]')
 plt.ylabel('y-position [AU]')
 plt.legend(loc = "upper right")
-plt.axis("equal")
+# plt.axis("equal")
+x = r[1,0,-1]
+y = r[1,1,-1]
+# z = r[1,2,0]
+a = 0.015
+plt.xlim(x-3.5*a,x+a)
+plt.ylim(y-a,y+2*a)
 if savefile:
-	tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
+	# tikz_save(savefile, figureheight="\\figureheight", figurewidth="\\figureheight")
+	plt.savefig(savefile + ".pdf")
 plt.show()

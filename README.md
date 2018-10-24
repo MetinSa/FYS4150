@@ -15,3 +15,6 @@ Solving Poisson's equation in one dimension with spherical symmetry using the tr
 
 ## Project 2
 Solving Schrödinger's equation as an eigenvalue problem by using Jacobi's rotation algortihm. The project description can be found [here](https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Projects/2018/Project2/pdf/Project2.pdf)
+
+## Project 3
+Simulating the Solar System using primarly the velocity Verlet method to calculate the planetary orbits. The project description can be found [here](https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Projects/2018/Project3/pdf/Project3.pdf)

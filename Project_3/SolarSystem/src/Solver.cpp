@@ -55,6 +55,9 @@ void Solver::forwardEuler(double dt, double Tfinal, int SaveEvery)
     	system->smallobjects[i].position += system->smallobjects[i].velocity * dt;
         };
 
+
+
+
 	t += dt;
     // Writing information to file instead of saving the arrays
     if (j%SaveEvery == 0)

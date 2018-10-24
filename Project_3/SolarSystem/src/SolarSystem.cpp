@@ -155,25 +155,24 @@ void SolarSystem::dumpenergytofile(std::ofstream &outfile)
 {
 	double Ek;
 	double Ep;
+	double momentum;
+	Ek = 0;
+	Ep = 0;
+	momentum = 0;
 
 	for (int i = 0; i < objects.size(); i++){
 		Ek += objects[i].KineticEnergy();
+		momentum += objects[i].AngularMomentum();
 	}
 
 	for (int i = 0; i < gravityForces.size(); i++){
     Ep -= gravityForces[i].PotentialEnergy();
   }
 
-	// for (int i = 0; i < smallobjects.size(); i++){
-	// 	Ek += smallobjects[i].KineticEnergy();
-	// }
-
-
-	outfile <<  Ek << " " << Ep << " ";
+	outfile <<  Ek << " " << Ep << " " << momentum << " ";
 	outfile << std::endl;
 
-	Ek = 0;
-	Ep = 0;
+
 
 }
 

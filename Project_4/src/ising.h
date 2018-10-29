@@ -22,7 +22,7 @@ private:
 
 	arma::mat lattice;
 	arma::vec expectation_values;
-	arma::vec delta_energies;
+	arma::vec energy_difference;
 
 //  ======================
 //  Quantities of interest
@@ -64,5 +64,9 @@ public:
 
 	// Initiallizing the system
 	void InitializeLattice(double temperature);
+
+	// Monte Carlo integration
+	void MonteCarloSample(int N);
+
 
 };

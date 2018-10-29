@@ -10,7 +10,7 @@ Ising::Ising(int dimension_of_lattice)
 	number_of_spins = dimension_of_lattice*dimension_of_lattice;
 	lattice = arma::mat(dimension_of_lattice, dimension_of_lattice);
 	expectation_values = arma::vec(5);
-	delta_energies = arma::vec(17);
+	energy_difference = arma::vec(17);
 
 
 	// Energy
@@ -44,12 +44,12 @@ void Ising::InitializeLattice(double temperature)
 	// Precomputing possible energies
 	for (int i = -8; i <= 8; i++)
 	{
-		delta_energies(i+8) = 0;
+		energy_difference(i+8) = 0;
 	}
 
 	for (int i = -8; i <= 8; i += 4)
 	{
-		delta_energies(i+8) = exp(-i/temperature);
+		energy_difference(i+8) = exp(-i/temperature);
 	}
 
 	// Initializing spin directions randomly
@@ -73,22 +73,48 @@ void Ising::InitializeLattice(double temperature)
 					  lattice(i, PBC(j, dimension_of_lattice, -1)));
 		}
 	}
-	lattice.print("lattice: ");
-	std::cout << "magnetization: " <<magnetization << std::endl;
+
+	// lattice.print("lattice: ");
+	// std::cout << "magnetization: " <<magnetization << std::endl;
 }
 
-
-int Ising::PBC(int index, int limit, int offset)
+void Ising::MonteCarloSample(int N)
 {
-	// Periodic boundary conditions, returns the index of the requested neighbour.
+	// Starts the Monte Carlo samping of the Ising-model for N mc-cycles.
 
-	return (index + limit  + offset) % limit;
+	number_of_mc_cycles = N;
+
+	for (int i = 0; i < N; i++)
+	{
+		Metropolis();
+		expectation_values(0) += energy;
+		expectation_values(1) += energy * energy;
+		expectation_values(2) += magnetization;
+		expectation_values(3) += magnetization * magnetization;
+		expectation_values(4) += fabs(magnetization);
+	}
+
+	// normalizing the expectation values
+	double norm = 1 / ((double) N);
+	expectation_values *= norm;
+	
+	// Variance calculations
+	energy_variance = (expectation_values(1) - expectation_values(0)*expectation_values(0)) / number_of_spins;
+	susceptibility = (expectation_values(3) - expectation_values(2)*expectation_values(2)) / (number_of_spins * temperature);
+
+	// Physical quantities
+	mean_energy = expectation_values(0) / number_of_spins;
+	mean_magnetization = expectation_values(2) / number_of_spins;
+	specific_heat = energy_variance / (temperature*temperature);
+	mean_absoloute_magnetization = expectation_values(4) / number_of_spins;
+
+	std::cout << mean_energy << std::endl
+	<< susceptibility << std::endl << specific_heat << std::endl <<  mean_absoloute_magnetization << std::endl;
 }
-
 
 void Ising::Metropolis()
 {
-	// Metropolis montecarlo method
+	// Metropolis method
 
 	for (int i = 0; i < number_of_spins; i++)
 		{
@@ -100,7 +126,7 @@ void Ising::Metropolis()
 			double rand_condition = rand() * 1./ RAND_MAX;
 
 			// Update variables if metropolis condition is met
-			if (rand_condition <= delta_energies(delta_e + 8))
+			if (rand_condition <= energy_difference(delta_e + 8))
 			{
 				lattice(rand_x, rand_y) *= -1;
 				magnetization += 2 * lattice(rand_x, rand_y);
@@ -128,6 +154,12 @@ double Ising::getEnergy(int x, int y)
 }
 
 
+int Ising::PBC(int index, int limit, int offset)
+{
+	// Periodic boundary conditions, returns the index of the requested neighbour.
+
+	return (index + limit  + offset) % limit;
+}
 
 
 

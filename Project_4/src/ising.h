@@ -2,7 +2,7 @@
 #include <string>
 
 
-class ising
+class Ising
 {
 	//  
 	//  Ising model
@@ -45,10 +45,25 @@ private:
 //  =======
 
 	// Periodic boundary conditions index
-	int PBC();
+	int PBC(int index, int limit, int offset);
 
 	// The metropolis algorithm
-	void metropolis();
+	void Metropolis();
+
+	// Extracting energy
+	double getEnergy(int x, int y);
+
+public:
+
+	//  =======
+	//  Methods
+	//  =======
+
+	// constructor
+	ising(int dimension_of_lattice);
+
+	// void initialize_system()
+
 
 
 }

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-ising::ising(int dimension_of_lattice)
+Ising::Ising(int dimension_of_lattice)
 {
 	// Initializing system properties
 	this->dimension_of_lattice = dimension_of_lattice;
@@ -28,7 +28,7 @@ ising::ising(int dimension_of_lattice)
 
 };
 
-int ising::PBC(int index, int limit, int offset)
+int Ising::PBC(int index, int limit, int offset)
 {
 
 	// Periodic boundary conditions, returns the index of the requested neighbour.
@@ -37,7 +37,7 @@ int ising::PBC(int index, int limit, int offset)
 }
 
 
-void ising::metropolis()
+void Ising::Metropolis()
 {
 
 	for (int i = 0; i < number_of_spins; i++)
@@ -62,7 +62,7 @@ void ising::metropolis()
 
 }
 
-double ising::get_energy(int x, int y)
+double Ising::getEnergy(int x, int y)
 {
 	double up, down, left, right, self;
 

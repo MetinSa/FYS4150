@@ -1,4 +1,4 @@
-#include "ising.h"
+#include "Ising.h"
 #include <iostream>
 #include <fstream>
 
@@ -9,9 +9,9 @@ Ising::Ising(int dimension_of_lattice)
 
 	number_of_spins = dimension_of_lattice*dimension_of_lattice;
 
-	spin_matrix = arma::mat(dimension_of_lattice, dimension_of_lattice)
-	expectation_values = arma:vec(1);
-	delta_energies = arma:vec(1);
+	spin_matrix = arma::mat(dimension_of_lattice, dimension_of_lattice);
+	expectation_values = arma::vec(1);
+	delta_energies = arma::vec(1);
 
 
 	// Energy
@@ -46,13 +46,13 @@ void Ising::Metropolis()
 			int rand_x = rand() % dimension_of_lattice;
 			int rand_y = rand() % dimension_of_lattice;
 
-			double delta_e = get_energy(rand_x, rand_y);
+			double delta_e = getEnergy(rand_x, rand_y);
 			double rand_condition = rand() * 1./ RAND_MAX;
 
 			// Update variables if metropolis condition is met
 			if (rand_condition <= delta_energies(delta_e + 8))
 			{
-				spin_matrix(randx, randy) *= -1;
+				spin_matrix(rand_x, rand_y) *= -1;
 				magnetization += 2 * spin_matrix(rand_x, rand_y);
 				energy += delta_e;
 				number_of_accepted_states++;
@@ -64,7 +64,7 @@ void Ising::Metropolis()
 
 double Ising::getEnergy(int x, int y)
 {
-	double up, down, left, right, self;
+	double up, down, left, right, spin_mat;
 
 	spin_mat = spin_matrix(x,y);
 	up = spin_matrix(x, PBC(y, dimension_of_lattice, 1));

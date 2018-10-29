@@ -22,7 +22,7 @@ private:
 
 	arma::mat spin_matrix;
 	arma::vec expectation_values;
-	arma::ved delta_energies;
+	arma::vec delta_energies;
 
 //  ======================
 //  Quantities of interest
@@ -32,10 +32,10 @@ private:
 	double energy;
 	double mean_energy;
 	double energy_variance;
-	double specific_heat
+	double specific_heat;
 
 	// Magnetization
-	double magnetization
+	double magnetization;
 	double mean_magnetization;
 	double susceptibility;
 	double mean_absoloute_magnetization;
@@ -60,10 +60,8 @@ public:
 	//  =======
 
 	// constructor
-	ising(int dimension_of_lattice);
+	Ising(int dimension_of_lattice);
 
 	// void initialize_system()
 
-
-
-}
+};

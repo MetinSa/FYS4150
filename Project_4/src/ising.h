@@ -20,7 +20,7 @@ private:
 	int number_of_accepted_states;
 	double temperature;
 
-	arma::mat spin_matrix;
+	arma::mat lattice;
 	arma::vec expectation_values;
 	arma::vec delta_energies;
 
@@ -59,9 +59,10 @@ public:
 	//  Methods
 	//  =======
 
-	// constructor
+	// Constructor
 	Ising(int dimension_of_lattice);
 
-	// void initialize_system()
+	// Initiallizing the system
+	void InitializeLattice(double temperature);
 
 };

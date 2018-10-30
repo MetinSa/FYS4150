@@ -4,13 +4,16 @@
 
 class Ising
 {
-	// Class which simulates the Ising model
+	// Class that simulates the two-dimensional Ising model. We use the
+	// coupling constant J = 1, and Boltzmann constant k_B = 1, so that
+	// temperature has dimension energy. The model is simulated using the
+	// Metropolis algorithm with periodic boundary conditions.
 
 private:
 
-//  =================
-//  System properties
-//  =================
+	//  =================
+	//  System properties
+	//  =================
 
 	int dimension_of_lattice;
 	int number_of_spins;
@@ -18,15 +21,17 @@ private:
 	int number_of_accepted_states;
 	double temperature;
 
+	bool intermediate_calculations;
+
 	arma::mat lattice;
 	arma::vec expectation_values;
 	arma::vec energy_difference;
 
 	std::string filename;
 
-//  ======================
-//  Quantities of interest
-//  ======================
+	//  ======================
+	//  Quantities of interest
+	//  ======================
 
 	// Energy
 	double energy;
@@ -40,9 +45,9 @@ private:
 	double susceptibility;
 	double mean_absolute_magnetization;
 
-//  =======
-//  Methods
-//  =======
+	//  ===============
+	//  Private Methods
+	//  ===============
 
 	// Periodic boundary conditions index
 	int PBC(int index, int limit, int offset);
@@ -55,9 +60,9 @@ private:
 
 public:
 
-	//  =======
-	//  Methods
-	//  =======
+	//  ==============
+	//  Public Methods
+	//  ==============
 
 	// Constructor
 	Ising(int dimension_of_lattice, std::string filename);
@@ -66,14 +71,17 @@ public:
 	void InitializeLattice(double temperature);
 
 	// Monte Carlo integration
-	void MonteCarloSample(int N);
+	void MonteCarloSample(int N, bool intermediate_calculations);
+
+	void ComputeQuantities(int current_cycle);
 
 	//  ===================
 	//  Auxillary functions
 	//  ===================
 
-	void PrintInfo(int N);
-	void WriteToFile();
+	void PrintInfo();
+
+	void WriteToFile(int current_cycle);
 
 
 };

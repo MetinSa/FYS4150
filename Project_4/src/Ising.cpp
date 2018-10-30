@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <ctime>
 
 Ising::Ising(int dimension_of_lattice, std::string filename)
 {
@@ -32,7 +33,7 @@ Ising::Ising(int dimension_of_lattice, std::string filename)
 void Ising::InitializeLattice(double temperature)
 {
 	// Initializing the lattice (system) for a given temperature. The expectation values are
-	// reseted and initial values are computed. Also make us of a lookup-table for energies 
+	// reseted and initial values are computed. Also makes use of a lookup-table for energies 
 	// to save computation time.
 
 
@@ -43,7 +44,7 @@ void Ising::InitializeLattice(double temperature)
 	magnetization = 0;
 	number_of_accepted_states = 0;
 
-	// Precomputing possible energies
+	// Precomputing possible initial energies for a given temperature
 	for (int i = -8; i <= 8; i++)
 	{
 		energy_difference(i+8) = 0;
@@ -53,6 +54,9 @@ void Ising::InitializeLattice(double temperature)
 	{
 		energy_difference(i+8) = exp(-i/temperature);
 	}
+
+	// Finding a random seed for the RNG based on the time
+	srand(time(NULL));
 
 	// Initializing spin directions randomly
 	for (int i = 0; i < dimension_of_lattice; i++)
@@ -75,14 +79,12 @@ void Ising::InitializeLattice(double temperature)
 					  lattice(i, PBC(j, dimension_of_lattice, -1)));
 		}
 	}
-
-	// lattice.print("lattice: ");
-	// std::cout << "magnetization: " <<magnetization << std::endl;
 }
 
-void Ising::MonteCarloSample(int N)
+void Ising::MonteCarloSample(int N, bool intermediate_calculation)
 {
-	// Starts the Monte Carlo samping of the Ising-model for N mc-cycles.
+	// Starts the Monte Carlo samping of the Ising-model for N mc-cycles using
+	// the Metropolis algorithm.
 
 	number_of_mc_cycles = N;
 
@@ -94,29 +96,45 @@ void Ising::MonteCarloSample(int N)
 		expectation_values(2) += magnetization;
 		expectation_values(3) += magnetization * magnetization;
 		expectation_values(4) += fabs(magnetization);
+
+		// 
+		if ((intermediate_calculation == true) && (i % 100 == 0) && i != 0) 
+		{
+			ComputeQuantities(i);
+			WriteToFile(i);
+		}
 	}
 
-	// normalizing the expectation values
-	double norm = 1 / ((double) N);
-	expectation_values *= norm;
+	ComputeQuantities(number_of_mc_cycles);
+	WriteToFile(number_of_mc_cycles);
+
+}
+
+void Ising::ComputeQuantities(int current_cycle)
+{
+
+	// Functions that calculates physical quantities of interest from the current
+	// expectation values.
+
+	// Normalizing the expectation values
+	double norm = 1 / ((double) current_cycle);
+	arma::vec normalized_expectation_values = expectation_values*norm;
 	
 	// Variance calculations
-	energy_variance = (expectation_values(1) - expectation_values(0)*expectation_values(0)) / number_of_spins;
-	susceptibility = (expectation_values(3) - expectation_values(2)*expectation_values(2)) / (number_of_spins * temperature);
+	energy_variance = (normalized_expectation_values(1) - normalized_expectation_values(0)*normalized_expectation_values(0)) / number_of_spins;
+	susceptibility = (normalized_expectation_values(3) - normalized_expectation_values(2)*normalized_expectation_values(2)) / (number_of_spins * temperature);
 
 	// Physical quantities
-	mean_energy = expectation_values(0) / number_of_spins;
-	mean_magnetization = expectation_values(2) / number_of_spins;
+	mean_energy = normalized_expectation_values(0) / number_of_spins;
+	mean_magnetization = normalized_expectation_values(2) / number_of_spins;
 	specific_heat = energy_variance / (temperature*temperature);
-	mean_absolute_magnetization = expectation_values(4) / number_of_spins;
+	mean_absolute_magnetization = normalized_expectation_values(4) / number_of_spins;
 
-	// std::cout << mean_energy << std::endl
-	// << susceptibility << std::endl << specific_heat << std::endl <<  mean_absolute_magnetization << std::endl;
 }
 
 void Ising::Metropolis()
 {
-	// Metropolis method
+	// The Metropolis algorithm.
 
 	for (int i = 0; i < number_of_spins; i++)
 		{
@@ -127,28 +145,26 @@ void Ising::Metropolis()
 			double delta_e = getEnergy(rand_x, rand_y);
 			double rand_condition = rand() * 1./ RAND_MAX;
 
-			// Update variables if metropolis condition is met
+			// Update variables if Metropolis condition is met
 			if (rand_condition <= energy_difference(delta_e + 8))
 			{
 				lattice(rand_x, rand_y) *= -1;
 				magnetization += 2 * lattice(rand_x, rand_y);
 				energy += delta_e;
 				number_of_accepted_states++;
-
 			}
 		}
-
 }
 
 double Ising::getEnergy(int x, int y)
 {
-	double up, down, left, right, spin_mat;
+	// Returning the energy difference between a lattice point and its neighbours.
 
-	spin_mat = lattice(x,y);
-	up = lattice(x, PBC(y, dimension_of_lattice, 1));
-	down = lattice(x, PBC(y, dimension_of_lattice, -1));
-	left = lattice(PBC(x, dimension_of_lattice, -1), y);
-	right = lattice(PBC(x, dimension_of_lattice, 1), y);
+	double spin_mat = lattice(x,y);
+	double up = lattice(x, PBC(y, dimension_of_lattice, 1));
+	double down = lattice(x, PBC(y, dimension_of_lattice, -1));
+	double left = lattice(PBC(x, dimension_of_lattice, -1), y);
+	double right = lattice(PBC(x, dimension_of_lattice, 1), y);
 
 	return 2 * spin_mat * (up + down + left + right);
 
@@ -163,32 +179,34 @@ int Ising::PBC(int index, int limit, int offset)
 	return (index + limit  + offset) % limit;
 }
 
-void Ising::WriteToFile()
+
+void Ising::WriteToFile(int current_cycle)
 {
 	using namespace std;
 
 	ofstream ofile;
-	ofile.open(filename, ios::app);
+	ofile.open("data/" + filename + ".dat", ios::app);
 	ofile << setiosflags(ios::showpoint | ios::uppercase);
-
-	ofile << setw(20) << setprecision(8) << temperature;
-	ofile << setw(20) << setprecision(8) << mean_energy;
-	ofile << setw(20) << setprecision(8) << mean_magnetization;
-	ofile << setw(20) << setprecision(8) << specific_heat;
-	ofile << setw(20) << setprecision(8) << susceptibility;
-	ofile << setw(20) << setprecision(8) << mean_absolute_magnetization;
-	ofile << setw(20) << setprecision(8) << number_of_accepted_states / (double) number_of_mc_cycles << endl;
+	ofile << setprecision(8) << current_cycle;
+	ofile << setw(15) << setprecision(8) << temperature;
+	ofile << setw(15) << setprecision(8) << mean_energy;
+	ofile << setw(15) << setprecision(8) << mean_magnetization;
+	ofile << setw(15) << setprecision(8) << specific_heat;
+	ofile << setw(15) << setprecision(8) << susceptibility;
+	ofile << setw(15) << setprecision(8) << mean_absolute_magnetization;
+	ofile << setw(15) << setprecision(8) << number_of_accepted_states / (double) number_of_mc_cycles << endl;
 	ofile.close();
 
 }
 
-void Ising::PrintInfo(int N)
+
+void Ising::PrintInfo()
 {
 	// Printing key information about a mc-sample to the terminal.
     using namespace std;
 
     cout << setw(20) << "===========================================" << endl
-    	 << "Monte Carlo Simulation for N: " << N << " cycles." << endl
+    	 << "Monte Carlo Simulation for N: " << number_of_mc_cycles << " cycles." << endl
     	 << "===========================================" << endl
     	 << "Temperature: " << temperature << endl
     	 << "Expected energy: " << mean_energy << endl

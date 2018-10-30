@@ -15,7 +15,6 @@ Ising::Ising(int dimension_of_lattice, std::string filename)
 	expectation_values = arma::vec(5);
 	energy_difference = arma::vec(17);
 
-
 	// Energy
 	energy = 0;
 	mean_energy = 0;
@@ -30,7 +29,7 @@ Ising::Ising(int dimension_of_lattice, std::string filename)
 
 };
 
-void Ising::InitializeLattice(double temperature)
+void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 {
 	// Initializing the lattice (system) for a given temperature. The expectation values are
 	// reseted and initial values are computed. Also makes use of a lookup-table for energies 
@@ -63,9 +62,17 @@ void Ising::InitializeLattice(double temperature)
 	{
 		for (int j = 0; j < dimension_of_lattice; j++)
 		{
-			double rand_condition = rand() * 1./ RAND_MAX;
-			lattice(i,j) = (rand_condition < 0.5) ? 1 : -1;
-			magnetization += lattice(i,j);
+			if (oriented_lattice == true)
+			{
+				lattice(i,j) = 1;
+			}
+
+			else
+			{
+				double rand_condition = rand() * 1./ RAND_MAX;
+				lattice(i,j) = (rand_condition < 0.5) ? 1 : -1;
+				magnetization += lattice(i,j);
+			}
 		}
 	}
 

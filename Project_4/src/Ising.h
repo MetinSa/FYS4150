@@ -21,6 +21,7 @@ private:
 	int number_of_accepted_states;
 	double temperature;
 
+	bool oriented_lattice;
 	bool intermediate_calculations;
 
 	arma::mat lattice;
@@ -69,6 +70,7 @@ public:
 
 	// Initiallizing the system
 	void InitializeLattice(double temperature);
+	void InitializeLattice(double temperature, bool oriented_lattice);
 
 	// Monte Carlo integration
 	void MonteCarloSample(int N, bool intermediate_calculations);

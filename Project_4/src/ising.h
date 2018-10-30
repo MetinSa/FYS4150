@@ -4,9 +4,7 @@
 
 class Ising
 {
-	//  
-	//  Ising model
-	// 
+	// Class which simulates the Ising model
 
 private:
 
@@ -24,6 +22,8 @@ private:
 	arma::vec expectation_values;
 	arma::vec energy_difference;
 
+	std::string filename;
+
 //  ======================
 //  Quantities of interest
 //  ======================
@@ -38,7 +38,7 @@ private:
 	double magnetization;
 	double mean_magnetization;
 	double susceptibility;
-	double mean_absoloute_magnetization;
+	double mean_absolute_magnetization;
 
 //  =======
 //  Methods
@@ -60,13 +60,20 @@ public:
 	//  =======
 
 	// Constructor
-	Ising(int dimension_of_lattice);
+	Ising(int dimension_of_lattice, std::string filename);
 
 	// Initiallizing the system
 	void InitializeLattice(double temperature);
 
 	// Monte Carlo integration
 	void MonteCarloSample(int N);
+
+	//  ===================
+	//  Auxillary functions
+	//  ===================
+
+	void PrintInfo(int N);
+	void WriteToFile();
 
 
 };

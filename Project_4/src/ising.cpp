@@ -1,11 +1,13 @@
 #include "Ising.h"
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 
-Ising::Ising(int dimension_of_lattice)
+Ising::Ising(int dimension_of_lattice, std::string filename)
 {
 	// Initializing system properties
 	this->dimension_of_lattice = dimension_of_lattice;
+	this->filename = filename;
 
 	number_of_spins = dimension_of_lattice*dimension_of_lattice;
 	lattice = arma::mat(dimension_of_lattice, dimension_of_lattice);
@@ -23,7 +25,7 @@ Ising::Ising(int dimension_of_lattice)
 	magnetization = 0;
 	mean_magnetization = 0;
 	susceptibility = 0;
-	mean_absoloute_magnetization = 0;
+	mean_absolute_magnetization = 0;
 
 };
 
@@ -106,10 +108,10 @@ void Ising::MonteCarloSample(int N)
 	mean_energy = expectation_values(0) / number_of_spins;
 	mean_magnetization = expectation_values(2) / number_of_spins;
 	specific_heat = energy_variance / (temperature*temperature);
-	mean_absoloute_magnetization = expectation_values(4) / number_of_spins;
+	mean_absolute_magnetization = expectation_values(4) / number_of_spins;
 
-	std::cout << mean_energy << std::endl
-	<< susceptibility << std::endl << specific_heat << std::endl <<  mean_absoloute_magnetization << std::endl;
+	// std::cout << mean_energy << std::endl
+	// << susceptibility << std::endl << specific_heat << std::endl <<  mean_absolute_magnetization << std::endl;
 }
 
 void Ising::Metropolis()
@@ -161,6 +163,42 @@ int Ising::PBC(int index, int limit, int offset)
 	return (index + limit  + offset) % limit;
 }
 
+void Ising::WriteToFile()
+{
+	using namespace std;
+
+	ofstream ofile;
+	ofile.open(filename, ios::app);
+	ofile << setiosflags(ios::showpoint | ios::uppercase);
+
+	ofile << setw(20) << setprecision(8) << temperature;
+	ofile << setw(20) << setprecision(8) << mean_energy;
+	ofile << setw(20) << setprecision(8) << mean_magnetization;
+	ofile << setw(20) << setprecision(8) << specific_heat;
+	ofile << setw(20) << setprecision(8) << susceptibility;
+	ofile << setw(20) << setprecision(8) << mean_absolute_magnetization;
+	ofile << setw(20) << setprecision(8) << number_of_accepted_states / (double) number_of_mc_cycles << endl;
+	ofile.close();
+
+}
+
+void Ising::PrintInfo(int N)
+{
+	// Printing key information about a mc-sample to the terminal.
+    using namespace std;
+
+    cout << setw(20) << "===========================================" << endl
+    	 << "Monte Carlo Simulation for N: " << N << " cycles." << endl
+    	 << "===========================================" << endl
+    	 << "Temperature: " << temperature << endl
+    	 << "Expected energy: " << mean_energy << endl
+    	 << "Expected magnetization: " << mean_magnetization << endl
+    	 << "Specific heat: " << specific_heat << endl
+    	 << "Susceptibility: " << susceptibility << endl
+    	 << "Expected absolute magnetization: " << mean_absolute_magnetization << endl
+		 << "Number of accepted states per cycle: " << number_of_accepted_states / (double) number_of_mc_cycles << endl
+		 << "===========================================" << endl;
+}
 
 
 

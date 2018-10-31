@@ -192,7 +192,7 @@ void Ising::WriteToFile(int current_cycle)
 	using namespace std;
 
 	ofstream ofile;
-	ofile.open("data/" + filename + ".dat", ios::app);
+	ofile.open("data/AcceptedStates/" + filename + ".dat", ios::app);
 	ofile << setiosflags(ios::showpoint | ios::uppercase);
 	ofile << setprecision(8) << current_cycle;
 	ofile << setw(15) << setprecision(8) << temperature;
@@ -201,7 +201,7 @@ void Ising::WriteToFile(int current_cycle)
 	ofile << setw(15) << setprecision(8) << specific_heat;
 	ofile << setw(15) << setprecision(8) << susceptibility;
 	ofile << setw(15) << setprecision(8) << mean_absolute_magnetization;
-	ofile << setw(15) << setprecision(8) << number_of_accepted_states / (double) number_of_mc_cycles << endl;
+	ofile << setw(15) << setprecision(8) << number_of_accepted_states << endl;
 	ofile.close();
 
 }
@@ -212,7 +212,7 @@ void Ising::PrintInfo()
 	// Printing key information about a mc-sample to the terminal.
     using namespace std;
 
-    cout << setw(20) << "===========================================" << endl
+    cout << "===========================================" << endl
     	 << "Monte Carlo Simulation for N: " << number_of_mc_cycles << " cycles." << endl
     	 << "===========================================" << endl
     	 << "Temperature: " << temperature << endl

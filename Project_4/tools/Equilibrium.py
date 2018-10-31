@@ -24,11 +24,13 @@ if quantity == "E":
 	plt.ylabel("Expected Energy")
 
 elif quantity == "M":
-	plt.plot(N,M, label = r"Average Magnetization, $\langle M \rangle$", color = "crimson")
+	plt.plot(N,absM, label = r"Average Magnetization, $\langle M \rangle$", color = "crimson")
 	plt.ylabel("Expected Magnetization")
 
 plt.title(title)
+# plt.xlim(0,10000)
 plt.legend()
 plt.xlabel("Monte-Carlo Cycles")
 plt.grid(linestyle = "--")
+# plt.savefig("../figures/" + filename + "_" + quantity + ".png")
 plt.show()

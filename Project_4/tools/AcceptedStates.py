@@ -2,6 +2,10 @@ import numpy as np
 import sys as sys 
 import matplotlib.pyplot as plt 
 import os 
+from cycler import cycler
+
+default_cycler = (cycler(color=['darkorchid', 'darkorange', 'mediumseagreen', 'crimson', "royalblue"]))
+plt.rc('axes', prop_cycle=default_cycler)
 
 filenames = []
 
@@ -20,5 +24,5 @@ plt.legend()
 plt.ylabel("Accepted States")
 plt.xlabel("Monte-Carlo Cycles")
 plt.grid(linestyle = "--")
-# plt.savefig("../figures/" + filename + "_" + quantity + ".png")
+plt.savefig("../figures/AcceptedStates.png")
 plt.show()

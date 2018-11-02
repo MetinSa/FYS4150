@@ -29,7 +29,7 @@ Ising::Ising(int dimension_of_lattice, std::string filename)
 
 };
 
-void Ising::InitializeLattice(double temperature, bool oriented_lattice)
+void Ising::InitializeLattice(double temperature, bool oriented_lattice, int seed)
 {
 	// Initializing the lattice (system) for a given temperature. The expectation values are
 	// reseted and initial values are computed. Also makes use of a lookup-table for energies 
@@ -42,6 +42,7 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 	energy = 0;
 	magnetization = 0;
 	number_of_accepted_states = 0;
+	expectation_values.zeros();
 
 	// Precomputing possible initial energies for a given temperature
 	for (int i = -8; i <= 8; i++)
@@ -55,7 +56,7 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 	}
 
 	// Finding a random seed for the RNG based on the time
-	srand(time(NULL));
+	srand(time(NULL)*seed);
 
 	// Initializing spin directions randomly
 	for (int i = 0; i < dimension_of_lattice; i++)
@@ -90,21 +91,23 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 
 void Ising::MonteCarloSample(int N, bool intermediate_calculation)
 {
-	// Starts the Monte Carlo samping of the Ising-model for N mc-cycles using
+	// Starts the Monte-Carlo sampling of the Ising-model for N mc-cycles using
 	// the Metropolis algorithm.
 
 	number_of_mc_cycles = N;
 
-	for (int i = 0; i < N; i++)
+	// Starts the Monte-Carlo sampling
+	for (int i = 0; i < number_of_mc_cycles; i++)
 	{
 		Metropolis();
+
 		expectation_values(0) += energy;
 		expectation_values(1) += energy * energy;
 		expectation_values(2) += magnetization;
 		expectation_values(3) += magnetization * magnetization;
 		expectation_values(4) += fabs(magnetization);
 
-		// 
+		// Saves data during calculation
 		if ((intermediate_calculation == true) && (i % 100 == 0) && i != 0) 
 		{
 			ComputeQuantities(i);
@@ -116,6 +119,7 @@ void Ising::MonteCarloSample(int N, bool intermediate_calculation)
 	WriteToFile(number_of_mc_cycles);
 
 }
+
 
 void Ising::ComputeQuantities(int current_cycle)
 {
@@ -192,7 +196,7 @@ void Ising::WriteToFile(int current_cycle)
 	using namespace std;
 
 	ofstream ofile;
-	ofile.open("data/AcceptedStates/" + filename + ".dat", ios::app);
+	ofile.open("data/" + filename + ".dat", ios::app);
 	ofile << setiosflags(ios::showpoint | ios::uppercase);
 	ofile << setprecision(8) << current_cycle;
 	ofile << setw(15) << setprecision(8) << temperature;
@@ -201,7 +205,7 @@ void Ising::WriteToFile(int current_cycle)
 	ofile << setw(15) << setprecision(8) << specific_heat;
 	ofile << setw(15) << setprecision(8) << susceptibility;
 	ofile << setw(15) << setprecision(8) << mean_absolute_magnetization;
-	ofile << setw(15) << setprecision(8) << number_of_accepted_states << endl;
+	ofile << setw(15) << setprecision(8) << number_of_accepted_states << "\n";
 	ofile.close();
 
 }

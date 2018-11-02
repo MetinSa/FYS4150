@@ -2,29 +2,54 @@ import numpy as np
 import sys as sys 
 import matplotlib.pyplot as plt 
 
-filename = sys.argv[1]
+filename = str(sys.argv[1])
 quantity = str(sys.argv[2])
 
-N, T, E, M, C_V, Chi, absM, accepted_states = np.loadtxt("../data/" + filename + ".dat", unpack = True)
+thermalize = False
 
+if len(sys.argv) >= 4:
+	equilibration = str(sys.argv[3])
+	thermalize = True
+
+
+# Reading in expectation values
+N, T, E, M, C_V, Chi, absM, accepted_states = np.loadtxt("../data/" + filename + ".dat", unpack = True)
+expectation_list = [N, T, E, M, C_V, absM, accepted_states]
+
+if thermalize == True:
+
+	# Discard pre equilibrium expectation values and scaling the accepted states
+	N_max = N[-1]
+	dN = N[10]-N[9]
+	i_eq = int((0.2*N_max/dN))
+	expectation_list[-1] -= expectation_list[-1][i_eq-1]	
+
+	for i in range(len(expectation_list)):
+		expectation_list[i] = expectation_list[i][i_eq:]
+
+# Fixing title of plot
 if "oriented" in filename:
 	if "24" in filename:
 		title = "20 x 20 oriented initial lattice with T = 2.4 K"
 	else:
 		title = "20 x 20 oriented initial lattice with T = 1 K"
 
-else:
+if "random" in filename:
 	if "24" in filename:
 		title = "20 x 20 random initial lattice with T = 2.4 K"
 	else:
 		title = "20 x 20 random initial lattice with T = 1 K"
 
+else:
+	title = "20 x 20 random initial lattice"
+
+# Plotting different quantities
 if quantity == "E":
-	plt.plot(N, E, label = r"Average Energy, $\langle E \rangle$", color = "mediumseagreen")
+	plt.plot(expectation_list[0], expectation_list[2], label = r"Average Energy, $\langle E \rangle$, $T = $%.2f K" %T[1], color = "mediumseagreen")
 	plt.ylabel("Expected Energy")
 
 elif quantity == "M":
-	plt.plot(N,absM, label = r"Average Magnetization, $\langle M \rangle$", color = "crimson")
+	plt.plot(expectation_list[0], expectation_list[3], label = r"Average Magnetization, $\langle M \rangle$, $T = $%.2f K" %T[1], color = "crimson")
 	plt.ylabel("Expected Magnetization")
 
 plt.title(title)

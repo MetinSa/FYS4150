@@ -23,6 +23,7 @@ private:
 
 	bool oriented_lattice;
 	bool intermediate_calculations;
+	bool equilibriate;
 
 	arma::mat lattice;
 	arma::vec expectation_values;
@@ -69,20 +70,22 @@ public:
 	Ising(int dimension_of_lattice, std::string filename);
 
 	// Initiallizing the system
-	void InitializeLattice(double temperature, bool oriented_lattice);
+	void InitializeLattice(double temperature, bool oriented_lattice, int seed);
 
 	// Monte Carlo integration
 	void MonteCarloSample(int N, bool intermediate_calculations);
 
+	// Computes physical quantities of interest
 	void ComputeQuantities(int current_cycle);
 
 	//  ===================
 	//  Auxillary functions
 	//  ===================
 
+	// Prints information to terminal
 	void PrintInfo();
 
+	// Writes information to file
 	void WriteToFile(int current_cycle);
-
 
 };

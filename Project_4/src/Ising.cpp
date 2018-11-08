@@ -58,8 +58,8 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 
 	// Initialzing seed and the Mersienne random generator
 	std::random_device rd;
-	std::mt19937_64 gen(rd());
-	std::uniform_real_distribution<double> RandomNumberGenerator(0.0, 1.0);
+	std::mt19937_64 generator(rd());
+	std::uniform_real_distribution<double> RNG(0.0, 1.0);
 
 	// srand(time(NULL));
 
@@ -75,7 +75,7 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 
 			else
 			{
-				double rand_condition = RandomNumberGenerator(gen);
+				double rand_condition = RNG(generator);
 				lattice(i,j) = (rand_condition < 0.5) ? 1 : -1;
 				magnetization += lattice(i,j);
 			}
@@ -151,17 +151,15 @@ void Ising::ComputeQuantities(int current_cycle)
 void Ising::Metropolis()
 {
 	// The Metropolis algorithm.
-	std::random_device rd;
-	std::mt19937_64 gen(rd());
-	std::uniform_real_distribution<double> RandomNumberGenerator(0.0, 1.0);
+
 	for (int i = 0; i < number_of_spins; i++)
 		{
 			// Removing potensial bias
-			int rand_x = RandomNumberGenerator(gen)*dimension_of_lattice;
-			int rand_y = RandomNumberGenerator(gen)*dimension_of_lattice;
+			int rand_x = RNG(generator)*dimension_of_lattice;
+			int rand_y = RNG(generator)*dimension_of_lattice;
 
 			double delta_e = getEnergy(rand_x, rand_y);
-			double rand_condition = RandomNumberGenerator(gen);
+			double rand_condition = RNG(generator);
 
 			// Update variables if Metropolis condition is met
 			if (rand_condition <= energy_difference(delta_e + 8))

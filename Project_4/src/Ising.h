@@ -47,6 +47,11 @@ private:
 	double susceptibility;
 	double mean_absolute_magnetization;
 
+	// RandomNumberGenerator
+	// std::random_device rd;
+	std::mt19937 generator;
+	std::uniform_real_distribution<double> RNG;
+
 	//  ===============
 	//  Private Methods
 	//  ===============

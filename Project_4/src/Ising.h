@@ -70,7 +70,7 @@ public:
 	Ising(int dimension_of_lattice, std::string filename);
 
 	// Initiallizing the system
-	void InitializeLattice(double temperature, bool oriented_lattice, int seed);
+	void InitializeLattice(double temperature, bool oriented_lattice);
 
 	// Monte Carlo integration
 	void MonteCarloSample(int N, bool intermediate_calculations);

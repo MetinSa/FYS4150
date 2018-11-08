@@ -37,14 +37,13 @@ int main(int argc, char *argv[])
 	Ising system = Ising(dimension_of_lattice, filename);
 
 	// On and off functions
-	bool intermediate_calculations = false;
+	bool intermediate_calculations = true;
 	bool oriented_lattice = false;
 
-	for (int i = 0; i < 100; i++)
-	{
-		system.InitializeLattice(temperature, oriented_lattice, i);
-		system.MonteCarloSample(mc_cycles, intermediate_calculations);
-	}
+
+	system.InitializeLattice(temperature, oriented_lattice);
+	system.MonteCarloSample(mc_cycles, intermediate_calculations);
+	
 	return 0;
 
 }

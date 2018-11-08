@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <fstream>
 #include <ctime>
+#include <random>
 
 Ising::Ising(int dimension_of_lattice, std::string filename)
 {
@@ -29,7 +30,7 @@ Ising::Ising(int dimension_of_lattice, std::string filename)
 
 };
 
-void Ising::InitializeLattice(double temperature, bool oriented_lattice, int seed)
+void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 {
 	// Initializing the lattice (system) for a given temperature. The expectation values are
 	// reseted and initial values are computed. Also makes use of a lookup-table for energies 
@@ -55,8 +56,12 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice, int see
 		energy_difference(i+8) = exp(-i/temperature);
 	}
 
-	// Finding a random seed for the RNG based on the time
-	srand(time(NULL)*seed);
+	// Initialzing seed and the Mersienne random generator
+	std::random_device rd;
+	std::mt19937_64 gen(rd());
+	std::uniform_real_distribution<double> RandomNumberGenerator(0.0, 1.0);
+
+	// srand(time(NULL));
 
 	// Initializing spin directions randomly
 	for (int i = 0; i < dimension_of_lattice; i++)
@@ -70,7 +75,7 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice, int see
 
 			else
 			{
-				double rand_condition = rand() * 1./ RAND_MAX;
+				double rand_condition = RandomNumberGenerator(gen);
 				lattice(i,j) = (rand_condition < 0.5) ? 1 : -1;
 				magnetization += lattice(i,j);
 			}
@@ -146,15 +151,17 @@ void Ising::ComputeQuantities(int current_cycle)
 void Ising::Metropolis()
 {
 	// The Metropolis algorithm.
-
+	std::random_device rd;
+	std::mt19937_64 gen(rd());
+	std::uniform_real_distribution<double> RandomNumberGenerator(0.0, 1.0);
 	for (int i = 0; i < number_of_spins; i++)
 		{
 			// Removing potensial bias
-			int rand_x = rand() % dimension_of_lattice;
-			int rand_y = rand() % dimension_of_lattice;
+			int rand_x = RandomNumberGenerator(gen)*dimension_of_lattice;
+			int rand_y = RandomNumberGenerator(gen)*dimension_of_lattice;
 
 			double delta_e = getEnergy(rand_x, rand_y);
-			double rand_condition = rand() * 1./ RAND_MAX;
+			double rand_condition = RandomNumberGenerator(gen);
 
 			// Update variables if Metropolis condition is met
 			if (rand_condition <= energy_difference(delta_e + 8))

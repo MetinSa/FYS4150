@@ -11,7 +11,6 @@ C_V_list = []
 Chi_list = []
 absM_list = []
 
-
 # filenames
 filenames = []
 

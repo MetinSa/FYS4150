@@ -52,33 +52,83 @@ int main(int argc, char *argv[])
 	MPI_Bcast(&T_max, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Bcast(&T_step, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
+	// Calculating the total/per core number of experiments for given initial conditions
+	int number_of_experiments = round((T_max-T_min)/(double)T_step);
+	int experiments_per_core = number_of_experiments/(double)world_size;
+
+	// Making temperature arrays 
+	double temperature[number_of_experiments];
+	double local_temperature[experiments_per_core];
+	if (world_rank == 0)
+	{
+		for (int i = 0; i < number_of_experiments; i++)
+		{
+			temperature[i] = T_min + T_step*i;
+		}
+	}
+
 	// Starting time of parallel processes
 	double TimeStart, TimeStop, TimeTotal;
 	TimeStart = MPI_Wtime();
 
+	MPI_Scatter(&temperature, experiments_per_core, MPI_DOUBLE, &local_temperature, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
 	// Ising Model initialization
 	Ising system = Ising(dimension_of_lattice, filename);
 
-	// Parallel Monte Carlo simulation for a temperature range
-	for (double temperature = T_min; temperature <= T_max; temperature += T_step)
+	// Expectation values to be studied through different cores (local values)
+	double local_energy[number_of_experiments];
+	double local_energy_squared[number_of_experiments];
+	double local_energy_variance[number_of_experiments];
+	double local_specific_heat[number_of_experiments];
+	double local_magnetization[number_of_experiments];
+	double local_absolute_magnetization[number_of_experiments];
+	double local_susceptibility[number_of_experiments];
+
+	// Parallel Monte Carlo simulation for a given temperature T
+	for (int j = 0; j < experiments_per_core; j++)
 	{
-		system.InitializeLattice(temperature, oriented_lattice);
+		double T = local_temperature[j];
+		system.InitializeLattice(T, oriented_lattice);
 		system.MonteCarloSample(mc_cycles, intermediate_calculations, print_every);
-		system.reduced_expectation_values = arma::vec(5);
 
-		for (int i = 0; i < 5; i++)
+		// Saving the expectation values
+		local_energy[j] = system.mean_energy;
+		local_energy_squared[j] = system.mean_energy_squared;
+		local_energy_variance[j] = system.energy_variance;
+		local_specific_heat[j] = system.specific_heat;
+		local_magnetization[j] = system.mean_magnetization;
+		local_absolute_magnetization[j] = system.mean_absolute_magnetization;
+		local_susceptibility[j] = system.susceptibility;
+	}
+
+	// Non-local expectation values that will be gathered
+	double energy[number_of_experiments];
+	double energy_squared[number_of_experiments];
+	double energy_variance[number_of_experiments];
+	double specific_heat[number_of_experiments];
+	double magnetization[number_of_experiments];
+	double absolute_magnetization[number_of_experiments];
+	double susceptibility[number_of_experiments];
+	double temperatures_used[number_of_experiments];
+
+	MPI_Gather(&local_energy, experiments_per_core, MPI_DOUBLE, &energy, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_energy_squared, experiments_per_core, MPI_DOUBLE, &energy_squared, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_energy_variance, experiments_per_core, MPI_DOUBLE, &energy_variance, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_specific_heat, experiments_per_core, MPI_DOUBLE, &specific_heat, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_magnetization, experiments_per_core, MPI_DOUBLE, &magnetization, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_absolute_magnetization, experiments_per_core, MPI_DOUBLE, &absolute_magnetization, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_susceptibility, experiments_per_core, MPI_DOUBLE, &susceptibility, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_temperature, experiments_per_core, MPI_DOUBLE, &temperatures_used, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+	if (world_rank == 0)
+	{
+		for (int i = 0; i < number_of_experiments; i++)
 		{
-			MPI_Reduce(&system.expectation_values_list(i), &system.reduced_expectation_values(i), 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-
-		}
-
-		if (world_rank == 0)
-		{
-			// Normalize the reduced expectation values 
-			system.reduced_expectation_values /= world_size;
-			system.WriteToFileMPI(system.reduced_expectation_values);
+			std::cout << temperatures_used[i] << std::endl;
 		}
 	}
+
 
 	if (world_rank == 0)
 	{

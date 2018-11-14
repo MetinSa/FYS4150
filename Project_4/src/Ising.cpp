@@ -140,17 +140,10 @@ void Ising::ComputeQuantities(int current_cycle)
 
 	// Physical quantities
 	mean_energy = normalized_expectation_values(0) / number_of_spins;
+	mean_energy_squared = normalized_expectation_values(1) / number_of_spins;
 	mean_magnetization = normalized_expectation_values(2) / number_of_spins;
 	specific_heat = energy_variance / (temperature*temperature);
 	mean_absolute_magnetization = normalized_expectation_values(4) / number_of_spins;
-
-	// Putting the desired physical quantities into a array
-	expectation_values_list = arma::vec(5);
-	expectation_values_list(0) = mean_energy;
-	expectation_values_list(1) = mean_magnetization;
-	expectation_values_list(2) = specific_heat;
-	expectation_values_list(3) = susceptibility;
-	expectation_values_list(4) = mean_absolute_magnetization;
 
 }
 
@@ -231,7 +224,7 @@ void Ising::WriteToFileMPI(arma::vec reduced_expectation_values)
 	ofile << setw(15) << setprecision(8) << temperature;
 	for (int i = 0; i < 5; i++)
 	{
-		ofile<< setw(15) << setprecision(8) << expectation_values_list(i);
+		ofile<< setw(15) << setprecision(8) << expectation_values(i);
 	}
 	ofile << "\n";
 	ofile.close();

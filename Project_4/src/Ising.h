@@ -9,7 +9,7 @@ class Ising
 	// temperature has dimension energy. The model is simulated using the
 	// Metropolis algorithm with periodic boundary conditions.
 
-private:
+public:
 
 	//  =================
 	//  System properties
@@ -38,6 +38,7 @@ private:
 	// Energy
 	double energy;
 	double mean_energy;
+	double mean_energy_squared;
 	double energy_variance;
 	double specific_heat;
 
@@ -65,14 +66,10 @@ private:
 	// Extracting energy
 	double getEnergy(int x, int y);
 
-public:
 
 	//  ==============
 	//  Public Methods
 	//  ==============
-
-	arma::vec expectation_values_list;
-	arma::vec reduced_expectation_values;
 
 	// Constructor
 	Ising(int dimension_of_lattice, std::string filename);

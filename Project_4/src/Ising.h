@@ -94,6 +94,7 @@ public:
 	void WriteToFile(int current_cycle);
 
 	// Writes information from Parallel computation to file
-	void WriteToFileMPI(arma::vec reduced_);
+	void MPIWriteToFile(int number_of_experiments, double T[] ,double E[], double EE[], double EV[], double CV[], 
+						double M[], double absM[], double sus[]);
 
 };

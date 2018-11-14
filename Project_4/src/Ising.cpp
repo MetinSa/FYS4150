@@ -214,19 +214,25 @@ void Ising::WriteToFile(int current_cycle)
 
 }
 
-void Ising::WriteToFileMPI(arma::vec reduced_expectation_values)
+void Ising::MPIWriteToFile(int number_of_experiments, double T[] ,double E[], double EE[], double EV[], double CV[],
+							 double M[], double absM[], double sus[])
 {
 	using namespace std;
 
 	ofstream ofile;
 	ofile.open("data/" + filename + ".dat", ios::app);
-	ofile << setiosflags(ios::showpoint | ios::uppercase);
-	ofile << setw(15) << setprecision(8) << temperature;
-	for (int i = 0; i < 5; i++)
+	ofile << setiosflags(ios::showpoint | ios::uppercase);	
+	for (int i = 0; i < number_of_experiments; i++)
 	{
-		ofile<< setw(15) << setprecision(8) << expectation_values(i);
+		ofile << setw(15) << setprecision(8) << T[i];
+		ofile << setw(15) << setprecision(8) << E[i];
+		ofile << setw(15) << setprecision(8) << EE[i];
+		ofile << setw(15) << setprecision(8) << EV[i];
+		ofile << setw(15) << setprecision(8) << CV[i];
+		ofile << setw(15) << setprecision(8) << M[i];
+		ofile << setw(15) << setprecision(8) << absM[i];
+		ofile << setw(15) << setprecision(8) << sus[i] << "\n";
 	}
-	ofile << "\n";
 	ofile.close();
 
 }

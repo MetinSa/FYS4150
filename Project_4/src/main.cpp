@@ -123,30 +123,17 @@ int main(int argc, char *argv[])
 
 	if (world_rank == 0)
 	{
-		for (int i = 0; i < number_of_experiments; i++)
-		{
-			std::cout << temperatures_used[i] << std::endl;
-		}
-	}
-
-
-	if (world_rank == 0)
-	{
 		TimeStop = MPI_Wtime();
 		TimeTotal = TimeStop-TimeStart;
 		std::cout << "Time spent: " << TimeTotal << " seconds" << "\nProcesses: " << world_size << std::endl;
+
+		system.MPIWriteToFile(number_of_experiments, temperatures_used,  energy, energy_squared, energy_variance
+			, specific_heat, magnetization, absolute_magnetization, susceptibility);
 
 	}
 
 
 	MPI_Finalize();
-
-
-
-
-	// system.InitializeLattice(temperature, oriented_lattice);
-	// system.MonteCarloSample(mc_cycles, intermediate_calculations, print_every);
-	// system.PrintInfo();
 	
 	return 0;
 

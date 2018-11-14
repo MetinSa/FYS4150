@@ -61,8 +61,6 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 	std::mt19937_64 generator(rd());
 	std::uniform_real_distribution<double> RNG(0.0, 1.0);
 
-	// srand(time(NULL));
-
 	// Initializing spin directions randomly
 	for (int i = 0; i < dimension_of_lattice; i++)
 	{
@@ -82,7 +80,6 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 		}
 	}
 
-
 	// Initializing energies
 	for (int i = 0; i < dimension_of_lattice; i++)
 	{
@@ -94,7 +91,8 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 	}
 }
 
-void Ising::MonteCarloSample(int N, bool intermediate_calculation)
+
+void Ising::MonteCarloSample(int N, bool intermediate_calculation, int print_every)
 {
 	// Starts the Monte-Carlo sampling of the Ising-model for N mc-cycles using
 	// the Metropolis algorithm.
@@ -113,7 +111,7 @@ void Ising::MonteCarloSample(int N, bool intermediate_calculation)
 		expectation_values(4) += fabs(magnetization);
 
 		// Saves data during calculation
-		if ((intermediate_calculation == true) && (i % 100 == 0) && i != 0) 
+		if ((intermediate_calculation == true) && (i % print_every == 0) && i != 0) 
 		{
 			ComputeQuantities(i);
 			WriteToFile(i);
@@ -121,7 +119,7 @@ void Ising::MonteCarloSample(int N, bool intermediate_calculation)
 	}
 
 	ComputeQuantities(number_of_mc_cycles);
-	WriteToFile(number_of_mc_cycles);
+	// WriteToFile(number_of_mc_cycles);
 
 }
 
@@ -145,6 +143,14 @@ void Ising::ComputeQuantities(int current_cycle)
 	mean_magnetization = normalized_expectation_values(2) / number_of_spins;
 	specific_heat = energy_variance / (temperature*temperature);
 	mean_absolute_magnetization = normalized_expectation_values(4) / number_of_spins;
+
+	// Putting the desired physical quantities into a array
+	expectation_values_list = arma::vec(5);
+	expectation_values_list(0) = mean_energy;
+	expectation_values_list(1) = mean_magnetization;
+	expectation_values_list(2) = specific_heat;
+	expectation_values_list(3) = susceptibility;
+	expectation_values_list(4) = mean_absolute_magnetization;
 
 }
 
@@ -215,6 +221,23 @@ void Ising::WriteToFile(int current_cycle)
 
 }
 
+void Ising::WriteToFileMPI(arma::vec reduced_expectation_values)
+{
+	using namespace std;
+
+	ofstream ofile;
+	ofile.open("data/" + filename + ".dat", ios::app);
+	ofile << setiosflags(ios::showpoint | ios::uppercase);
+	ofile << setw(15) << setprecision(8) << temperature;
+	for (int i = 0; i < 5; i++)
+	{
+		ofile<< setw(15) << setprecision(8) << expectation_values_list(i);
+	}
+	ofile << "\n";
+	ofile.close();
+
+}
+
 
 void Ising::PrintInfo()
 {
@@ -228,6 +251,7 @@ void Ising::PrintInfo()
     	 << "Expected energy: " << mean_energy << endl
     	 << "Expected magnetization: " << mean_magnetization << endl
     	 << "Specific heat: " << specific_heat << endl
+    	 << "Energy Variance: " << energy_variance << endl
     	 << "Susceptibility: " << susceptibility << endl
     	 << "Expected absolute magnetization: " << mean_absolute_magnetization << endl
 		 << "Number of accepted states per cycle: " << number_of_accepted_states / (double) number_of_mc_cycles << endl

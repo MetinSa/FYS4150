@@ -71,6 +71,9 @@ public:
 	//  Public Methods
 	//  ==============
 
+	arma::vec expectation_values_list;
+	arma::vec reduced_expectation_values;
+
 	// Constructor
 	Ising(int dimension_of_lattice, std::string filename);
 
@@ -78,7 +81,7 @@ public:
 	void InitializeLattice(double temperature, bool oriented_lattice);
 
 	// Monte Carlo integration
-	void MonteCarloSample(int N, bool intermediate_calculations);
+	void MonteCarloSample(int N, bool intermediate_calculations, int print_every);
 
 	// Computes physical quantities of interest
 	void ComputeQuantities(int current_cycle);
@@ -92,5 +95,8 @@ public:
 
 	// Writes information to file
 	void WriteToFile(int current_cycle);
+
+	// Writes information from Parallel computation to file
+	void WriteToFileMPI(arma::vec reduced_);
 
 };

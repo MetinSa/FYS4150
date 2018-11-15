@@ -29,7 +29,6 @@ Ising::Ising(int dimension_of_lattice, std::string filename)
 	mean_magnetization = 0;
 	susceptibility = 0;
 	mean_absolute_magnetization = 0;
-
 };
 
 void Ising::InitializeLattice(double temperature, bool oriented_lattice)
@@ -37,7 +36,6 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 	// Initializing the lattice (system) for a given temperature. The expectation values are
 	// reseted and initial values are computed. Also makes use of a lookup-table for energies 
 	// to save computation time.
-
 
 	this->temperature = temperature;
 
@@ -120,7 +118,6 @@ void Ising::MonteCarloSample(int number_of_mc_cycles, bool intermediate_calculat
 			WriteToFile(i);
 		}
 	}
-
 	// Computes the physical quantities of interest
 	ComputeQuantities(number_of_mc_cycles);
 }
@@ -128,7 +125,6 @@ void Ising::MonteCarloSample(int number_of_mc_cycles, bool intermediate_calculat
 
 void Ising::ComputeQuantities(int current_cycle)
 {
-
 	// Functions that calculates physical quantities of interest from the current
 	// expectation values.
 
@@ -146,8 +142,8 @@ void Ising::ComputeQuantities(int current_cycle)
 	mean_magnetization = normalized_expectation_values(2) / number_of_spins;
 	specific_heat = energy_variance / (temperature*temperature);
 	mean_absolute_magnetization = normalized_expectation_values(4) / number_of_spins;
-
 }
+
 
 void Ising::Metropolis()
 {
@@ -179,6 +175,7 @@ void Ising::Metropolis()
 		}
 }
 
+
 double Ising::getEnergy(int x, int y)
 {
 	// Returning the energy difference between a lattice point and its neighbours.
@@ -190,8 +187,6 @@ double Ising::getEnergy(int x, int y)
 	double right = lattice(PBC(x, dimension_of_lattice, 1), y);
 
 	return 2 * spin_matrix * (up + down + left + right);
-
-
 }
 
 
@@ -224,7 +219,7 @@ void Ising::WriteToFile(int current_cycle)
 }
 
 void Ising::MPIWriteToFile(int number_of_experiments, double T[] ,double E[], double EE[], double EV[], double CV[],
-							 double M[], double absM[], double sus[])
+							 double M[], double absM[], double sus[], double acc_states[])
 {
 	// Writing the results from the parallel calculation to file
 	using namespace std;
@@ -241,10 +236,10 @@ void Ising::MPIWriteToFile(int number_of_experiments, double T[] ,double E[], do
 		ofile << setw(15) << setprecision(8) << CV[i];
 		ofile << setw(15) << setprecision(8) << M[i];
 		ofile << setw(15) << setprecision(8) << absM[i];
-		ofile << setw(15) << setprecision(8) << sus[i] << "\n";
+		ofile << setw(15) << setprecision(8) << sus[i];
+		ofile << setw(15) << setprecision(8) << acc_states[i] << "\n";
 	}
 	ofile.close();
-
 }
 
 
@@ -266,10 +261,3 @@ void Ising::PrintInfo()
 		 << "Number of accepted states per cycle: " << number_of_accepted_states / (double) number_of_mc_cycles << endl
 		 << "===========================================" << endl;
 }
-
-
-
-
-
-
-

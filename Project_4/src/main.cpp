@@ -1,10 +1,8 @@
 #include "Ising.h"
 #include <mpi.h>
 
-
 int main(int argc, char *argv[])
 {
-
 	// Declearing variables to be read in
 	int dimension_of_lattice;
 	int mc_cycles;
@@ -83,6 +81,7 @@ int main(int argc, char *argv[])
 	double local_magnetization[number_of_experiments];
 	double local_absolute_magnetization[number_of_experiments];
 	double local_susceptibility[number_of_experiments];
+	double local_accepted_states[number_of_experiments];
 
 	// Ising Model initialization
 	Ising system = Ising(dimension_of_lattice, filename);
@@ -102,6 +101,7 @@ int main(int argc, char *argv[])
 		local_magnetization[j] = system.mean_magnetization;
 		local_absolute_magnetization[j] = system.mean_absolute_magnetization;
 		local_susceptibility[j] = system.susceptibility;
+		local_accepted_states[j] = system.number_of_accepted_states;
 	}
 
 	// Non-local expectation values that will be gathered
@@ -113,6 +113,7 @@ int main(int argc, char *argv[])
 	double absolute_magnetization[number_of_experiments];
 	double susceptibility[number_of_experiments];
 	double temperatures_used[number_of_experiments];
+	double accepted_states[number_of_experiments];
 
 	// Gathering the different values calculated across different cores
 	MPI_Gather(&local_energy, experiments_per_core, MPI_DOUBLE, &energy, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -123,6 +124,7 @@ int main(int argc, char *argv[])
 	MPI_Gather(&local_absolute_magnetization, experiments_per_core, MPI_DOUBLE, &absolute_magnetization, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Gather(&local_susceptibility, experiments_per_core, MPI_DOUBLE, &susceptibility, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Gather(&local_temperature, experiments_per_core, MPI_DOUBLE, &temperatures_used, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(&local_accepted_states, experiments_per_core, MPI_DOUBLE, &accepted_states, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
 	// Dumping the data to file from the root core
 	if (world_rank == 0)
@@ -134,8 +136,7 @@ int main(int argc, char *argv[])
 		std::cout << "Time spent: " << TimeTotal << " seconds" << "\nProcesses: " << world_size << std::endl;
 
 		system.MPIWriteToFile(number_of_experiments, temperatures_used,  energy, energy_squared, energy_variance
-			, specific_heat, magnetization, absolute_magnetization, susceptibility);
-
+			, specific_heat, magnetization, absolute_magnetization, susceptibility, accepted_states);
 	}
 
 	// Terminating MPI

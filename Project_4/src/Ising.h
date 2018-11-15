@@ -1,7 +1,6 @@
 #include <armadillo>
 #include <string>
 
-
 class Ising
 {
 	// Class that simulates the two-dimensional Ising model. We use the
@@ -91,5 +90,5 @@ public:
 
 	// Writes information from Parallel computation to file
 	void MPIWriteToFile(int number_of_experiments, double T[] ,double E[], double EE[], double EV[], double CV[], 
-						double M[], double absM[], double sus[]);
+						double M[], double absM[], double sus[], double acc_states[]);
 };

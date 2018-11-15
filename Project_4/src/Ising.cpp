@@ -7,7 +7,9 @@
 
 Ising::Ising(int dimension_of_lattice, std::string filename)
 {
+	// The constructor.
 	// Initializing system properties
+
 	this->dimension_of_lattice = dimension_of_lattice;
 	this->filename = filename;
 
@@ -39,7 +41,7 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 
 	this->temperature = temperature;
 
-	// Reseting stuff
+	// Reseting stuff for reusablility
 	energy = 0;
 	magnetization = 0;
 	number_of_accepted_states = 0;
@@ -92,35 +94,35 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 }
 
 
-void Ising::MonteCarloSample(int N, bool intermediate_calculation, int print_every)
+void Ising::MonteCarloSample(int number_of_mc_cycles, bool intermediate_calculation, int print_every)
 {
 	// Starts the Monte-Carlo sampling of the Ising-model for N mc-cycles using
 	// the Metropolis algorithm.
 
-	number_of_mc_cycles = N;
-
 	// Starts the Monte-Carlo sampling
 	for (int i = 0; i < number_of_mc_cycles; i++)
 	{
+		// Running the Metropolis algorithm
 		Metropolis();
 
+		// Updating the expectation values
 		expectation_values(0) += energy;
 		expectation_values(1) += energy * energy;
 		expectation_values(2) += magnetization;
 		expectation_values(3) += magnetization * magnetization;
 		expectation_values(4) += fabs(magnetization);
 
-		// Saves data during calculation
+		// Toggle on and off intermediate calculations are desired and pass along how often they should be done through print_every
 		if ((intermediate_calculation == true) && (i % print_every == 0) && i != 0) 
 		{
+			// Computes the physical quantities and writes to file
 			ComputeQuantities(i);
 			WriteToFile(i);
 		}
 	}
 
+	// Computes the physical quantities of interest
 	ComputeQuantities(number_of_mc_cycles);
-	// WriteToFile(number_of_mc_cycles);
-
 }
 
 
@@ -134,11 +136,11 @@ void Ising::ComputeQuantities(int current_cycle)
 	double norm = 1 / ((double) current_cycle);
 	arma::vec normalized_expectation_values = expectation_values*norm;
 	
-	// Variance calculations
+	// Variance calculations per spin
 	energy_variance = (normalized_expectation_values(1) - normalized_expectation_values(0)*normalized_expectation_values(0)) / number_of_spins;
 	susceptibility = (normalized_expectation_values(3) - normalized_expectation_values(2)*normalized_expectation_values(2)) / (number_of_spins * temperature);
 
-	// Physical quantities
+	// Physical quantities per spin
 	mean_energy = normalized_expectation_values(0) / number_of_spins;
 	mean_energy_squared = normalized_expectation_values(1) / number_of_spins;
 	mean_magnetization = normalized_expectation_values(2) / number_of_spins;
@@ -150,22 +152,28 @@ void Ising::ComputeQuantities(int current_cycle)
 void Ising::Metropolis()
 {
 	// The Metropolis algorithm.
-
 	for (int i = 0; i < number_of_spins; i++)
 		{
-			// Removing potensial bias
+			// Using the RNG to extract random indicies for the lattice
 			int rand_x = RNG(generator)*dimension_of_lattice;
 			int rand_y = RNG(generator)*dimension_of_lattice;
 
+			// Computing the energy difference between a spin and its neighbour at a random lattice location
 			double delta_e = getEnergy(rand_x, rand_y);
 			double rand_condition = RNG(generator);
 
-			// Update variables if Metropolis condition is met
+			// Comparing the energy difference with a random number which is the Metropolis condition
+			// If this condition is met, we accept the state and update the lattice
 			if (rand_condition <= energy_difference(delta_e + 8))
 			{
+				// flipping the spin
 				lattice(rand_x, rand_y) *= -1;
+
+				// updating magnetization and energy
 				magnetization += 2 * lattice(rand_x, rand_y);
 				energy += delta_e;
+
+				// updating the number of accepted states
 				number_of_accepted_states++;
 			}
 		}
@@ -175,13 +183,13 @@ double Ising::getEnergy(int x, int y)
 {
 	// Returning the energy difference between a lattice point and its neighbours.
 
-	double spin_mat = lattice(x,y);
+	double spin_matrix = lattice(x,y);
 	double up = lattice(x, PBC(y, dimension_of_lattice, 1));
 	double down = lattice(x, PBC(y, dimension_of_lattice, -1));
 	double left = lattice(PBC(x, dimension_of_lattice, -1), y);
 	double right = lattice(PBC(x, dimension_of_lattice, 1), y);
 
-	return 2 * spin_mat * (up + down + left + right);
+	return 2 * spin_matrix * (up + down + left + right);
 
 
 }
@@ -197,6 +205,7 @@ int Ising::PBC(int index, int limit, int offset)
 
 void Ising::WriteToFile(int current_cycle)
 {
+	// Writing the results to file
 	using namespace std;
 
 	ofstream ofile;
@@ -217,6 +226,7 @@ void Ising::WriteToFile(int current_cycle)
 void Ising::MPIWriteToFile(int number_of_experiments, double T[] ,double E[], double EE[], double EV[], double CV[],
 							 double M[], double absM[], double sus[])
 {
+	// Writing the results from the parallel calculation to file
 	using namespace std;
 
 	ofstream ofile;

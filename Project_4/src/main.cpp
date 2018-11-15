@@ -6,7 +6,8 @@ int main(int argc, char *argv[])
 {
 
 	// Declearing variables to be read in
-	int dimension_of_lattice, mc_cycles;
+	int dimension_of_lattice;
+	int mc_cycles;
 	double T_min, T_max, T_step;
 	std::string filename;
 
@@ -21,15 +22,15 @@ int main(int argc, char *argv[])
 	int world_rank;
 	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
+	// Reading in variables
 	if ((world_rank == 0) && (argc <= 4))
 	{
 		std::cout << "Bad Usage: " << argv[0] << std::endl << "Please pass along the following arguments: " << std::endl << 
-		"Lattice dimension, Number of Monte-Carlo cycles, Initial temperature and a filename for the output file."
+		"Lattice dimension, Number of Monte-Carlo cycles, a minimum and a maximum temperature and the temperature step, and finaly a filename for the output file." 
 		<< std::endl;
 		exit(1);
 	}
 
-	// Reading in variables
 	if ( (world_rank == 0) && (argc >= 7))
 	{
 		dimension_of_lattice = atoi(argv[1]);
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
 		filename = argv[6];
 	}
 
-	// On and off functions
+	// On and off functions 
 	bool intermediate_calculations = false;
 	bool oriented_lattice = false;
 	int print_every = 1;
@@ -71,10 +72,8 @@ int main(int argc, char *argv[])
 	double TimeStart, TimeStop, TimeTotal;
 	TimeStart = MPI_Wtime();
 
+	// Distributing the temperature array to the different cores
 	MPI_Scatter(&temperature, experiments_per_core, MPI_DOUBLE, &local_temperature, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-	// Ising Model initialization
-	Ising system = Ising(dimension_of_lattice, filename);
 
 	// Expectation values to be studied through different cores (local values)
 	double local_energy[number_of_experiments];
@@ -84,6 +83,9 @@ int main(int argc, char *argv[])
 	double local_magnetization[number_of_experiments];
 	double local_absolute_magnetization[number_of_experiments];
 	double local_susceptibility[number_of_experiments];
+
+	// Ising Model initialization
+	Ising system = Ising(dimension_of_lattice, filename);
 
 	// Parallel Monte Carlo simulation for a given temperature T
 	for (int j = 0; j < experiments_per_core; j++)
@@ -112,6 +114,7 @@ int main(int argc, char *argv[])
 	double susceptibility[number_of_experiments];
 	double temperatures_used[number_of_experiments];
 
+	// Gathering the different values calculated across different cores
 	MPI_Gather(&local_energy, experiments_per_core, MPI_DOUBLE, &energy, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Gather(&local_energy_squared, experiments_per_core, MPI_DOUBLE, &energy_squared, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Gather(&local_energy_variance, experiments_per_core, MPI_DOUBLE, &energy_variance, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -121,10 +124,13 @@ int main(int argc, char *argv[])
 	MPI_Gather(&local_susceptibility, experiments_per_core, MPI_DOUBLE, &susceptibility, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Gather(&local_temperature, experiments_per_core, MPI_DOUBLE, &temperatures_used, experiments_per_core, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
+	// Dumping the data to file from the root core
 	if (world_rank == 0)
 	{
 		TimeStop = MPI_Wtime();
 		TimeTotal = TimeStop-TimeStart;
+
+		// Writing out the time spent on the total calculation
 		std::cout << "Time spent: " << TimeTotal << " seconds" << "\nProcesses: " << world_size << std::endl;
 
 		system.MPIWriteToFile(number_of_experiments, temperatures_used,  energy, energy_squared, energy_variance
@@ -132,7 +138,7 @@ int main(int argc, char *argv[])
 
 	}
 
-
+	// Terminating MPI
 	MPI_Finalize();
 	
 	return 0;

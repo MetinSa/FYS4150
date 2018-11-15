@@ -21,6 +21,7 @@ public:
 	int number_of_accepted_states;
 	double temperature;
 
+	// On and off functions
 	bool oriented_lattice;
 	bool intermediate_calculations;
 	bool equilibriate;
@@ -49,23 +50,8 @@ public:
 	double mean_absolute_magnetization;
 
 	// RandomNumberGenerator
-	// std::random_device rd;
 	std::mt19937 generator;
 	std::uniform_real_distribution<double> RNG;
-
-	//  ===============
-	//  Private Methods
-	//  ===============
-
-	// Periodic boundary conditions index
-	int PBC(int index, int limit, int offset);
-
-	// The metropolis algorithm
-	void Metropolis();
-
-	// Extracting energy
-	double getEnergy(int x, int y);
-
 
 	//  ==============
 	//  Public Methods
@@ -78,10 +64,20 @@ public:
 	void InitializeLattice(double temperature, bool oriented_lattice);
 
 	// Monte Carlo integration
-	void MonteCarloSample(int N, bool intermediate_calculations, int print_every);
+	void MonteCarloSample(int number_of_mc_cycles, bool intermediate_calculations, int print_every);
+
+	// The metropolis algorithm
+	void Metropolis();
+
+	// Extracting energy
+	double getEnergy(int x, int y);
+
+	// Periodic boundary conditions index
+	int PBC(int index, int limit, int offset);
 
 	// Computes physical quantities of interest
 	void ComputeQuantities(int current_cycle);
+
 
 	//  ===================
 	//  Auxillary functions
@@ -96,5 +92,4 @@ public:
 	// Writes information from Parallel computation to file
 	void MPIWriteToFile(int number_of_experiments, double T[] ,double E[], double EE[], double EV[], double CV[], 
 						double M[], double absM[], double sus[]);
-
 };

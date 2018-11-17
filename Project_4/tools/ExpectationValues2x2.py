@@ -55,14 +55,3 @@ print("="*20)
 print("N:	E:	   M:	     C_V:      Chi:      absM:")
 for i, (E, M, C_V, Chi, absM) in enumerate(zip(E_expectation, M_expectation, C_V_expectation, Chi_expectation, absM_expectation)):
 	print ("%.E: " %(10**(i+1)), "%.7f" %E, "%.7f" %M, "%.7f" %C_V, "%.7f" %Chi, "%.7f"%absM)
-
-
-
-
-
-
-
-
-
-	
-

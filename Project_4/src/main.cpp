@@ -163,11 +163,8 @@ int main(int argc, char *argv[])
 		// Writing out the time spent on the total calculation
 		std::cout << "Time spent: " << TimeTotal << " seconds" << "\nProcesses: " << world_size << std::endl;
 
-		// if (intermediate_calculations == false)
-		// {
 		system.MPIWriteToFile(number_of_experiments, temperatures_used,  energy, energy_squared, energy_variance
 			, specific_heat, magnetization, absolute_magnetization, susceptibility, accepted_states);
-		// }
 
 	}
 

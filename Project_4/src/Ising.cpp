@@ -7,7 +7,7 @@
 
 Ising::Ising(int dimension_of_lattice, std::string filename)
 {
-	// The constructor.
+	// The constructor. 
 	// Initializing system properties
 
 	this->dimension_of_lattice = dimension_of_lattice;

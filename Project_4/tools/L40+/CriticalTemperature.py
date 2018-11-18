@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Path to directory containing files
-path = "../data/Phasetransition/"
+path = "../../data/Phasetransition/"
 
 filenames = []
 for filename in os.listdir(path):
@@ -33,10 +33,10 @@ for files in filenames:
 	T_C_SUS[files] = temperature[(np.argwhere(bestfit_polynomial_SUS == np.amax(bestfit_polynomial_SUS))[0][0])]
 
 # Combing the two lists and connecting them to their respective lattice dimensions
-T_C = [T_C_CV, T_C_SUS]
+# T_C_list = [T_C_CV, T_C_SUS]
 T_C_L40 = 0;	T_C_L60 = 0;	T_C_L80 = 0;	T_C_L100 = 0
 
-for Tc in T_C:
+for Tc in [T_C_CV, T_C_SUS]:
 	for key, value in Tc.items():
 		if "40" in key:
 			T_C_L40 += value
@@ -50,10 +50,50 @@ for Tc in T_C:
 		else:
 			T_C_L100 += value
 
-# Normalizing the values
-T_C_L40 /= 2;	T_C_L60 /= 2;	T_C_L80 /= 2;	T_C_L100 /= 2
+# Creating a dictionary with the normalized critical temperature
+T_C = {"40":T_C_L40/2, "60":T_C_L60/2, "80":T_C_L80/2, "100":T_C_L100/2}
 
-print("L = 40:	T_C = %.7f" %T_C_L40)
-print("L = 60:	T_C =  %.7f" %T_C_L60)
-print("L = 80:	T_C =  %.7f" %T_C_L80)
-print("L = 100:T_C =  %.7f" %T_C_L100)
+# Prints the critical temperature for all given lattices
+print("=="*17)
+for key in T_C:
+	print("T_C(L = %d) = %.7f" %(int(key),T_C[key]))
+print("=="*17)
+
+# setting nu = 1
+nu = 1
+
+
+def get_a(L1,L2):
+
+	# Computes the constant a for two lattice sizes.
+	return ((np.abs(T_C[str(L1)] - T_C[str(L2)]))/np.abs((L1**(-1/nu) - (L2**(-1/nu)))))
+
+
+# Determining best value of constant a by checking all possible combinations of L1 and L2
+a_list = []
+
+for key_i in T_C:
+	for key_j in T_C:
+		if key_i != key_j:
+			a = get_a(int(key_i),int(key_j))
+			if a not in a_list:
+				a_list.append(a)
+
+a = np.average(a_list)
+
+def get_T_C_infty(L):
+
+	# Computes the critical temperature of an infinite system
+	return T_C[str(L)] - a*L**(-1/nu)
+
+
+# Computing T_C_infty for all lattice sizes L
+T_C_infty_list = []
+for key in T_C:
+	T_C_infty_list.append(get_T_C_infty(int(key)))
+
+#Finding the average T_C_infty
+T_C_infty = np.average(T_C_infty_list)
+
+print("T_C(L = infty) = %.7f" %T_C_infty)
+print("=="*17)

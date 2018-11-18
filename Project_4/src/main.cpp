@@ -40,9 +40,9 @@ int main(int argc, char *argv[])
 	}
 
 	// On and off functions 
-	bool intermediate_calculations = false;
-	bool oriented_lattice = false;
-	int print_every = 100;
+	bool intermediate_calculations = true;
+	bool oriented_lattice = true;
+	int print_every = 1000;
 
 	// Broadcasting initial conditions to all processes
 	MPI_Bcast(&dimension_of_lattice, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -162,9 +162,11 @@ int main(int argc, char *argv[])
 
 		// Writing out the time spent on the total calculation
 		std::cout << "Time spent: " << TimeTotal << " seconds" << "\nProcesses: " << world_size << std::endl;
-
-		system.MPIWriteToFile(number_of_experiments, temperatures_used,  energy, energy_squared, energy_variance
-			, specific_heat, magnetization, absolute_magnetization, susceptibility, accepted_states);
+		if (intermediate_calculations == false)
+		{
+			system.MPIWriteToFile(number_of_experiments, temperatures_used,  energy, energy_squared, energy_variance
+				, specific_heat, magnetization, absolute_magnetization, susceptibility, accepted_states);
+		}
 
 	}
 

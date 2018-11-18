@@ -20,7 +20,7 @@ else:
 	nspins = 100**2
 
 # Reading in expectation values
-temperature, energy, energy_squared, energy_variance, specific_heat, magnetization, absolute_magnetization, susceptibility, accepted_states = np.loadtxt("../data/" + filename + ".dat", unpack = True)
+temperature, energy, energy_squared, energy_variance, specific_heat, magnetization, absolute_magnetization, susceptibility, accepted_states = np.loadtxt("../../data/Phasetransition/" + filename + ".dat", unpack = True)
 
 # Computing the absSusceptibility
 absSusceptibility = susceptibility + ((magnetization*magnetization)/(temperature*nspins)) - \

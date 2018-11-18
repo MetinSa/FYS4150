@@ -75,8 +75,9 @@ void Ising::InitializeLattice(double temperature, bool oriented_lattice)
 			{
 				double rand_condition = RNG(generator);
 				lattice(i,j) = (rand_condition < 0.5) ? 1 : -1;
-				magnetization += lattice(i,j);
 			}
+			magnetization += lattice(i,j);
+
 		}
 	}
 

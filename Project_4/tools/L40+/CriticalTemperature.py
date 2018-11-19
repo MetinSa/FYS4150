@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Path to directory containing files
-path = "../../data/Phasetransition/"
+path = "../../data/L40+/"
 
 filenames = []
 for filename in os.listdir(path):

@@ -16,12 +16,12 @@ plt.rc('font', family='serif')
 plt.subplots_adjust(left = 0.14)
 
 # Path to directory containing files
-path = "../../data/Phasetransition/"
+path = "../../data/L40+/"
 savepath = "../../figures/"
 
 filenames = []
 
-for filename in os.listdir("../../data/Phasetransition/"):
+for filename in os.listdir(path):
 	if ".dat" in filename:
 		filenames.append(filename)
 

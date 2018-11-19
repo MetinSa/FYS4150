@@ -17,7 +17,7 @@ This will create a run.x executable. The executable takes in the following argum
 where -n 2 means that the program is split up into 2 processes.
 If one only wants to study a single temperature, put the final temperature argument to 0 and number of temperature steps to 1.
 
-## Running tools
+## Tools
 
 The tools used to analyze the resulting data are written in python. These should be studied individually to understand their use and how they are executed.
 

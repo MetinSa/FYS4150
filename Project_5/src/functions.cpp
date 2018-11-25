@@ -22,12 +22,13 @@ void StockMarketModel::Transaction()
 	// Initialzing seed and the Mersienne random generator
 	std::random_device rd;
 	std::mt19937_64 generator(rd());
-	std::uniform_int_distribution<int> RNG_int(0, N-1);
-	std::uniform_real_distribution<double> RNG_real(0.1, 1.0);
+	std::uniform_int_distribution<int> RNG_int(0, N-1);					// Uniform integer distribution in (0, N)
+	std::uniform_real_distribution<double> RNG_real(0.1, 1.0);			// Uniform double distribution in (0.1, 1.0)
 
+	// Performing given number of transactions 
 	for (int i = 0; i < transactions; i++)
 	{
-		// Extracting two random agents
+		// Picking two random agents
 		int agent_i = RNG_int(generator);
 		int agent_j = RNG_int(generator);	
 
@@ -35,13 +36,13 @@ void StockMarketModel::Transaction()
 		double m_i = agents(agent_i);
 		double m_j = agents(agent_j);	
 
-		// Finding the random monetary value exchanged during transaction
+		// Finding a random monetary value exchanged during transaction epsilon
 		double epsilon = RNG_real(generator);	
 
-		// Computing delta m
+		// Computing the traded money delta_m
 		double delta_m = (epsilon*m_j - (1 - epsilon)*m_i);	
 
-		// Updating the money of the agents
+		// Updating the new wealth of both agents
 		agents(agent_i) += delta_m;
 		agents(agent_j) -= delta_m;
 	}
@@ -50,6 +51,7 @@ void StockMarketModel::Transaction()
 
 void StockMarketModel::DumpToFile()
 {
+	// Writing the final wealth distribution of all N agents to file
 	using namespace std;
 
 	ofstream ofile;

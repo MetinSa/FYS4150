@@ -25,7 +25,6 @@ public:
 	arma::vec agents;
 
 
-
 	// Constructor which initializes the model
 	StockMarketModel(int N, int transactions, int simulations, double m_0, std::string savefile);
 

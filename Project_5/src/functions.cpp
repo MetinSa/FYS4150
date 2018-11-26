@@ -17,7 +17,7 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 };
 
 
-void StockMarketModel::Transaction()
+void StockMarketModel::Trade()
 {
 	// Initialzing seed and the Mersienne random generator
 	std::random_device rd;

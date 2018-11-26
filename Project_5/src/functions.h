@@ -29,7 +29,7 @@ public:
 	StockMarketModel(int N, int transactions, int simulations, double m_0, std::string savefile);
 
 	// Functions
-	void Transaction();
+	void Trade();
 	void DumpToFile();
 
 };

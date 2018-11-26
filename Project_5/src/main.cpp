@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	// Initializing the model
 	StockMarketModel StockMarket = StockMarketModel(N, transactions, simulations, m_0, savefile);
 	// StockMarket.agents.print();
-	StockMarket.Transaction();
+	StockMarket.Trade();
 	StockMarket.DumpToFile();
 
 	return 0;

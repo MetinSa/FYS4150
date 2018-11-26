@@ -11,10 +11,10 @@ class StockMarketModel
 	// agents using the Monte Carlo methhod.
 
 public:
-
+	
 	// Model spesifics
 	int N;					// Number of agents
-	int transactions;		// Number of transactions
+	int transactions;		// Number of trades
 	int simulations;		// Number of simulations
 	std::string savefile;	// Name of outputfile
 
@@ -24,12 +24,15 @@ public:
 	// Vector containing the wealth of all agents
 	arma::vec agents;
 
+	// Vector containing the total averaged wealth of all agents
+	arma::vec total_average_agents;
 
 	// Constructor which initializes the model
 	StockMarketModel(int N, int transactions, int simulations, double m_0, std::string savefile);
 
 	// Functions
-	void Trade();
-	void DumpToFile();
+	void Trade();			// Performing the transactions
+	void Simulate();		// Simulating the system
+	void DumpToFile();		// Dumping results to file
 
 };

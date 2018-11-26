@@ -14,11 +14,17 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	arma::vec agents(N);
 	agents.fill(m_0);
 	this->agents = agents;
+
+	// Vector containing the total averaged wealth of all agents
+	arma::vec total_average_agents(N);
+	this->total_average_agents = total_average_agents;
 };
 
 
 void StockMarketModel::Trade()
 {
+	// Function that performs a trade between an agent and another
+
 	// Initialzing seed and the Mersienne random generator
 	std::random_device rd;
 	std::mt19937_64 generator(rd());
@@ -48,6 +54,38 @@ void StockMarketModel::Trade()
 	}
 }
 
+void StockMarketModel::Simulate()
+{
+	// Function that simulates the system a given number of times and computes 
+	// the average wealth distribution
+
+	// Timing the simulation
+	clock_t start, stop;
+
+	// Starting the clock
+	start = clock();
+
+	// Performing a given number of simulations
+	for (int i = 0; i < simulations; i++)
+	{
+		// Activating the Trade function
+		Trade();
+
+		// Sorting the agents array and adding it to the total
+		total_average_agents += arma::sort(agents);
+	}
+	
+	// Saving the final results by dumping them to a file
+	total_average_agents /= simulations;
+	DumpToFile();
+
+	// Stopping the clock
+	stop = clock();
+
+	// Printing the time spent
+	std::cout << "Time spent: " << double (stop - start)/CLOCKS_PER_SEC << " seconds." << std::endl;
+}
+
 
 void StockMarketModel::DumpToFile()
 {
@@ -59,7 +97,7 @@ void StockMarketModel::DumpToFile()
 	ofile << setiosflags(ios::showpoint | ios::uppercase);
 	for (int i = 0; i < N; i++)
 	{
-		ofile << setprecision(8) << agents(i) << "\n";
+		ofile << setprecision(8) << total_average_agents(i) << "\n";
 	}
 	ofile.close();
 }

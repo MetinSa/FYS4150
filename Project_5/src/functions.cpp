@@ -18,6 +18,7 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	// Vector containing the total averaged wealth of all agents
 	arma::vec total_average_agents(N);
 	this->total_average_agents = total_average_agents;
+
 };
 
 
@@ -30,6 +31,11 @@ void StockMarketModel::Trade()
 	std::mt19937_64 generator(rd());
 	std::uniform_int_distribution<int> RNG_int(0, N-1);					// Uniform integer distribution in (0, N)
 	std::uniform_real_distribution<double> RNG_real(0.1, 1.0);			// Uniform double distribution in (0.1, 1.0)
+
+	// Parameters which will be used to determine equilibrium
+	int transaction_interval = 1e4;
+	double variance, averaged_variance, previous_averaged_variance;
+	previous_averaged_variance = 1e10;
 
 	// Performing given number of transactions 
 	for (int i = 0; i < transactions; i++)
@@ -51,6 +57,34 @@ void StockMarketModel::Trade()
 		// Updating the new wealth of both agents
 		agents(agent_i) += delta_m;
 		agents(agent_j) -= delta_m;
+
+
+		// Checking if the system has reached an equilibrium
+		// Updating variance for each transaction in a interval
+		variance += arma::var(agents);
+
+		// Comparing variance at end of interval
+		if (i % transaction_interval == 0)
+		{
+			// Averaging the variance over the interval
+			averaged_variance = variance/transaction_interval;
+
+			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
+			{
+				// Letting user know that equilibrium has been reached
+				std::cout << "System has reach equilibrium at transaction no. " << i << std::endl;
+
+				// Ending the Trade algorithm
+				break;
+			}
+			// If variance statement is not passed, the averaged variance is saved for later comparison
+			else
+			{
+				previous_averaged_variance = averaged_variance;
+			}
+			// reseting the variance
+			variance = 0;
+		}
 	}
 }
 
@@ -74,7 +108,7 @@ void StockMarketModel::Simulate()
 		// Sorting the agents array and adding it to the total
 		total_average_agents += arma::sort(agents);
 	}
-	
+
 	// Saving the final results by dumping them to a file
 	total_average_agents /= simulations;
 	DumpToFile();

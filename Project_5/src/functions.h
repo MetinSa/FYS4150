@@ -11,7 +11,7 @@ class StockMarketModel
 	// agents using the Monte Carlo methhod.
 
 public:
-	
+
 	// Model spesifics
 	int N;					// Number of agents
 	int transactions;		// Number of trades
@@ -20,6 +20,10 @@ public:
 
 	// Initial wealth of all agents
 	double m_0;
+
+	// Parameters used to estimate equilibrium
+	double transacton_interval;
+	double variance;
 
 	// Vector containing the wealth of all agents
 	arma::vec agents;

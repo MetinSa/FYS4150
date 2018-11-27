@@ -18,8 +18,9 @@ public:
 	int simulations;		// Number of simulations
 	std::string savefile;	// Name of outputfile
 
-	// Initial wealth of all agents
+	// Initial wealth and save fraction of all agents
 	double m_0;
+	double lambda;
 
 	// Parameters used to estimate equilibrium
 	double transacton_interval;
@@ -32,7 +33,7 @@ public:
 	arma::vec total_average_agents;
 
 	// Constructor which initializes the model
-	StockMarketModel(int N, int transactions, int simulations, double m_0, std::string savefile);
+	StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, std::string savefile);
 
 	// Functions
 	void Trade(arma::vec &agents);			// Performing the transactions

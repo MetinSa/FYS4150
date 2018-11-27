@@ -1,4 +1,5 @@
 #include "functions.h"
+#include <omp.h>
 
 StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, std::string savefile)
 {
@@ -22,8 +23,8 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 };
 
 
-void StockMarketModel::Trade()
-{
+void StockMarketModel::Trade(arma::vec &agents)
+	{
 	// Function that performs a trade between an agent and another
 
 	// Initialzing seed and the Mersienne random generator
@@ -72,7 +73,7 @@ void StockMarketModel::Trade()
 			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
 			{
 				// Letting user know that equilibrium has been reached
-				std::cout << "System has reach equilibrium at transaction no. " << i << std::endl;
+				// std::cout << "System has reach equilibrium at transaction no. " << i << std::endl;
 
 				// Ending the Trade algorithm
 				break;
@@ -95,18 +96,40 @@ void StockMarketModel::Simulate()
 
 	// Timing the simulation
 	clock_t start, stop;
+	int thread_num, n_threads;
 
+	arma::vec agentscopy = agents;
+	arma::mat total_average_agents_per_thread;
 	// Starting the clock
 	start = clock();
 
-	// Performing a given number of simulations
-	for (int i = 0; i < simulations; i++)
-	{
-		// Activating the Trade function
-		Trade();
 
-		// Sorting the agents array and adding it to the total
-		total_average_agents += arma::sort(agents);
+	// Performing a given number of simulations
+#pragma omp parallel private(agents, thread_num) shared(n_threads, total_average_agents_per_thread)
+	{
+#pragma omp master
+		{
+			n_threads = omp_get_num_threads();
+			total_average_agents_per_thread = arma::mat(N, n_threads);
+		}
+		agents = agentscopy;
+		thread_num = omp_get_thread_num();
+
+#pragma omp for
+		for (int i = 0; i < simulations; i++)
+			{
+				// Activating the Trade function
+				Trade(agents);
+				// Sorting the agents array and adding it to the total
+				total_average_agents_per_thread.col(thread_num) += arma::sort(agents);
+			}
+#pragma omp master
+		{
+			for (int i = 0; i < n_threads; i++)
+			{
+				total_average_agents += total_average_agents_per_thread.col(i);
+			}
+		}
 	}
 
 	// Saving the final results by dumping them to a file
@@ -115,9 +138,8 @@ void StockMarketModel::Simulate()
 
 	// Stopping the clock
 	stop = clock();
-
 	// Printing the time spent
-	std::cout << "Time spent: " << double (stop - start)/CLOCKS_PER_SEC << " seconds." << std::endl;
+	std::cout << "Time spent: " << double (stop - start)/(n_threads*CLOCKS_PER_SEC) << " seconds." << std::endl;
 }
 
 

@@ -8,10 +8,18 @@ int main(int argc, char *argv[])
 	double m_0 = 100;
 
 	std::string savefile;
-	savefile = argv[1];
+	if (argc > 1)
+	{
+		savefile = argv[1];
+	}
+	else
+	{
+		std::cout << "Please provide filename in command line." << std::endl;
+		return 1;
+	}
 
 	// Initializing the model
-	StockMarketModel StockMarket = StockMarketModel(N, transactions, simulations, m_0, savefile);
+	StockMarketModel StockMarket(N, transactions, simulations, m_0, savefile);
 	StockMarket.Simulate();
 
 	return 0;

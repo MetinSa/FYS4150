@@ -9,8 +9,8 @@ SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)" )
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 INCLUDES := $(shell find $(INCDIR) -type f -name "*.h" )
-CPPFLAGS := -O3 -std=c++17
-LIB := -larmadillo -llapack -lblas
+CPPFLAGS := -O3 -std=c++17 -fopenmp
+LIB := -larmadillo -llapack -lblas -fopenmp
 INC := -I $(INCDIR)
 
 TESTDIR := test

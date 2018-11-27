@@ -1,6 +1,6 @@
 #include "functions.h"
 
-StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, std::string savefile)
+StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, std::string savefile)
 {
 	// The constructor
 	// Initializing the stock market model
@@ -8,6 +8,7 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	this->transactions = transactions;
 	this->simulations = simulations;
 	this->m_0 = m_0;
+	this->lambda = lambda;
 	this-> savefile = savefile;
 
 	// Vector containing the wealth of all agents
@@ -37,22 +38,22 @@ void StockMarketModel::Trade()
 	double variance, averaged_variance, previous_averaged_variance;
 	previous_averaged_variance = 1e10;
 
-	// Performing given number of transactions 
+	// Performing given number of transactions
 	for (int i = 0; i < transactions; i++)
 	{
 		// Picking two random agents
 		int agent_i = RNG_int(generator);
-		int agent_j = RNG_int(generator);	
+		int agent_j = RNG_int(generator);
 
 		// Extracting wealth of respective agents
 		double m_i = agents(agent_i);
-		double m_j = agents(agent_j);	
+		double m_j = agents(agent_j);
 
 		// Finding a random monetary value exchanged during transaction epsilon
-		double epsilon = RNG_real(generator);	
+		double epsilon = RNG_real(generator);
 
 		// Computing the traded money delta_m
-		double delta_m = (epsilon*m_j - (1 - epsilon)*m_i);	
+		double delta_m = (1-lambda)*(epsilon*m_j - (1 - epsilon)*m_i);
 
 		// Updating the new wealth of both agents
 		agents(agent_i) += delta_m;
@@ -90,7 +91,7 @@ void StockMarketModel::Trade()
 
 void StockMarketModel::Simulate()
 {
-	// Function that simulates the system a given number of times and computes 
+	// Function that simulates the system a given number of times and computes
 	// the average wealth distribution
 
 	// Timing the simulation

@@ -71,10 +71,8 @@ void StockMarketModel::Trade()
 
 			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
 			{
-				// Letting user know that equilibrium has been reached
-				std::cout << "System has reach equilibrium at transaction no. " << i << std::endl;
 
-				// Ending the Trade algorithm
+				// Equilibrium has been reached. Ending the Trade algorithm
 				break;
 			}
 			// If variance statement is not passed, the averaged variance is saved for later comparison

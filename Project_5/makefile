@@ -11,6 +11,7 @@ INCLUDES := $(shell find $(SRCDIR) -type f -name "*.h" )
 CPPFLAGS := -O3 -std=c++17 -fopenmp
 LIB := -larmadillo -llapack -lblas -fopenmp
 
+
 TESTDIR := test
 TESTSOURCES := $(shell find $(TESTDIR) -type f -name "*.$(SRCEXT)" )
 FUNCSOURCES := $(shell find $(SRCDIR) -type f \( -name "*.$(SRCEXT)" ! -name "main.cpp" \))
@@ -24,7 +25,7 @@ $(TARGET):			$(OBJECTS)
 
 $(BUILDDIR)/%.o:	$(SRCDIR)/%.$(SRCEXT) $(INCLUDES)
 					@mkdir -p $(BUILDDIR)
-					$(CC) $(CPPFLAGS) $(INC) -c -o $@ $<
+					$(CC) $(CPPFLAGS) -c -o $@ $<
 					
 
 

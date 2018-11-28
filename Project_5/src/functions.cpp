@@ -9,8 +9,10 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	this->transactions = transactions;
 	this->simulations = simulations;
 	this->m_0 = m_0;
-	this->lambda = lambda;
 	this-> savefile = savefile;
+
+	// Parameters
+	this->lambda = lambda;												// Saving criterion fraction
 
 	// Vector containing the wealth of all agents
 	arma::vec agents(N);
@@ -20,7 +22,6 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	// Vector containing the total averaged wealth of all agents
 	arma::vec total_average_agents(N);
 	this->total_average_agents = total_average_agents;
-
 };
 
 
@@ -36,8 +37,10 @@ void StockMarketModel::Trade(arma::vec &agents)
 
 	// Parameters which will be used to determine equilibrium
 	int transaction_interval = 1e4;
-	double variance, averaged_variance, previous_averaged_variance;
-	previous_averaged_variance = 1e10;
+	double variance, averaged_variance;
+
+	// Initial large value so that the first average variance is always saved
+	double previous_averaged_variance = 1e10;
 
 	// Performing given number of transactions
 	for (int i = 0; i < transactions; i++)
@@ -65,16 +68,17 @@ void StockMarketModel::Trade(arma::vec &agents)
 		// Updating variance for each transaction in a interval
 		variance += arma::var(agents);
 
-		// Comparing variance at end of interval
+		// Enters loop at the end of an interval
 		if (i % transaction_interval == 0)
 		{
 			// Averaging the variance over the interval
 			averaged_variance = variance/transaction_interval;
 
+			// Checking if the average variance has changed by less than 0.5% during the last interval
 			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
 			{
 
-				// Ending the Trade algorithm
+				// Equilibrium has been reached. Ending the Trade algorithm
 				break;
 			}
 			// If variance statement is not passed, the averaged variance is saved for later comparison
@@ -82,11 +86,13 @@ void StockMarketModel::Trade(arma::vec &agents)
 			{
 				previous_averaged_variance = averaged_variance;
 			}
+
 			// reseting the variance
 			variance = 0;
 		}
 	}
 }
+
 
 void StockMarketModel::Simulate()
 {
@@ -147,9 +153,11 @@ void StockMarketModel::DumpToFile()
 	ofstream ofile;
 	ofile.open("data/" + savefile + ".dat", ios::app);
 	ofile << setiosflags(ios::showpoint | ios::uppercase);
+
 	for (int i = 0; i < N; i++)
 	{
 		ofile << setprecision(8) << total_average_agents(i) << "\n";
 	}
+
 	ofile.close();
 }

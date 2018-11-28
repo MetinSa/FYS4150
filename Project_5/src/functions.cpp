@@ -73,8 +73,6 @@ void StockMarketModel::Trade(arma::vec &agents)
 
 			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
 			{
-				// Letting user know that equilibrium has been reached
-				// std::cout << "System has reach equilibrium at transaction no. " << i << std::endl;
 
 				// Ending the Trade algorithm
 				break;
@@ -126,10 +124,7 @@ void StockMarketModel::Simulate()
 			}
 #pragma omp master
 		{
-			for (int i = 0; i < n_threads; i++)
-			{
-				total_average_agents += total_average_agents_per_thread.col(i);
-			}
+			total_average_agents = sum(total_average_agents_per_thread, 1);
 		}
 	}
 

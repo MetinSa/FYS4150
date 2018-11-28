@@ -40,7 +40,7 @@ $(TESTDIR)/%.x:		$(TESTDIR)/%.o $(FUNCOBJECTS)
 					@echo "Test $@ passed!"
 
 $(TESTDIR)/%.o:		$(TESTDIR)/%.cpp $(INCLUDES)
-					@$(CC) $(CPPFLAGS) $(INC) -c -o $@ $<
+					@$(CC) $(CPPFLAGS) -c -o $@ $<
 
 
 # Cleaning		

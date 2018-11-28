@@ -38,7 +38,7 @@ public:
 	StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, std::string savefile);
 
 	// Functions
-	void Trade();			// Performing the transactions
+	void Trade(arma::vec &agents);			// Performing the transactions
 	void Simulate();		// Simulating the system
 	void DumpToFile();		// Dumping results to file
 

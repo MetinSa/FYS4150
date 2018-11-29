@@ -59,7 +59,7 @@ void StockMarketModel::Trade()
 		// - agent i and j are the same agent
 		// - likelihood is smaller than some random number (throwing dice)
 		// If conditions are met the loop breaks and the agents are allowed to trade
-		while ( (agent_i == agent_j) || ((pow(fabs(m_i - m_j), -alpha)) < 100*RNG_real(generator)) )
+		while ( (agent_i == agent_j) || ((pow(fabs(m_i - m_j), -alpha)) < 0.01*RNG_real(generator)) )
 		{
 			// Picking two new agents
 			agent_i = RNG_int(generator);
@@ -150,7 +150,7 @@ void StockMarketModel::DumpToFile()
 	using namespace std;
 
 	ofstream ofile;
-	ofile.open("data/" + savefile + ".dat", ios::app);
+	ofile.open("data/" + savefile + ".dat");
 	ofile << setiosflags(ios::showpoint | ios::uppercase);
 
 	for (int i = 0; i < N; i++)

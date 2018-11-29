@@ -5,6 +5,7 @@ from matplotlib import rc
 
 # System information
 path = "../data/"
+savepath = "../figures/test/"
 filename = sys.argv[1]
 
 # Reading file
@@ -20,4 +21,5 @@ n, bins, patches = plt.hist(agents, 50, color = "royalblue", edgecolor = "black"
 plt.grid(linestyle = "--")
 plt.xlabel("Wealth $m$")
 plt.ylabel("Distribution of wealth $w_m$")
+plt.savefig(savepath + filename + ".pdf")
 plt.show()

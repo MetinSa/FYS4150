@@ -20,6 +20,7 @@ public:
 
 	// Parameters
 	double lambda;
+	double alpha;
 
 	// Initial wealth of all agents
 	double m_0;
@@ -35,7 +36,7 @@ public:
 	arma::vec total_average_agents;
 
 	// Constructor which initializes the model
-	StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, std::string savefile);
+	StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, double alpha, std::string savefile);
 
 	// Functions
 	void Trade();			// Performing the transactions

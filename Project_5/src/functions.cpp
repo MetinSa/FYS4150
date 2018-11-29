@@ -1,6 +1,6 @@
 #include "functions.h"
 
-StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, std::string savefile)
+StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, double alpha, std::string savefile)
 {
 	// The constructor
 	// Initializing the stock market model
@@ -32,7 +32,7 @@ void StockMarketModel::Trade()
 	std::random_device rd;
 	std::mt19937_64 generator(rd());
 	std::uniform_int_distribution<int> RNG_int(0, N-1);					// Uniform integer distribution in (0, N)
-	std::uniform_real_distribution<double> RNG_real(0.1, 1.0);			// Uniform double distribution in (0.1, 1.0)
+	std::uniform_real_distribution<double> RNG_real(0.0, 1.0);			// Uniform double distribution in (0.1, 1.0)
 
 	// Parameters which will be used to determine equilibrium
 	int transaction_interval = 1e4;
@@ -52,6 +52,23 @@ void StockMarketModel::Trade()
 		double m_i = agents(agent_i);
 		double m_j = agents(agent_j);
 
+		// Defining likelihood of a transaction between the two arbritarily chosen agents
+
+		// Checking if:
+		// - agent i and j are the same agent
+		// - likelihood is smaller than some random number (throwing dice)
+		// If conditions are met the loop breaks and the agents are allowed to trade
+		while ( (agent_i == agent_j) || ((pow(fabs(m_i - m_j), -alpha)) < 100*RNG_real(generator)) )
+		{
+			// Picking two new agents
+			agent_i = RNG_int(generator);
+			agent_j = RNG_int(generator);
+
+			// Extracting their wealth
+			m_i = agents(agent_i);
+			m_j = agents(agent_j);
+
+		}
 		// Finding a random monetary value exchanged during transaction epsilon
 		double epsilon = RNG_real(generator);
 
@@ -73,7 +90,7 @@ void StockMarketModel::Trade()
 			// Averaging the variance over the interval
 			averaged_variance = variance/transaction_interval;
 
-			// Checking if the average variance has changed by less than 0.5% during the last interval
+			// Checking if the average variance has changed by less than 0.5% during the last transaction interval
 			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
 			{
 

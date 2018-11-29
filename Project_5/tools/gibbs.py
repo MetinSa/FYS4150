@@ -16,7 +16,7 @@ m_0 = 100
 N = len(WealthDistribution)
 
 # Delta_m 
-delta_m = 0.05
+delta_m = 0.03
 
 # Number of bins 
 N_bins = (int(N*delta_m))
@@ -35,11 +35,11 @@ plt.grid(linestyle = "--")
 plt.xlabel("Wealth $m$")
 plt.ylabel("Distribution of wealth $w_m$")
 # print (len(m))
-plt.plot(m,w_m/N, color = "royalblue")
+plt.semilogy(m,w_m/N, color = "royalblue")
 
 # Gibbs comparison
 m_gibbs = np.linspace(np.amin(WealthDistribution), np.amax(WealthDistribution),N)
-w_gibbs = GibbsDistribution(m_0,m_gibbs)
-plt.plot(m_gibbs,w_gibbs*10)
+# w_gibbs = GibbsDistribution(m_0,m_gibbs)
+# plt.plot(m_gibbs,w_gibbs*10)
 plt.show()
 

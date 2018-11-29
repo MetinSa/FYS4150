@@ -12,6 +12,7 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 
 	// Parameters
 	this->lambda = lambda;												// Saving criterion fraction
+	this->alpha = alpha;												// Power law tail
 
 	// Vector containing the wealth of all agents
 	arma::vec agents(N);

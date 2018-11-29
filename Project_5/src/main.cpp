@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 	int simulations = 1e2;
 	double m_0 = 1;
 	double lambda = 0;
-	double alpha = 2;
+	double alpha = 0;
 
 	std::string savefile;
 	savefile = argv[1];

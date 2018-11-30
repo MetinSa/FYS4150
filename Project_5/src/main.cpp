@@ -5,9 +5,9 @@ int main(int argc, char *argv[])
 	int N = 1000;
 	int transactions = 1e7;
 	int simulations = 1e2;
-	double m_0 = 1;
+	double m_0 = 100;
 	double lambda = 0;
-	double alpha = 0;
+	double alpha = 0.5;
 
 	std::string savefile;
 	savefile = argv[1];

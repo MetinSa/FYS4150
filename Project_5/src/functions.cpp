@@ -42,6 +42,7 @@ void StockMarketModel::Trade()
 	// Initial large value so that the first average variance is always saved
 	double previous_averaged_variance = 1e10;
 
+	int idum = 0;
 	// Performing given number of transactions
 	for (int i = 0; i < transactions; i++)
 	{
@@ -59,7 +60,7 @@ void StockMarketModel::Trade()
 		// - agent i and j are the same agent
 		// - likelihood is smaller than some random number (throwing dice)
 		// If conditions are met the loop breaks and the agents are allowed to trade
-		while ( (agent_i == agent_j) || ((pow(fabs(m_i - m_j), -alpha)) < 0.01*RNG_real(generator)) )
+		while ( (agent_i == agent_j) || ((pow(fabs(m_i - m_j), -alpha)) < RNG_real(generator)) )
 		{
 			// Picking two new agents
 			agent_i = RNG_int(generator);
@@ -69,7 +70,11 @@ void StockMarketModel::Trade()
 			m_i = agents(agent_i);
 			m_j = agents(agent_j);
 
+			// Checking how many times two agents arent allowed to trade
+			idum ++;
+
 		}
+		// std::cout << "out" << std::endl;
 		// Finding a random monetary value exchanged during transaction epsilon
 		double epsilon = RNG_real(generator);
 
@@ -108,6 +113,8 @@ void StockMarketModel::Trade()
 			variance = 0;
 		}
 	}
+	// Printing the number of times agents werent allowed to trade becaused of likelihood per simulation
+	std::cout << idum << std::endl;
 }
 
 

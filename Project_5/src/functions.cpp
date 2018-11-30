@@ -115,7 +115,7 @@ void StockMarketModel::Trade(arma::vec &agents)
 		}
 	}
 	// Printing the number of times agents werent allowed to trade becaused of likelihood per simulation
-	std::cout << idum << std::endl;
+	//std::cout << idum << std::endl;
 }
 
 

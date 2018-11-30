@@ -4,15 +4,17 @@ int main(int argc, char *argv[])
 {
 	int N = 1000;
 	int transactions = 1e7;
-	int simulations = 1e2;
+	int simulations = 1e4;
 	double m_0 = 100;
-	double lambda = 0;
-	double alpha = 0.5;
+	double lambda;
+	double alpha;
 
 	std::string savefile;
 	if (argc > 1)
 	{
 		savefile = argv[1];
+		lambda = atof(argv[2]);
+		alpha = atof(argv[3]);
 	}
 	else
 	{

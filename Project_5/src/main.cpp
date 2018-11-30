@@ -7,13 +7,14 @@ int main(int argc, char *argv[])
 	int simulations = 1e2;
 	double m_0 = 100;
 	double lambda = 0;
-	double alpha = 0.5;
+	double alpha = 0.0;
+	double gamma = 0.0;
 
 	std::string savefile;
 	savefile = argv[1];
 
 	// Initializing the model
-	StockMarketModel StockMarket = StockMarketModel(N, transactions, simulations, m_0, lambda, alpha, savefile);
+	StockMarketModel StockMarket = StockMarketModel(N, transactions, simulations, m_0, lambda, alpha, gamma, savefile);
 	StockMarket.Simulate();
 
 	return 0;

@@ -1,6 +1,6 @@
 #include "functions.h"
 
-StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, double alpha, std::string savefile)
+StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, double alpha, double gamma, std::string savefile)
 {
 	// The constructor
 	// Initializing the stock market model
@@ -11,8 +11,9 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	this-> savefile = savefile;
 
 	// Parameters
-	this->lambda = lambda;												// Saving criterion fraction
-	this->alpha = alpha;												// Power law tail
+	this->lambda = lambda;								// Saving criterion fraction
+	this->alpha = alpha;									// Power law parameter for nearest neighbor interactions
+	this->gamma = gamma; 									// Power law parameter for former transactions
 
 	// Vector containing the wealth of all agents
 	arma::vec agents(N);
@@ -22,11 +23,18 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	// Vector containing the total averaged wealth of all agents
 	arma::vec total_average_agents(N);
 	this->total_average_agents = total_average_agents;
+
+	// Matrix containing number of interactions between all agents
+	arma::mat C(N,N);
+	C.fill(0);
+	this->C = C;
+
 };
 
 
 void StockMarketModel::Trade()
 {
+	std::cout << C << std::endl;
 	// Function that performs a trade between an agent and another
 
 	// Initialzing seed and the Mersienne random generator
@@ -54,13 +62,16 @@ void StockMarketModel::Trade()
 		double m_i = agents(agent_i);
 		double m_j = agents(agent_j);
 
+		// Extracting the current number of transactions between the two agents
+		int current_transactions = C(agent_i, agent_j);
+
 		// Defining likelihood of a transaction between the two arbritarily chosen agents
 
 		// Checking if:
 		// - agent i and j are the same agent
 		// - likelihood is smaller than some random number (throwing dice)
 		// If conditions are met the loop breaks and the agents are allowed to trade
-		while ( (agent_i == agent_j) || ((pow(fabs(m_i - m_j), -alpha)) < RNG_real(generator)) )
+		while ( (agent_i == agent_j) || ( ((pow(fabs(m_i - m_j), -alpha)) * (pow(current_transactions + 1, gamma))) < RNG_real(generator)) )
 		{
 			// Picking two new agents
 			agent_i = RNG_int(generator);
@@ -69,6 +80,9 @@ void StockMarketModel::Trade()
 			// Extracting their wealth
 			m_i = agents(agent_i);
 			m_j = agents(agent_j);
+
+			// Update the current number of transactions between the two new agents
+			current_transactions = C(agent_i, agent_j);
 
 			// Checking how many times two agents arent allowed to trade
 			idum ++;
@@ -85,6 +99,9 @@ void StockMarketModel::Trade()
 		agents(agent_i) += delta_m;
 		agents(agent_j) -= delta_m;
 
+		// Update the number of transactions
+		C(agent_i, agent_j) += 1;
+		C(agent_j, agent_i) += 1;
 
 		// Checking if the system has reached an equilibrium
 		// Updating variance for each transaction in a interval
@@ -115,6 +132,7 @@ void StockMarketModel::Trade()
 	}
 	// Printing the number of times agents werent allowed to trade becaused of likelihood per simulation
 	std::cout << idum << std::endl;
+	std::cout << C << std::endl;
 }
 
 

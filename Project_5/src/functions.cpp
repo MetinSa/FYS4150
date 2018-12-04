@@ -179,6 +179,7 @@ void StockMarketModel::Simulate()
 				// Sorting the agents array and adding it to the total
 				total_average_agents_per_thread.col(thread_num) += arma::sort(agents);
 			}
+#pragma omp barrier
 #pragma omp master
 		{
 			total_average_agents = sum(total_average_agents_per_thread, 1);

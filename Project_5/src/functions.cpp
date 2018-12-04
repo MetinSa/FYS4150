@@ -146,14 +146,13 @@ void StockMarketModel::Simulate()
 	// the average wealth distribution
 
 	// Timing the simulation
-	clock_t start, stop;
+	clock_t start, stop, avg_cpu_start, avg_cpu_stop;
 	int thread_num, n_threads;
 
 	arma::vec agentscopy = agents;
 	arma::mat C_copy = C;
 	arma::mat total_average_agents_per_thread;
-	// Starting the clock
-	start = clock();
+
 
 
 	// Performing a given number of simulations
@@ -163,6 +162,10 @@ void StockMarketModel::Simulate()
 		{
 			n_threads = omp_get_num_threads();
 			total_average_agents_per_thread = arma::mat(N, n_threads);
+			std::cout << "Number of CPUs: " << n_threads << std::endl;
+			// Starting the clock
+			start = omp_get_wtime();
+			avg_cpu_start = clock();
 		}
 		agents = agentscopy;
 		C = C_copy;
@@ -179,17 +182,20 @@ void StockMarketModel::Simulate()
 #pragma omp master
 		{
 			total_average_agents = sum(total_average_agents_per_thread, 1);
+			// Saving the final results by dumping them to a file
+			total_average_agents /= simulations;
+			DumpToFile();
+
+			// Stopping the clock
+			stop = omp_get_wtime();
+			avg_cpu_stop = clock();
+			// Printing the time spent
+			std::cout << "Time spent: " << double (stop - start) << " seconds." << std::endl;
+			std::cout << "Total CPU-time: " << double (avg_cpu_stop - avg_cpu_start)/(CLOCKS_PER_SEC) << " seconds." << std::endl;
+			std::cout << "Average CPU-time: " << double (avg_cpu_stop - avg_cpu_start)/(n_threads*CLOCKS_PER_SEC) << " seconds." << std::endl;
 		}
 	}
 
-	// Saving the final results by dumping them to a file
-	total_average_agents /= simulations;
-	DumpToFile();
-
-	// Stopping the clock
-	stop = clock();
-	// Printing the time spent
-	std::cout << "Time spent: " << double (stop - start)/(n_threads*CLOCKS_PER_SEC) << " seconds." << std::endl;
 }
 
 

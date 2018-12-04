@@ -17,9 +17,9 @@ int main(int argc, char *argv[])
 		if (argc > 2) {lambda = atof(argv[2]);}
 		if (argc > 3) {alpha = atof(argv[3]);}
 		if (argc > 4) {gamma = atof(argv[4]);}
-		if (argc > 5) {simulations = atoi(argv[5]);}
-		if (argc > 6) {N = atoi(argv[6]);}
-		if (argc > 7) {transactions = atoi(argv[7]);}
+		if (argc > 5) {simulations = atof(argv[5]);}
+		if (argc > 6) {N = atof(argv[6]);}
+		if (argc > 7) {transactions = atof(argv[7]);}
 		if (argc > 8) {m_0 = atof(argv[8]);}
 	}
 	else

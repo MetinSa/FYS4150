@@ -21,7 +21,7 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	this->total_average_agents = arma::vec(N);
 
 	// Matrix containing number of interactions between all agents
-	this->C = arma::vec(C).fill(0);
+	this->C = arma::mat(N,N).fill(0);
 };
 
 
@@ -66,7 +66,7 @@ void StockMarketModel::Trade()
 		// 	- agent i and j are the same agent
 		// 	- likelihood is smaller than some random number
 		// If both conditions are false the loop breaks and the agents are allowed to perform a transaction
-		while ( (agent_i == agent_j) || ( ((pow(fabs(m_i - m_j), -alpha)) * (pow(C_ij + 1, gamma)) ) < RNG_real(generator)) )
+		while ((agent_i == agent_j) || (((pow(fabs(m_i - m_j), -alpha)) * (pow(C_ij + 1, gamma))) < RNG_real(generator)))
 		{
 			// Picking two new agents
 			agent_i = RNG_int(generator);

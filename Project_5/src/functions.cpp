@@ -76,11 +76,11 @@ void StockMarketModel::Trade()
 			m_i = agents(agent_i);
 			m_j = agents(agent_j);
 
-			// Update the current number of transactions between the two new agents
+			// Update the current number of transactions
 			C_ij = C(agent_i, agent_j);
 
 		}
-		// Finding a random monetary value exchanged during transaction epsilon
+		// Finding a random monetary value exchanged during transaction
 		double epsilon = RNG_real(generator);
 
 		// Computing the traded money delta_m
@@ -98,26 +98,26 @@ void StockMarketModel::Trade()
 		// Updating variance for each transaction in a interval
 		variance += arma::var(agents);
 
-		// Enters loop at the end of an interval
+		// Enters loop at the end of a transaction interval
 		if (i % transaction_interval == 0)
 		{
 			// Averaging the variance over the interval
 			averaged_variance = variance/transaction_interval;
 
-			// Checking if the average variance has changed by less than 0.5% during the last transaction interval
-			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
+			// Checking if variance changed by less than 0.5%
+			if ((fabs(previous_averaged_variance - averaged_variance) / (previous_averaged_variance)) < 0.005)
 			{
-
-				// Equilibrium has been reached. Ending the Trade algorithm
+				// Equilibrium has been reached.
 				break;
 			}
-			// If variance statement is not passed, the averaged variance is saved for later comparison
+
 			else
 			{
+				// The averaged variance is stored for later use
 				previous_averaged_variance = averaged_variance;
 			}
 
-			// reseting the variance
+			// Reseting the variance
 			variance = 0;
 		}
 	}
@@ -145,7 +145,7 @@ void StockMarketModel::Simulate()
 		total_average_agents += arma::sort(agents);
 	}
 
-	// Saving the final results by dumping them to a file
+	// Averaging over all simulations and saving to file
 	total_average_agents /= simulations;
 	DumpToFile();
 

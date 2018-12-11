@@ -137,29 +137,31 @@ void StockMarketModel::Simulate()
 	clock_t start, stop, avg_cpu_start, avg_cpu_stop;
 	int thread_num, n_threads;
 
+	// Creating copies to initialize every private array in parallelization
 	arma::vec agentscopy = agents;
 	arma::mat C_copy = C;
-	arma::mat total_average_agents_per_thread;
+	arma::mat total_average_agents_per_thread;		// Array to store all averages
 
 
 
-	// Performing a given number of simulations
+	// Starting parallelization
 #pragma omp parallel private(agents, thread_num, C) shared(n_threads, total_average_agents_per_thread)
 	{
-#pragma omp master
+#pragma omp master															// Only run by master thread
 		{
-			n_threads = omp_get_num_threads();
-			total_average_agents_per_thread = arma::mat(N, n_threads);
-			std::cout << "Number of CPUs: " << n_threads << std::endl;
+			n_threads = omp_get_num_threads();								// Getting number of threads
+			total_average_agents_per_thread = arma::mat(N, n_threads);		// Every thread has own array to avoid blocking
+			std::cout << "Number of threads: " << n_threads << std::endl;	// Print number of threads
 			// Starting the clock
 			start = omp_get_wtime();
 			avg_cpu_start = clock();
 		}
+		// Initializing private arrays for all threads
 		agents = agentscopy;
 		C = C_copy;
 		thread_num = omp_get_thread_num();
 
-#pragma omp for
+#pragma omp for			// Automatically distributing the indices of the for-loop to threads
 		for (int i = 0; i < simulations; i++)
 			{
 				// Activating the Trade function
@@ -167,9 +169,10 @@ void StockMarketModel::Simulate()
 				// Sorting the agents array and adding it to the total
 				total_average_agents_per_thread.col(thread_num) += arma::sort(agents);
 			}
-#pragma omp barrier
-#pragma omp master
+#pragma omp barrier		// Barrier to make sure all threads are finished before average is calculated
+#pragma omp master		// Only run by master thread
 		{
+			// Calculating average from all threads
 			total_average_agents = sum(total_average_agents_per_thread, 1);
 			// Saving the final results by dumping them to a file
 			total_average_agents /= simulations;

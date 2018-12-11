@@ -165,7 +165,7 @@ void StockMarketModel::Simulate()
 		for (int i = 0; i < simulations; i++)
 			{
 				// Activating the Trade function
-				Trade(agents, C);
+				Trade(agents, C); // Sending agents and C as pointers
 				// Sorting the agents array and adding it to the total
 				total_average_agents_per_thread.col(thread_num) += arma::sort(agents);
 			}

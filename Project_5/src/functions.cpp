@@ -2,8 +2,7 @@
 
 StockMarketModel::StockMarketModel(int N, int transactions, int simulations, double m_0, double lambda, double alpha, double gamma, std::string savefile)
 {
-	// The constructor
-	// Initializing the stock market model
+	// The constructor which initializes the stock market model
 	this->N = N;
 	this->transactions = transactions;
 	this->simulations = simulations;
@@ -11,30 +10,23 @@ StockMarketModel::StockMarketModel(int N, int transactions, int simulations, dou
 	this-> savefile = savefile;
 
 	// Parameters
-	this->lambda = lambda;								// Saving criterion fraction
-	this->alpha = alpha;									// Power law parameter for nearest neighbor interactions
-	this->gamma = gamma; 									// Power law parameter for former transactions
+	this->lambda = lambda;					// Saving criterion fraction
+	this->alpha = alpha;					// Power law parameter for nearest neighbor interactions
+	this->gamma = gamma; 					// Power law parameter for former transactions
 
 	// Vector containing the wealth of all agents
-	arma::vec agents(N);
-	agents.fill(m_0);
-	this->agents = agents;
+	this->agents = arma::vec(N).fill(m_0);
 
 	// Vector containing the total averaged wealth of all agents
-	arma::vec total_average_agents(N);
-	this->total_average_agents = total_average_agents;
+	this->total_average_agents = arma::vec(N);
 
 	// Matrix containing number of interactions between all agents
-	arma::mat C(N,N);
-	C.fill(0);
-	this->C = C;
-
+	this->C = arma::mat(N,N).fill(0);
 };
 
 
 void StockMarketModel::Trade()
 {
-	std::cout << C << std::endl;
 	// Function that performs a trade between an agent and another
 
 	// Initialzing seed and the Mersienne random generator
@@ -43,6 +35,10 @@ void StockMarketModel::Trade()
 	std::uniform_int_distribution<int> RNG_int(0, N-1);					// Uniform integer distribution in (0, N)
 	std::uniform_real_distribution<double> RNG_real(0.0, 1.0);			// Uniform double distribution in (0.1, 1.0)
 
+	// Reseting agent and transaction matrices
+	C.fill(0);
+	agents.fill(m_0);
+
 	// Parameters which will be used to determine equilibrium
 	int transaction_interval = 1e4;
 	double variance, averaged_variance;
@@ -50,7 +46,6 @@ void StockMarketModel::Trade()
 	// Initial large value so that the first average variance is always saved
 	double previous_averaged_variance = 1e10;
 
-	int idum = 0;
 	// Performing given number of transactions
 	for (int i = 0; i < transactions; i++)
 	{
@@ -63,15 +58,15 @@ void StockMarketModel::Trade()
 		double m_j = agents(agent_j);
 
 		// Extracting the current number of transactions between the two agents
-		int current_transactions = C(agent_i, agent_j);
+		int C_ij = C(agent_i, agent_j);
 
 		// Defining likelihood of a transaction between the two arbritarily chosen agents
 
 		// Checking if:
-		// - agent i and j are the same agent
-		// - likelihood is smaller than some random number (throwing dice)
-		// If conditions are met the loop breaks and the agents are allowed to trade
-		while ( (agent_i == agent_j) || ( ((pow(fabs(m_i - m_j), -alpha)) * (pow(current_transactions + 1, gamma))) < RNG_real(generator)) )
+		// 	- agent i and j are the same agent
+		// 	- likelihood is smaller than some random number
+		// If both conditions are false the loop breaks and the agents are allowed to perform a transaction
+		while ((agent_i == agent_j) || (((pow(fabs(m_i - m_j), -alpha)) * (pow(C_ij + 1, gamma))) < RNG_real(generator)))
 		{
 			// Picking two new agents
 			agent_i = RNG_int(generator);
@@ -81,15 +76,11 @@ void StockMarketModel::Trade()
 			m_i = agents(agent_i);
 			m_j = agents(agent_j);
 
-			// Update the current number of transactions between the two new agents
-			current_transactions = C(agent_i, agent_j);
-
-			// Checking how many times two agents arent allowed to trade
-			idum ++;
+			// Update the current number of transactions
+			C_ij = C(agent_i, agent_j);
 
 		}
-		// std::cout << "out" << std::endl;
-		// Finding a random monetary value exchanged during transaction epsilon
+		// Finding a random monetary value exchanged during transaction
 		double epsilon = RNG_real(generator);
 
 		// Computing the traded money delta_m
@@ -107,32 +98,29 @@ void StockMarketModel::Trade()
 		// Updating variance for each transaction in a interval
 		variance += arma::var(agents);
 
-		// Enters loop at the end of an interval
+		// Enters loop at the end of a transaction interval
 		if (i % transaction_interval == 0)
 		{
 			// Averaging the variance over the interval
 			averaged_variance = variance/transaction_interval;
 
-			// Checking if the average variance has changed by less than 0.5% during the last transaction interval
-			if ((fabs(previous_averaged_variance - averaged_variance) / fabs(previous_averaged_variance)) < 0.005)
+			// Checking if variance changed by less than 0.5%
+			if ((fabs(previous_averaged_variance - averaged_variance) / (previous_averaged_variance)) < 0.005)
 			{
-
-				// Equilibrium has been reached. Ending the Trade algorithm
+				// Equilibrium has been reached.
 				break;
 			}
-			// If variance statement is not passed, the averaged variance is saved for later comparison
+
 			else
 			{
+				// The averaged variance is stored for later use
 				previous_averaged_variance = averaged_variance;
 			}
 
-			// reseting the variance
+			// Reseting the variance
 			variance = 0;
 		}
 	}
-	// Printing the number of times agents werent allowed to trade becaused of likelihood per simulation
-	std::cout << idum << std::endl;
-	std::cout << C << std::endl;
 }
 
 
@@ -157,7 +145,7 @@ void StockMarketModel::Simulate()
 		total_average_agents += arma::sort(agents);
 	}
 
-	// Saving the final results by dumping them to a file
+	// Averaging over all simulations and saving to file
 	total_average_agents /= simulations;
 	DumpToFile();
 

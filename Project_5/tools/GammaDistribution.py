@@ -10,5 +10,8 @@ def GammaDistribution(m0, m, lmbda):
     n = 1 + (3*lmbda)/(1 - lmbda)
     x = m/m0
     a_n = n**n/gamma(n)
-    
+
     return a_n*x**(n-1) * exp(-n*x)
+
+#x_n = n * x
+#return ( x_n**(n-1)*exp(-x_n) )/gamma(n)

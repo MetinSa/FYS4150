@@ -28,28 +28,6 @@ $(BUILDDIR)/%.o:	$(SRCDIR)/%.$(SRCEXT) $(INCLUDES)
 					$(CC) $(CPPFLAGS) -c -o $@ $<
 					
 
-
-.SECONDARY:			$(TESTOBJECTS)
-
-.PHONY:	test
-test:				$(TESTEXEC)
-					@echo "All tests passed."
-
-$(TESTDIR)/%.x:		$(TESTDIR)/%.o $(FUNCOBJECTS)
-					@$(CC) $^ -o $@ $(LIB)
-					@$@ || (echo "Test $@ failed!" && rm $@ && exit 1)
-					@echo "Test $@ passed!"
-
-$(TESTDIR)/%.o:		$(TESTDIR)/%.cpp $(INCLUDES)
-					@$(CC) $(CPPFLAGS) -c -o $@ $<
-
-
-# Cleaning		
-.PHONY: cleantest
-cleantest:
-					@echo " Cleaning test..."; 
-					$(RM) $(TESTEXEC) $(TESTOBJECTS)
-
 # Cleaning		
 .PHONY: clean
 clean:
